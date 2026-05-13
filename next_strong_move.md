@@ -233,7 +233,7 @@ Target commands:
 ```bash
 flint --make-ui --p / -page Portfolio
 flint --make-ui --c / -component ProjectCard
-flint --make:ui root-design
+flint --make-ui -root-design
 ```
 
 Plan:
