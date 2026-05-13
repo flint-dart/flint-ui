@@ -157,6 +157,8 @@ Plan:
 
 Make forms work naturally with FlintDart backend validation.
 
+Status: implemented.
+
 Target API:
 
 ```dart
@@ -168,14 +170,18 @@ TextField(
 
 Plan:
 
-- Define a client-side validation error shape.
-- Add error props and aria attributes to form widgets.
-- Add helpers for mapping backend validation responses to fields.
-- Add example login/register forms.
+- Done: added `FormErrors` as the client-side validation error shape.
+- Done: `FormErrors.from(...)` maps backend-style `{ errors: { field: [...] } }` payloads into field messages.
+- Done: `FormController` now stores `FormErrors`, exposes `error(field)`, and captures thrown validation payloads during `submit`.
+- Done: `TextField`, `TextArea`, `Select`, `Checkbox`, `Switch`, `FileInput`, and `RadioGroup` can resolve errors by `name` from `FormErrors`.
+- Done: controls keep `aria-invalid` and `aria-describedby` wired to generated help/error text.
+- Done: added tests for backend payload mapping, submit validation capture, and control-level error resolution.
 
 ## 8. Page Layout System
 
 Create app-level shells for common fullstack app surfaces.
+
+Status: implemented.
 
 Target API:
 
@@ -189,14 +195,17 @@ PageShell(
 
 Plan:
 
-- Add shells for portfolio, dashboard, auth, docs, and marketing pages.
-- Make shells responsive by default.
-- Let each shell consume `RootDesign` and theme tokens.
-- Build examples in FlintDart sample apps.
+- Done: added `PortfolioShell`, `DashboardShell`, `AuthShell`, `DocsShell`, and `MarketingShell`.
+- Done: built shells on top of `PageShell`, `AppShell`, `SafeArea`, `ConstrainedBox`, and `ResponsiveGrid`.
+- Done: shells use DartStyle and theme token fallbacks for common backgrounds, text, surfaces, borders, shadows, and spacing.
+- Done: each shell exposes slot-based APIs for nav, hero/header, sidebar, body, actions, user, and footer content.
+- Done: added tests proving each shell composes the expected semantic page surface.
 
 ## 9. SEO And Head From Dart
 
 Improve page metadata from the Dart UI side while preserving server-side metadata.
+
+Status: implemented.
 
 Target API:
 
@@ -209,10 +218,11 @@ Head(
 
 Plan:
 
-- Add safe browser-side head updates.
-- Keep server `res.page(... meta: ...)` as the source of truth for first render.
-- Allow Flint UI to update route-level title and meta during client navigation.
-- Add tests for title/meta rendering behavior.
+- Done: expanded `Head` with SEO fields for `title`, `description`, `canonical`, Open Graph image/type/url/title/description, site name, and locale.
+- Done: added `Head.seo(...)` as the route-level metadata API.
+- Done: head sync now upserts existing server-rendered tags by stable keys instead of duplicating them.
+- Done: server `res.page(... meta: ...)` can remain the first-render source of truth, while Dart updates the browser head after mount/navigation.
+- Done: added browser tests for title/meta rendering, server tag reuse, and stable Flint head tag updates.
 
 ## 10. CLI Generator
 

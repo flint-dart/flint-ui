@@ -1,3 +1,5 @@
+import 'validation.dart';
+
 typedef FlintVoidCallback = void Function();
 
 class TextEditingController {
@@ -50,7 +52,7 @@ class FormController {
   final Map<String, TextEditingController> _controllers = {};
   final List<FlintVoidCallback> _listeners = [];
 
-  Map<String, String> errors = {};
+  FormErrors errors = const FormErrors();
   bool processing = false;
   bool wasSuccessful = false;
   bool recentlySuccessful = false;
@@ -82,21 +84,23 @@ class FormController {
     _notifyListeners();
   }
 
-  void setError(String key, String message) {
-    errors = {...errors, key: message};
+  String? error(String key) => errors.field(key);
+
+  void setError(String key, Object message) {
+    errors = errors.merge(FormErrors.from({key: message}));
     _notifyListeners();
   }
 
-  void setErrors(Map<String, String> messages) {
-    errors = Map<String, String>.from(messages);
+  void setErrors(Object? messages) {
+    errors = FormErrors.from(messages);
     _notifyListeners();
   }
 
   void clearErrors([List<String> keys = const []]) {
     if (keys.isEmpty) {
-      errors = {};
+      errors = const FormErrors();
     } else {
-      errors = {...errors}..removeWhere((key, _) => keys.contains(key));
+      errors = errors.without(keys);
     }
     _notifyListeners();
   }
@@ -113,6 +117,7 @@ class FormController {
     Future<T> Function(Map<String, Object?> data) action, {
     void Function(T result)? onSuccess,
     void Function(Object error)? onError,
+    void Function(FormErrors errors)? onValidationError,
     bool resetOnSuccess = false,
   }) async {
     processing = true;
@@ -128,6 +133,11 @@ class FormController {
       onSuccess?.call(result);
       return result;
     } catch (error) {
+      final validationErrors = FormErrors.from(error);
+      if (validationErrors.isNotEmpty) {
+        errors = validationErrors;
+        onValidationError?.call(validationErrors);
+      }
       onError?.call(error);
       return null;
     } finally {

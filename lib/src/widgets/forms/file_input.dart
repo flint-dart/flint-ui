@@ -1,5 +1,6 @@
 import '../../style.dart';
 import 'text_field.dart';
+import 'validation.dart';
 
 class FileInput extends TextField {
   FileInput({
@@ -10,6 +11,7 @@ class FileInput extends TextField {
     bool required = false,
     bool disabled = false,
     String? error,
+    FormErrors? errors,
     String? helpText,
     String? className,
     Map<String, Object?> props = const {},
@@ -25,6 +27,7 @@ class FileInput extends TextField {
           required: required,
           disabled: disabled,
           error: error,
+          errors: errors,
           helpText: helpText,
           className: className,
           props: props,

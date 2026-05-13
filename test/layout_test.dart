@@ -243,5 +243,62 @@ void main() {
       expect(main.tag, 'main');
       expect(main.children.single, isA<Text>());
     });
+
+    test('common page layout shells compose expected app surfaces', () {
+      final portfolio = PortfolioShell(
+        nav: Text('Nav'),
+        hero: Text('Hero'),
+        footer: Text('Footer'),
+        child: Text('Portfolio body'),
+      );
+      expect(portfolio.children.first, isA<Text>());
+      final portfolioContent = portfolio.children[1] as ConstrainedBox;
+      expect(
+          portfolioContent.props['style'], containsPair('max-width', '1120px'));
+      expect(portfolioContent.children[1], isA<FlintElement>());
+
+      final dashboard = DashboardShell(
+        brand: 'Flint',
+        sidebar: Sidebar(items: const [SidebarItem(label: 'Home', href: '/')]),
+        title: 'Dashboard',
+        child: Text('Metrics'),
+      );
+      expect(dashboard.children.single, isA<AppShell>());
+      final app = dashboard.children.single as AppShell;
+      expect(app.children.first, isA<FlintElement>());
+
+      final auth = AuthShell(
+        title: 'Sign in',
+        description: 'Welcome back.',
+        child: TextField(name: 'email'),
+      );
+      final authSafe = auth.children.single as SafeArea;
+      final authBox =
+          (authSafe.children.single as ConstrainedBox).children.single as Box;
+      expect(authBox.tag, 'main');
+      expect(authBox.children.last, isA<TextField>());
+
+      final docs = DocsShell(
+        sidebar: Text('Docs nav'),
+        title: 'Getting started',
+        child: Text('Install Flint UI'),
+      );
+      final docsSafe = docs.children.single as SafeArea;
+      final docsGrid = (docsSafe.children.single as ConstrainedBox)
+          .children
+          .single as ResponsiveGrid;
+      expect(docsGrid.children.first, isA<FlintElement>());
+      expect(docsGrid.children.last, isA<FlintElement>());
+
+      final marketing = MarketingShell(
+        nav: Text('Nav'),
+        hero: Text('Hero'),
+        footer: Text('Footer'),
+        child: Text('Feature'),
+      );
+      expect(marketing.children.single, isA<PageShell>());
+      final marketingShell = marketing.children.single as PageShell;
+      expect(marketingShell.children.first, isA<Text>());
+    });
   });
 }

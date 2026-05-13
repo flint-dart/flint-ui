@@ -4,6 +4,7 @@ import '../../style.dart';
 import '../shared/theme.dart';
 import 'controllers.dart';
 import 'field_helpers.dart';
+import 'validation.dart';
 import 'package:universal_web/web.dart' as web;
 
 class TextField extends FlintElement {
@@ -19,6 +20,7 @@ class TextField extends FlintElement {
     InputVariant variant = InputVariant.outline,
     ComponentSize size = ComponentSize.md,
     String? error,
+    FormErrors? errors,
     String? helpText,
     String? className,
     Map<String, Object?> props = const {},
@@ -46,7 +48,7 @@ class TextField extends FlintElement {
             disabled: disabled,
             variant: variant,
             size: size,
-            error: error,
+            error: resolveFieldError(name: name, error: error, errors: errors),
             helpText: helpText,
             inputProps: inputProps,
             inputStyle: inputStyle,

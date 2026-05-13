@@ -1,6 +1,7 @@
 import '../../node.dart';
 import '../../style.dart';
 import 'field_helpers.dart';
+import 'validation.dart';
 
 class Checkbox extends FlintElement {
   Checkbox({
@@ -10,6 +11,7 @@ class Checkbox extends FlintElement {
     bool disabled = false,
     bool indeterminate = false,
     String? error,
+    FormErrors? errors,
     String? helpText,
     String? className,
     Map<String, Object?> props = const {},
@@ -31,7 +33,7 @@ class Checkbox extends FlintElement {
             checked: checked,
             disabled: disabled,
             indeterminate: indeterminate,
-            error: error,
+            error: resolveFieldError(name: name, error: error, errors: errors),
             helpText: helpText,
             inputProps: inputProps,
             onChanged: onChanged,

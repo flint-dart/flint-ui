@@ -1,5 +1,6 @@
 import '../../style.dart';
 import 'checkbox.dart';
+import 'validation.dart';
 
 class Switch extends Checkbox {
   Switch({
@@ -8,6 +9,7 @@ class Switch extends Checkbox {
     bool checked = false,
     bool disabled = false,
     String? error,
+    FormErrors? errors,
     String? helpText,
     String? className,
     Map<String, Object?> props = const {},
@@ -21,6 +23,7 @@ class Switch extends Checkbox {
           checked: checked,
           disabled: disabled,
           error: error,
+          errors: errors,
           helpText: helpText,
           className: className,
           props: props,

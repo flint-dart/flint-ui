@@ -93,7 +93,7 @@ void main() {
       expect(form.string('email'), 'grace@example.com');
 
       form.setError('email', 'Invalid email');
-      expect(form.errors['email'], 'Invalid email');
+      expect(form.error('email'), 'Invalid email');
 
       final result = await form.submit<int>((data) async {
         expect(form.processing, true);
@@ -109,6 +109,87 @@ void main() {
       form.reset(['email']);
       expect(form.string('email'), 'ada@example.com');
       expect(notifications, greaterThan(0));
+    });
+
+    test('FormErrors maps backend payloads into field messages', () {
+      final errors = FormErrors.from({
+        'message': 'Validation failed',
+        'errors': {
+          'email': ['Email is required', 'Email must be valid'],
+          'password': 'Password is required',
+        },
+      });
+
+      expect(errors.field('email'), 'Email is required');
+      expect(errors.fieldMessages('email'), [
+        'Email is required',
+        'Email must be valid',
+      ]);
+      expect(errors.field('password'), 'Password is required');
+      expect(errors.firstMessages, {
+        'email': 'Email is required',
+        'password': 'Password is required',
+      });
+      expect(errors.has('missing'), isFalse);
+    });
+
+    test('FormController captures validation errors thrown on submit',
+        () async {
+      final form = useForm({'email': ''});
+      FormErrors? reported;
+
+      final result = await form.submit<int>(
+        (_) async => throw {
+          'errors': {
+            'email': ['Email is required'],
+          },
+        },
+        onValidationError: (errors) => reported = errors,
+      );
+
+      expect(result, isNull);
+      expect(form.processing, false);
+      expect(form.error('email'), 'Email is required');
+      expect(reported?.field('email'), 'Email is required');
+    });
+
+    test('controls can resolve errors from FormErrors by name', () {
+      final errors = FormErrors.from({
+        'email': ['Email is required'],
+        'bio': 'Bio is too short',
+        'plan': 'Choose a plan',
+        'terms': 'Accept the terms',
+        'role': 'Choose a role',
+      });
+
+      final field = TextField(name: 'email', errors: errors);
+      final input = field.children.first as FlintElement;
+      expect(input.props['aria-invalid'], 'true');
+      final fieldError = field.children.last as FlintElement;
+      expect(
+          (fieldError.children.single as FlintText).value, 'Email is required');
+
+      final area = TextArea(name: 'bio', errors: errors);
+      expect((area.children.last as FlintElement).props['id'],
+          'flint-textarea-bio-error');
+
+      final select = Select(name: 'plan', errors: errors);
+      expect((select.children.first as FlintElement).props['aria-invalid'],
+          'true');
+
+      final checkbox = Checkbox(name: 'terms', errors: errors);
+      final checkboxLabel = checkbox.children.first as FlintElement;
+      final checkboxInput = checkboxLabel.children.first as FlintElement;
+      expect(checkboxInput.props['aria-invalid'], 'true');
+
+      final group = RadioGroup(
+        name: 'role',
+        errors: errors,
+        options: const [RadioOption(label: 'Admin', value: 'admin')],
+      );
+      expect(group.props['aria-invalid'], 'true');
+      expect((group.children.last as FlintElement).props['id'],
+          'flint-radio-role-error');
     });
 
     test('TextArea renders value as child text', () {

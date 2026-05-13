@@ -2,6 +2,7 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 import 'field_helpers.dart';
+import 'validation.dart';
 
 class RadioOption {
   final String label;
@@ -24,6 +25,7 @@ class RadioGroup extends FlintElement {
     bool required = false,
     bool disabled = false,
     String? error,
+    FormErrors? errors,
     String? helpText,
     String? className,
     Map<String, Object?> props = const {},
@@ -36,7 +38,9 @@ class RadioGroup extends FlintElement {
             {
               ...props,
               if (disabled) 'disabled': true,
-              if (error != null && error.isNotEmpty) 'aria-invalid': 'true',
+              if (resolveFieldError(name: name, error: error, errors: errors) !=
+                  null)
+                'aria-invalid': 'true',
             },
             className: className,
             defaultStyle: fieldWrapperStyle,
@@ -50,7 +54,7 @@ class RadioGroup extends FlintElement {
             options: options,
             required: required,
             disabled: disabled,
-            error: error,
+            error: resolveFieldError(name: name, error: error, errors: errors),
             helpText: helpText,
             onChanged: onChanged,
           ),

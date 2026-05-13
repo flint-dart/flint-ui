@@ -3,6 +3,7 @@ import '../../node.dart';
 import '../../style.dart';
 import '../shared/theme.dart';
 import 'field_helpers.dart';
+import 'validation.dart';
 
 class SelectOption {
   final String label;
@@ -28,6 +29,7 @@ class Select extends FlintElement {
     InputVariant variant = InputVariant.outline,
     ComponentSize size = ComponentSize.md,
     String? error,
+    FormErrors? errors,
     String? helpText,
     String? className,
     Map<String, Object?> props = const {},
@@ -55,7 +57,7 @@ class Select extends FlintElement {
             disabled: disabled,
             variant: variant,
             size: size,
-            error: error,
+            error: resolveFieldError(name: name, error: error, errors: errors),
             helpText: helpText,
             selectProps: selectProps,
             selectStyle: selectStyle,
