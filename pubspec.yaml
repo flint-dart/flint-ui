@@ -7,15 +7,11 @@ issue_tracker: https://github.com/flint-dart/flint-ui/issues
 license: MIT
 
 environment:
-  sdk: '>=3.2.0 <4.0.0'
+  sdk: '>=3.8.1 <4.0.0'
 
 dependencies:
   flint_client: ^0.0.3
   universal_web: ^1.1.1+1
-
-dependency_overrides:
-  flint_client:
-    path: ../flint-client
 
 dev_dependencies:
   lints: ^5.0.0
