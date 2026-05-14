@@ -3,9 +3,9 @@ import '../../node.dart';
 import '../../style.dart';
 import '../shared/theme.dart';
 
-/// Represents the Link API in Flint UI.
+/// Anchor element with optional button-style variants.
 class Link extends FlintElement {
-  /// Creates a Link instance.
+  /// Creates a link to [href] with optional content and styles.
   Link({
     required String href,
     Object? child,

@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the Image API in Flint UI.
+/// Responsive `img` element with common loading and decoding attributes.
 class Image extends FlintElement {
-  /// Creates a Image instance.
+  /// Creates an image from [src] with accessibility and loading options.
   Image({
     required String src,
     String alt = '',
@@ -46,9 +46,9 @@ class Image extends FlintElement {
        );
 }
 
-/// Represents the Figure API in Flint UI.
+/// Semantic `figure` element with an image and optional caption.
 class Figure extends FlintElement {
-  /// Creates a Figure instance.
+  /// Creates a figure from [image] and optional [caption].
   Figure({
     required Object image,
     Object? caption,
@@ -87,35 +87,35 @@ class Figure extends FlintElement {
        );
 }
 
-/// Options for the ImageLoading API.
+/// Browser image loading strategy.
 enum ImageLoading {
-  /// Creates a eager instance.
+  /// Load the image immediately.
   eager('eager'),
 
-  /// Creates a lazy instance.
+  /// Defer loading until the image is near the viewport.
   lazy('lazy');
 
-  /// The value value.
+  /// HTML `loading` attribute value.
   final String value;
 
-  /// Creates a ImageLoading instance.
+  /// Creates an image loading option.
   const ImageLoading(this.value);
 }
 
-/// Options for the ImageDecoding API.
+/// Browser image decoding strategy.
 enum ImageDecoding {
-  /// Creates a async instance.
+  /// Decode the image asynchronously.
   async('async'),
 
-  /// Creates a auto instance.
+  /// Let the browser choose the decoding strategy.
   auto('auto'),
 
-  /// Creates a sync instance.
+  /// Decode the image synchronously.
   sync('sync');
 
-  /// The value value.
+  /// HTML `decoding` attribute value.
   final String value;
 
-  /// Creates a ImageDecoding instance.
+  /// Creates an image decoding option.
   const ImageDecoding(this.value);
 }

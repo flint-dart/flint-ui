@@ -1,9 +1,9 @@
 import 'package:flint_client/flint_client.dart';
 import 'package:universal_web/web.dart' as web;
 
-/// Represents the ClientRouter API in Flint UI.
+/// Browser API client with Flint-style route grouping.
 class ClientRouter {
-  /// Creates a ClientRouter instance.
+  /// Creates a client router using the current browser origin by default.
   ClientRouter({
     String? baseUrl,
     this.prefix = '',
@@ -27,19 +27,21 @@ class ClientRouter {
          statusCodeConfig: statusCodeConfig,
        );
 
-  /// Creates a ClientRouter instance.
+  /// Creates a router around an existing [FlintClient].
   ClientRouter.fromClient(this.client, {this.prefix = ''});
 
-  /// The client value.
+  /// The underlying Flint HTTP client.
   final FlintClient client;
 
-  /// The prefix value.
+  /// Route prefix applied to relative request paths.
   final String prefix;
 
+  /// Returns a new router with [prefix] appended to this router's prefix.
   ClientRouter group(String prefix) {
     return ClientRouter.fromClient(client, prefix: _join(this.prefix, prefix));
   }
 
+  /// Sends a GET request to [path].
   Future<FlintResponse<T>> get<T>(
     String path, {
     Map<String, dynamic>? query,
@@ -60,6 +62,7 @@ class ClientRouter {
     );
   }
 
+  /// Sends a POST request to [path].
   Future<FlintResponse<T>> post<T>(
     String path, {
     dynamic body,
@@ -82,6 +85,7 @@ class ClientRouter {
     );
   }
 
+  /// Sends a PUT request to [path].
   Future<FlintResponse<T>> put<T>(
     String path, {
     dynamic body,
@@ -104,6 +108,7 @@ class ClientRouter {
     );
   }
 
+  /// Sends a PATCH request to [path].
   Future<FlintResponse<T>> patch<T>(
     String path, {
     dynamic body,
@@ -126,6 +131,7 @@ class ClientRouter {
     );
   }
 
+  /// Sends a DELETE request to [path].
   Future<FlintResponse<T>> delete<T>(
     String path, {
     Map<String, dynamic>? query,
@@ -146,6 +152,7 @@ class ClientRouter {
     );
   }
 
+  /// Sends a request using [method] and dispatches to the matching verb helper.
   Future<FlintResponse<T>> request<T>(
     String method,
     String path, {
@@ -238,19 +245,18 @@ class ClientRouter {
   }
 }
 
+/// Shared browser API router using the current origin.
 final clientRouter = ClientRouter();
 
 String _browserOrigin() {
   final location = web.window.location;
   final origin = location.origin;
 
-  /// Creates a if instance.
   if (origin.isNotEmpty) return origin;
 
   final protocol = location.protocol;
   final host = location.host;
 
-  /// Creates a if instance.
   if (protocol.isNotEmpty && host.isNotEmpty) return '$protocol//$host';
 
   return 'http://localhost';

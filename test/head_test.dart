@@ -43,47 +43,50 @@ void main() {
 
       expect(web.document.title, 'Flint UI');
       expect(
-          _metaContent('name', 'description'), 'Dart-first UI for Flint apps.');
+        _metaContent('name', 'description'),
+        'Dart-first UI for Flint apps.',
+      );
       expect(_metaContent('property', 'og:title'), 'Flint UI');
-      expect(_metaContent('property', 'og:description'),
-          'Dart-first UI for Flint apps.');
+      expect(
+        _metaContent('property', 'og:description'),
+        'Dart-first UI for Flint apps.',
+      );
       expect(_metaContent('property', 'og:url'), 'https://flint.dev/ui');
       expect(_metaContent('property', 'og:image'), 'https://flint.dev/og.png');
       expect(_metaContent('property', 'og:type'), 'website');
       expect(_canonicalHref(), 'https://flint.dev/ui');
     });
 
-    test('reuses existing server-rendered meta tags instead of duplicating',
-        () {
-      final serverDescription = web.document.createElement('meta');
-      serverDescription.setAttribute('name', 'description');
-      serverDescription.setAttribute('content', 'Server description');
-      web.document.head?.appendChild(serverDescription);
+    test(
+      'reuses existing server-rendered meta tags instead of duplicating',
+      () {
+        final serverDescription = web.document.createElement('meta');
+        serverDescription.setAttribute('name', 'description');
+        serverDescription.setAttribute('content', 'Server description');
+        web.document.head?.appendChild(serverDescription);
 
-      Head(
-        title: 'Client title',
-        description: 'Client description',
-      ).didMount();
+        Head(
+          title: 'Client title',
+          description: 'Client description',
+        ).didMount();
 
-      final descriptions =
-          web.document.querySelectorAll('meta[name="description"]');
-      expect(descriptions.length, 1);
-      expect(_metaContent('name', 'description'), 'Client description');
-      expect(web.document.title, 'Client title');
-    });
+        final descriptions = web.document.querySelectorAll(
+          'meta[name="description"]',
+        );
+        expect(descriptions.length, 1);
+        expect(_metaContent('name', 'description'), 'Client description');
+        expect(web.document.title, 'Client title');
+      },
+    );
 
     test('updates existing Flint head tags by stable key', () {
       final head = Head(
-        tags: [
-          Head.meta(name: 'robots', content: 'index,follow'),
-        ],
+        tags: [Head.meta(name: 'robots', content: 'index,follow')],
       );
 
       head.didMount();
       Head(
-        tags: [
-          Head.meta(name: 'robots', content: 'noindex'),
-        ],
+        tags: [Head.meta(name: 'robots', content: 'noindex')],
       ).didMount();
 
       final robots = web.document.querySelectorAll('meta[name="robots"]');

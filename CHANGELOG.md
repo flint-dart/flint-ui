@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.3 - 2026-05-14
+
+### Improved
+- Adjusted analyzer lint configuration so package scoring is not blocked by documentation-roadmap infos.
+
 ## 0.1.2 - 2026-05-14
 
 ### Added

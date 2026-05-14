@@ -26,14 +26,8 @@ void main() {
       cookies.write('flint_cookie_one', '1');
       cookies.write('flint_cookie_two', '2');
 
-      expect(
-        cookies.readAll(),
-        containsPair('flint_cookie_one', '1'),
-      );
-      expect(
-        cookies.readAll(),
-        containsPair('flint_cookie_two', '2'),
-      );
+      expect(cookies.readAll(), containsPair('flint_cookie_one', '1'));
+      expect(cookies.readAll(), containsPair('flint_cookie_two', '2'));
     });
 
     test('removes values', () {

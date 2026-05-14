@@ -2,14 +2,15 @@ import 'package:universal_web/web.dart' as web;
 
 import 'browser_storage.dart';
 
-/// Represents the SessionStorage API in Flint UI.
+/// Browser `sessionStorage` wrapper for tab-scoped key/value data.
 class SessionStorage extends BrowserStorage {
-  /// Creates a SessionStorage instance.
+  /// Creates a `sessionStorage` wrapper.
   const SessionStorage();
 
+  /// The browser `sessionStorage` object.
   @override
-  /// Returns the storage value.
   web.Storage get storage => web.window.sessionStorage;
 }
 
+/// Shared tab-scoped browser storage helper.
 const sessionStorage = SessionStorage();

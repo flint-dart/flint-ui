@@ -222,8 +222,10 @@ void main() {
       );
       expect(
         spinner.props['style'],
-        containsPair('animation',
-            'flint-spin 800ms linear infinite normal none running'),
+        containsPair(
+          'animation',
+          'flint-spin 800ms linear infinite normal none running',
+        ),
       );
       expect(spinner.props['style'], containsPair('will-change', 'transform'));
       expect(spinner.children.single, isA<FlintText>());

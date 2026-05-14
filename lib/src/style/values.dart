@@ -1,37 +1,37 @@
 part of '../style.dart';
 
-/// Represents the EdgeInsets API in Flint UI.
+/// Typed spacing value for CSS margin and padding.
 class EdgeInsets {
-  /// The top value.
+  /// Top edge value.
   final Object? top;
 
-  /// The right value.
+  /// Right edge value.
   final Object? right;
 
-  /// The bottom value.
+  /// Bottom edge value.
   final Object? bottom;
 
-  /// The left value.
+  /// Left edge value.
   final Object? left;
 
-  /// Creates a EdgeInsets instance.
+  /// Creates edge values for selected sides.
   const EdgeInsets.only({this.top, this.right, this.bottom, this.left});
 
-  /// Creates a EdgeInsets instance.
+  /// Creates equal edge values for every side.
   const EdgeInsets.all(Object value)
     : top = value,
       right = value,
       bottom = value,
       left = value;
 
-  /// Creates a EdgeInsets instance.
+  /// Creates vertical and horizontal edge values.
   const EdgeInsets.symmetric({Object? vertical, Object? horizontal})
     : top = vertical,
       right = horizontal,
       bottom = vertical,
       left = horizontal;
 
-  /// Runs the toCss operation.
+  /// Converts this spacing value to a CSS shorthand.
   String toCss() {
     final values = [
       cssValue(top ?? 0),
@@ -51,81 +51,84 @@ class EdgeInsets {
   }
 }
 
-/// Represents the SizeValue API in Flint UI.
+/// CSS size value with an explicit unit.
 class SizeValue {
-  /// The value value.
+  /// CSS size string.
   final String value;
 
-  /// Creates a SizeValue instance.
+  /// Creates a size from a raw CSS [value].
   const SizeValue(this.value);
 
-  /// Creates a SizeValue instance.
+  /// Creates a pixel size.
   const SizeValue.px(num value) : value = '${value}px';
 
-  /// Creates a SizeValue instance.
+  /// Creates a percentage size.
   const SizeValue.percent(num value) : value = '${value}%';
 
-  /// Creates a SizeValue instance.
+  /// Creates a rem size.
   const SizeValue.rem(num value) : value = '${value}rem';
 
-  /// Creates a SizeValue instance.
+  /// Creates an em size.
   const SizeValue.em(num value) : value = '${value}em';
 
+  /// CSS `auto` size.
   static const auto = SizeValue('auto');
+
+  /// CSS `100%` size.
   static const full = SizeValue('100%');
 
+  /// Returns the CSS size string.
   @override
-  /// Runs the toString operation.
   String toString() => value;
 }
 
-/// Represents the Border API in Flint UI.
+/// Typed CSS border shorthand value.
 class Border {
-  /// The width value.
+  /// Border width.
   final Object width;
 
-  /// The color value.
+  /// Border color.
   final Object color;
 
-  /// The style value.
+  /// Border style.
   final String style;
 
-  /// Creates a Border instance.
+  /// Creates a border shorthand value.
   const Border({this.width = 1, required Object color, this.style = 'solid'})
     : color = color;
 
-  /// Creates a Border instance.
+  /// Creates a border for all sides.
   const Border.all({
     Object width = 1,
     required Object color,
     String style = 'solid',
   }) : this(width: width, color: color, style: style);
 
-  /// Runs the toCss operation.
+  /// Converts this border to a CSS shorthand.
   String toCss() => '${cssValue(width)} $style ${cssValue(color)}';
 }
 
-/// Represents the Shadow API in Flint UI.
+/// Typed CSS box-shadow value.
 class Shadow {
-  /// The x value.
+  /// Horizontal shadow offset.
   final Object x;
 
-  /// The y value.
+  /// Vertical shadow offset.
   final Object y;
 
-  /// The blur value.
+  /// Shadow blur radius.
   final Object blur;
 
-  /// The spread value.
+  /// Shadow spread radius.
   final Object spread;
 
-  /// The color value.
+  /// Shadow color.
   final Object color;
 
-  /// The inset value.
+  /// Whether the shadow is inset.
   final bool inset;
 
-  /// Creates a Shadow instance.
+  /// Creates a box shadow value.
   const Shadow({
     this.x = 0,
     this.y = 1,
@@ -135,7 +138,7 @@ class Shadow {
     this.inset = false,
   });
 
-  /// Runs the toCss operation.
+  /// Converts this shadow to a CSS `box-shadow` value.
   String toCss() {
     return [
       if (inset) 'inset',
@@ -148,40 +151,40 @@ class Shadow {
   }
 }
 
-/// Represents the StyleTransform API in Flint UI.
+/// Typed CSS transform value.
 class StyleTransform {
-  /// The value value.
+  /// CSS transform string.
   final String value;
 
-  /// Creates a StyleTransform instance.
+  /// Creates a transform from a raw CSS [value].
   const StyleTransform(this.value);
 
-  /// Creates a StyleTransform instance.
+  /// Creates a `translate(...)` transform.
   factory StyleTransform.translate({Object x = 0, Object y = 0}) {
     return StyleTransform('translate(${cssValue(x)}, ${cssValue(y)})');
   }
 
-  /// Creates a StyleTransform instance.
+  /// Creates a `translateX(...)` transform.
   factory StyleTransform.translateX(Object value) {
     return StyleTransform('translateX(${cssValue(value)})');
   }
 
-  /// Creates a StyleTransform instance.
+  /// Creates a `translateY(...)` transform.
   factory StyleTransform.translateY(Object value) {
     return StyleTransform('translateY(${cssValue(value)})');
   }
 
-  /// Creates a StyleTransform instance.
+  /// Creates a `scale(...)` transform.
   factory StyleTransform.scale(num value) {
     return StyleTransform('scale($value)');
   }
 
-  /// Creates a StyleTransform instance.
+  /// Creates a `rotate(...)` transform.
   factory StyleTransform.rotate(Object value) {
     return StyleTransform('rotate(${cssValue(value)})');
   }
 
-  /// Creates a StyleTransform instance.
+  /// Combines multiple transforms into one CSS transform value.
   factory StyleTransform.combine(List<StyleTransform> transforms) {
     if (transforms.isEmpty) {
       throw ArgumentError.value(transforms, 'transforms', 'Must not be empty.');
@@ -189,40 +192,40 @@ class StyleTransform {
     return StyleTransform(transforms.map((item) => item.value).join(' '));
   }
 
+  /// Returns the CSS transform string.
   @override
-  /// Runs the toString operation.
   String toString() => value;
 }
 
-/// Represents the StyleFilter API in Flint UI.
+/// Typed CSS filter value.
 class StyleFilter {
-  /// The value value.
+  /// CSS filter string.
   final String value;
 
-  /// Creates a StyleFilter instance.
+  /// Creates a filter from a raw CSS [value].
   const StyleFilter(this.value);
 
-  /// Creates a StyleFilter instance.
+  /// Creates a `blur(...)` filter.
   factory StyleFilter.blur(Object value) {
     return StyleFilter('blur(${cssValue(value)})');
   }
 
-  /// Creates a StyleFilter instance.
+  /// Creates a `saturate(...)` filter.
   factory StyleFilter.saturate(num percent) {
     return StyleFilter('saturate($percent%)');
   }
 
-  /// Creates a StyleFilter instance.
+  /// Creates a `brightness(...)` filter.
   factory StyleFilter.brightness(num percent) {
     return StyleFilter('brightness($percent%)');
   }
 
-  /// Creates a StyleFilter instance.
+  /// Creates a `contrast(...)` filter.
   factory StyleFilter.contrast(num percent) {
     return StyleFilter('contrast($percent%)');
   }
 
-  /// Creates a StyleFilter instance.
+  /// Combines multiple filters into one CSS filter value.
   factory StyleFilter.combine(List<StyleFilter> filters) {
     if (filters.isEmpty) {
       throw ArgumentError.value(filters, 'filters', 'Must not be empty.');
@@ -230,66 +233,73 @@ class StyleFilter {
     return StyleFilter(filters.map((item) => item.value).join(' '));
   }
 
+  /// Returns the CSS filter string.
   @override
-  /// Runs the toString operation.
   String toString() => value;
 }
 
-/// Represents the FontFamily API in Flint UI.
+/// CSS font-family value.
 class FontFamily {
-  /// The value value.
+  /// CSS font-family string.
   final String value;
 
-  /// Creates a FontFamily instance.
+  /// Creates a font family from a raw CSS [value].
   const FontFamily(this.value);
 
+  /// System sans-serif font stack.
   static const systemSans = FontFamily(
     'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
   );
 
+  /// Returns the CSS font-family string.
   @override
-  /// Runs the toString operation.
   String toString() => value;
 }
 
-/// Represents the BoxSizing API in Flint UI.
+/// CSS box-sizing value.
 class BoxSizing {
-  /// The value value.
+  /// CSS box-sizing string.
   final String value;
 
-  /// Creates a BoxSizing instance.
+  /// Creates a box-sizing value.
   const BoxSizing(this.value);
 
+  /// CSS `border-box`.
   static const borderBox = BoxSizing('border-box');
+
+  /// CSS `content-box`.
   static const contentBox = BoxSizing('content-box');
 
+  /// Returns the CSS box-sizing string.
   @override
-  /// Runs the toString operation.
   String toString() => value;
 }
 
-/// Represents the ScrollBehavior API in Flint UI.
+/// CSS scroll-behavior value.
 class ScrollBehavior {
-  /// The value value.
+  /// CSS scroll-behavior string.
   final String value;
 
-  /// Creates a ScrollBehavior instance.
+  /// Creates a scroll behavior value.
   const ScrollBehavior(this.value);
 
+  /// CSS `auto`.
   static const auto = ScrollBehavior('auto');
+
+  /// CSS `smooth`.
   static const smooth = ScrollBehavior('smooth');
 
+  /// Returns the CSS scroll-behavior string.
   @override
-  /// Runs the toString operation.
   String toString() => value;
 }
 
-/// Represents the Cursor API in Flint UI.
+/// CSS cursor value.
 class Cursor {
-  /// The value value.
+  /// CSS cursor string.
   final String value;
 
-  /// Creates a Cursor instance.
+  /// Creates a cursor value.
   const Cursor(this.value);
 
   static const auto = Cursor('auto');
@@ -304,17 +314,17 @@ class Cursor {
   static const progress = Cursor('progress');
   static const help = Cursor('help');
 
+  /// Returns the CSS cursor string.
   @override
-  /// Runs the toString operation.
   String toString() => value;
 }
 
-/// Represents the Overflow API in Flint UI.
+/// CSS overflow value.
 class Overflow {
-  /// The value value.
+  /// CSS overflow string.
   final String value;
 
-  /// Creates a Overflow instance.
+  /// Creates an overflow value.
   const Overflow(this.value);
 
   static const visible = Overflow('visible');
@@ -323,17 +333,17 @@ class Overflow {
   static const scroll = Overflow('scroll');
   static const auto = Overflow('auto');
 
+  /// Returns the CSS overflow string.
   @override
-  /// Runs the toString operation.
   String toString() => value;
 }
 
-/// Represents the ObjectFit API in Flint UI.
+/// CSS object-fit value.
 class ObjectFit {
-  /// The value value.
+  /// CSS object-fit string.
   final String value;
 
-  /// Creates a ObjectFit instance.
+  /// Creates an object-fit value.
   const ObjectFit(this.value);
 
   static const fill = ObjectFit('fill');
@@ -342,17 +352,17 @@ class ObjectFit {
   static const none = ObjectFit('none');
   static const scaleDown = ObjectFit('scale-down');
 
+  /// Returns the CSS object-fit string.
   @override
-  /// Runs the toString operation.
   String toString() => value;
 }
 
-/// Represents the TextTransform API in Flint UI.
+/// CSS text-transform value.
 class TextTransform {
-  /// The value value.
+  /// CSS text-transform string.
   final String value;
 
-  /// Creates a TextTransform instance.
+  /// Creates a text-transform value.
   const TextTransform(this.value);
 
   static const none = TextTransform('none');
@@ -360,50 +370,50 @@ class TextTransform {
   static const uppercase = TextTransform('uppercase');
   static const lowercase = TextTransform('lowercase');
 
+  /// Returns the CSS text-transform string.
   @override
-  /// Runs the toString operation.
   String toString() => value;
 }
 
-/// Represents the TextDecorationStyle API in Flint UI.
+/// CSS text-decoration value.
 class TextDecorationStyle {
-  /// The value value.
+  /// CSS text-decoration string.
   final String value;
 
-  /// Creates a TextDecorationStyle instance.
+  /// Creates a text-decoration value.
   const TextDecorationStyle(this.value);
 
   static const none = TextDecorationStyle('none');
   static const underline = TextDecorationStyle('underline');
 
+  /// Returns the CSS text-decoration string.
   @override
-  /// Runs the toString operation.
   String toString() => value;
 }
 
-/// Represents the FlexWrap API in Flint UI.
+/// CSS flex-wrap value.
 class FlexWrap {
-  /// The value value.
+  /// CSS flex-wrap string.
   final String value;
 
-  /// Creates a FlexWrap instance.
+  /// Creates a flex-wrap value.
   const FlexWrap(this.value);
 
   static const nowrap = FlexWrap('nowrap');
   static const wrap = FlexWrap('wrap');
   static const wrapReverse = FlexWrap('wrap-reverse');
 
+  /// Returns the CSS flex-wrap string.
   @override
-  /// Runs the toString operation.
   String toString() => value;
 }
 
-/// Represents the Resize API in Flint UI.
+/// CSS resize value.
 class Resize {
-  /// The value value.
+  /// CSS resize string.
   final String value;
 
-  /// Creates a Resize instance.
+  /// Creates a resize value.
   const Resize(this.value);
 
   static const none = Resize('none');
@@ -413,17 +423,17 @@ class Resize {
   static const block = Resize('block');
   static const inline = Resize('inline');
 
+  /// Returns the CSS resize string.
   @override
-  /// Runs the toString operation.
   String toString() => value;
 }
 
-/// Represents the TransitionTiming API in Flint UI.
+/// CSS transition timing function.
 class TransitionTiming {
-  /// The value value.
+  /// CSS timing function string.
   final String value;
 
-  /// Creates a TransitionTiming instance.
+  /// Creates a transition timing value.
   const TransitionTiming(this.value);
 
   static const ease = TransitionTiming('ease');
@@ -432,20 +442,20 @@ class TransitionTiming {
   static const easeInOut = TransitionTiming('ease-in-out');
   static const linear = TransitionTiming('linear');
 
+  /// Returns the CSS timing function string.
   @override
-  /// Runs the toString operation.
   String toString() => value;
 }
 
-/// Represents the StyleTransition API in Flint UI.
+/// Typed CSS transition value.
 class StyleTransition {
-  /// The value value.
+  /// CSS transition string.
   final String value;
 
-  /// Creates a StyleTransition instance.
+  /// Creates a transition from a raw CSS [value].
   const StyleTransition(this.value);
 
-  /// Creates a StyleTransition instance.
+  /// Creates a transition for one CSS [property].
   factory StyleTransition.property(
     String property, {
     int milliseconds = 180,
@@ -454,7 +464,7 @@ class StyleTransition {
     return StyleTransition('$property ${milliseconds}ms ${timing.value}');
   }
 
-  /// Creates a StyleTransition instance.
+  /// Creates an `all` transition.
   factory StyleTransition.all({
     int milliseconds = 180,
     TransitionTiming timing = TransitionTiming.ease,
@@ -466,7 +476,7 @@ class StyleTransition {
     );
   }
 
-  /// Creates a StyleTransition instance.
+  /// Creates transitions for common color-related properties.
   factory StyleTransition.colors({
     int milliseconds = 180,
     TransitionTiming timing = TransitionTiming.ease,
@@ -490,7 +500,7 @@ class StyleTransition {
     ]);
   }
 
-  /// Creates a StyleTransition instance.
+  /// Creates a transition for CSS transforms.
   factory StyleTransition.transform({
     int milliseconds = 180,
     TransitionTiming timing = TransitionTiming.ease,
@@ -502,7 +512,7 @@ class StyleTransition {
     );
   }
 
-  /// Creates a StyleTransition instance.
+  /// Combines multiple transitions into one CSS transition value.
   factory StyleTransition.combine(List<StyleTransition> transitions) {
     if (transitions.isEmpty) {
       throw ArgumentError.value(
@@ -514,17 +524,17 @@ class StyleTransition {
     return StyleTransition(transitions.map((item) => item.value).join(', '));
   }
 
+  /// Returns the CSS transition string.
   @override
-  /// Runs the toString operation.
   String toString() => value;
 }
 
-/// Represents the AnimationDirection API in Flint UI.
+/// CSS animation-direction value.
 class AnimationDirection {
-  /// The value value.
+  /// CSS animation-direction string.
   final String value;
 
-  /// Creates a AnimationDirection instance.
+  /// Creates an animation direction value.
   const AnimationDirection(this.value);
 
   static const normal = AnimationDirection('normal');
@@ -532,17 +542,17 @@ class AnimationDirection {
   static const alternate = AnimationDirection('alternate');
   static const alternateReverse = AnimationDirection('alternate-reverse');
 
+  /// Returns the CSS animation-direction string.
   @override
-  /// Runs the toString operation.
   String toString() => value;
 }
 
-/// Represents the AnimationFillMode API in Flint UI.
+/// CSS animation-fill-mode value.
 class AnimationFillMode {
-  /// The value value.
+  /// CSS animation-fill-mode string.
   final String value;
 
-  /// Creates a AnimationFillMode instance.
+  /// Creates an animation fill mode value.
   const AnimationFillMode(this.value);
 
   static const none = AnimationFillMode('none');
@@ -550,54 +560,55 @@ class AnimationFillMode {
   static const backwards = AnimationFillMode('backwards');
   static const both = AnimationFillMode('both');
 
+  /// Returns the CSS animation-fill-mode string.
   @override
-  /// Runs the toString operation.
   String toString() => value;
 }
 
-/// Represents the AnimationPlayState API in Flint UI.
+/// CSS animation-play-state value.
 class AnimationPlayState {
-  /// The value value.
+  /// CSS animation-play-state string.
   final String value;
 
-  /// Creates a AnimationPlayState instance.
+  /// Creates an animation play state value.
   const AnimationPlayState(this.value);
 
   static const running = AnimationPlayState('running');
   static const paused = AnimationPlayState('paused');
 
+  /// Returns the CSS animation-play-state string.
   @override
-  /// Runs the toString operation.
   String toString() => value;
 }
 
-/// Represents the AnimationIteration API in Flint UI.
+/// CSS animation-iteration-count value.
 class AnimationIteration {
-  /// The value value.
+  /// Iteration count or keyword.
   final Object value;
 
-  /// Creates a AnimationIteration instance.
+  /// Creates an animation iteration value.
   const AnimationIteration(this.value);
 
-  /// Creates a AnimationIteration instance.
+  /// Creates a numeric iteration count.
   const AnimationIteration.count(num count) : value = count;
 
+  /// CSS `infinite` iteration count.
   static const infinite = AnimationIteration('infinite');
 
+  /// Returns the CSS animation-iteration-count string.
   @override
-  /// Runs the toString operation.
   String toString() => cssValue(value, unitlessNumber: true);
 }
 
-/// Represents the StyleAnimation API in Flint UI.
+/// Typed CSS animation shorthand value.
 class StyleAnimation {
-  /// The value value.
+  /// CSS animation string.
   final String value;
 
-  /// Creates a StyleAnimation instance.
+  /// Creates an animation from a raw CSS [value].
   const StyleAnimation(this.value);
 
-  /// Creates a StyleAnimation instance.
+  /// Creates an animation shorthand for [name].
   factory StyleAnimation.named(
     String name, {
     int milliseconds = 180,
@@ -622,7 +633,7 @@ class StyleAnimation {
     );
   }
 
-  /// Creates a StyleAnimation instance.
+  /// Creates an infinitely repeating animation.
   factory StyleAnimation.infinite(
     String name, {
     int milliseconds = 180,
@@ -636,7 +647,7 @@ class StyleAnimation {
     );
   }
 
-  /// Creates a StyleAnimation instance.
+  /// Creates the built-in `flint-fade-in` animation.
   factory StyleAnimation.fadeIn({
     int milliseconds = 180,
     TransitionTiming timing = TransitionTiming.easeOut,
@@ -649,7 +660,7 @@ class StyleAnimation {
     );
   }
 
-  /// Creates a StyleAnimation instance.
+  /// Creates the built-in `flint-spin` animation.
   factory StyleAnimation.spin({
     int milliseconds = 800,
     TransitionTiming timing = TransitionTiming.linear,
@@ -661,7 +672,7 @@ class StyleAnimation {
     );
   }
 
-  /// Creates a StyleAnimation instance.
+  /// Combines multiple animations into one CSS animation value.
   factory StyleAnimation.combine(List<StyleAnimation> animations) {
     if (animations.isEmpty) {
       throw ArgumentError.value(animations, 'animations', 'Must not be empty.');
@@ -669,17 +680,17 @@ class StyleAnimation {
     return StyleAnimation(animations.map((item) => item.value).join(', '));
   }
 
+  /// Returns the CSS animation string.
   @override
-  /// Runs the toString operation.
   String toString() => value;
 }
 
-/// Represents the WillChange API in Flint UI.
+/// CSS will-change value.
 class WillChange {
-  /// The value value.
+  /// CSS will-change string.
   final String value;
 
-  /// Creates a WillChange instance.
+  /// Creates a will-change value.
   const WillChange(this.value);
 
   static const auto = WillChange('auto');
@@ -688,7 +699,7 @@ class WillChange {
   static const scrollPosition = WillChange('scroll-position');
   static const contents = WillChange('contents');
 
-  /// Creates a WillChange instance.
+  /// Creates a comma-separated list of properties expected to change.
   factory WillChange.properties(List<Object> properties) {
     if (properties.isEmpty) {
       throw ArgumentError.value(properties, 'properties', 'Must not be empty.');
@@ -698,178 +709,172 @@ class WillChange {
     );
   }
 
+  /// Returns the CSS will-change string.
   @override
-  /// Runs the toString operation.
   String toString() => value;
 }
 
-/// Options for the Display API.
+/// CSS display values.
 enum Display {
-  /// Creates a block instance.
+  /// CSS `block`.
   block('block'),
 
-  /// Creates a inline instance.
+  /// CSS `inline`.
   inline('inline'),
 
-  /// Creates a inlineBlock instance.
+  /// CSS `inline-block`.
   inlineBlock('inline-block'),
 
-  /// Creates a flex instance.
+  /// CSS `flex`.
   flex('flex'),
 
-  /// Creates a inlineFlex instance.
+  /// CSS `inline-flex`.
   inlineFlex('inline-flex'),
 
-  /// Creates a grid instance.
+  /// CSS `grid`.
   grid('grid'),
 
-  /// Creates a none instance.
+  /// CSS `none`.
   none('none');
 
-  /// The css value.
+  /// CSS keyword emitted for this value.
   final String css;
 
-  /// Creates a Display instance.
+  /// Creates a display enum value.
   const Display(this.css);
 }
 
-/// Options for the FlexDirection API.
+/// CSS flex-direction values.
 enum FlexDirection {
-  /// Creates a row instance.
+  /// CSS `row`.
   row('row'),
 
-  /// Creates a rowReverse instance.
+  /// CSS `row-reverse`.
   rowReverse('row-reverse'),
 
-  /// Creates a column instance.
+  /// CSS `column`.
   column('column'),
 
-  /// Creates a columnReverse instance.
+  /// CSS `column-reverse`.
   columnReverse('column-reverse');
 
-  /// The css value.
+  /// CSS keyword emitted for this value.
   final String css;
 
-  /// Creates a FlexDirection instance.
+  /// Creates a flex-direction enum value.
   const FlexDirection(this.css);
 }
 
-/// Options for the AlignItems API.
+/// CSS align-items values.
 enum AlignItems {
-  /// Creates a start instance.
+  /// CSS `flex-start`.
   start('flex-start'),
 
-  /// Creates a center instance.
+  /// CSS `center`.
   center('center'),
 
-  /// Creates a end instance.
+  /// CSS `flex-end`.
   end('flex-end'),
 
-  /// Creates a stretch instance.
+  /// CSS `stretch`.
   stretch('stretch'),
 
-  /// Creates a baseline instance.
+  /// CSS `baseline`.
   baseline('baseline');
 
-  /// The css value.
+  /// CSS keyword emitted for this value.
   final String css;
 
-  /// Creates a AlignItems instance.
+  /// Creates an align-items enum value.
   const AlignItems(this.css);
 }
 
-/// Options for the JustifyContent API.
+/// CSS justify-content values.
 enum JustifyContent {
-  /// Creates a start instance.
+  /// CSS `flex-start`.
   start('flex-start'),
 
-  /// Creates a center instance.
+  /// CSS `center`.
   center('center'),
 
-  /// Creates a end instance.
+  /// CSS `flex-end`.
   end('flex-end'),
 
-  /// Creates a between instance.
+  /// CSS `space-between`.
   between('space-between'),
 
-  /// Creates a around instance.
+  /// CSS `space-around`.
   around('space-around'),
 
-  /// Creates a evenly instance.
+  /// CSS `space-evenly`.
   evenly('space-evenly');
 
-  /// The css value.
+  /// CSS keyword emitted for this value.
   final String css;
 
-  /// Creates a JustifyContent instance.
+  /// Creates a justify-content enum value.
   const JustifyContent(this.css);
 }
 
-/// Options for the Position API.
+/// CSS position values.
 enum Position {
-  /// Creates a static instance.
+  /// CSS `static`.
   static('static'),
 
-  /// Creates a relative instance.
+  /// CSS `relative`.
   relative('relative'),
 
-  /// Creates a absolute instance.
+  /// CSS `absolute`.
   absolute('absolute'),
 
-  /// Creates a fixed instance.
+  /// CSS `fixed`.
   fixed('fixed'),
 
-  /// Creates a sticky instance.
+  /// CSS `sticky`.
   sticky('sticky');
 
-  /// The css value.
+  /// CSS keyword emitted for this value.
   final String css;
 
-  /// Creates a Position instance.
+  /// Creates a position enum value.
   const Position(this.css);
 }
 
-/// Options for the TextAlign API.
+/// CSS text-align values.
 enum TextAlign {
-  /// Creates a left instance.
+  /// CSS `left`.
   left('left'),
 
-  /// Creates a center instance.
+  /// CSS `center`.
   center('center'),
 
-  /// Creates a right instance.
+  /// CSS `right`.
   right('right'),
 
-  /// Creates a justify instance.
+  /// CSS `justify`.
   justify('justify');
 
-  /// The css value.
+  /// CSS keyword emitted for this value.
   final String css;
 
-  /// Creates a TextAlign instance.
+  /// Creates a text-align enum value.
   const TextAlign(this.css);
 }
 
+/// Converts typed style values into CSS strings.
 String cssValue(Object? value, {bool unitlessNumber = false}) {
-  /// Creates a if instance.
   if (value == null) return '';
 
-  /// Creates a if instance.
   if (value is TokenRef) return value.toCss();
 
-  /// Creates a if instance.
   if (value is SizeValue) return value.value;
 
-  /// Creates a if instance.
   if (value is Flex) return value.toCss();
 
-  /// Creates a if instance.
   if (value is Border) return value.toCss();
 
-  /// Creates a if instance.
   if (value is Shadow) return value.toCss();
 
-  /// Creates a if instance.
   if (value is num) return unitlessNumber ? value.toString() : '${value}px';
   return value.toString();
 }

@@ -6,18 +6,18 @@ import 'package:universal_web/web.dart' as web;
 import 'component.dart';
 import 'node.dart';
 
-/// Represents the FlintRoot API in Flint UI.
+/// Browser DOM root that renders Flint nodes into a host element.
 class FlintRoot {
-  /// The host value.
+  /// Host element that receives rendered DOM nodes.
   final web.Element host;
   FlintNode? _node;
   bool _renderQueued = false;
   bool _mounted = false;
 
-  /// Creates a FlintRoot instance.
+  /// Creates a root renderer for [host].
   FlintRoot(this.host);
 
-  /// Runs the render operation.
+  /// Renders [node] into the host element.
   void render(Object? node) {
     _node = _normalize(node);
     _scheduleRender();
@@ -172,10 +172,10 @@ class FlintRoot {
   }
 }
 
+/// Creates a root renderer for the first element matching [selector].
 FlintRoot createRoot(String selector) {
   final element = web.document.querySelector(selector);
 
-  /// Creates a if instance.
   if (element == null) {
     throw StateError('No element found for selector "$selector".');
   }
@@ -183,4 +183,5 @@ FlintRoot createRoot(String selector) {
   return FlintRoot(element);
 }
 
+/// Creates a root renderer for an existing browser [element].
 FlintRoot createRootForElement(web.Element element) => FlintRoot(element);

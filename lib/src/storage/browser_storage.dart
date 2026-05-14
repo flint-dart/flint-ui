@@ -2,35 +2,37 @@ import 'dart:convert';
 
 import 'package:universal_web/web.dart' as web;
 
-/// Represents the BrowserStorage API in Flint UI.
+/// Base API for browser-backed key/value storage.
 abstract class BrowserStorage {
-  /// Creates a BrowserStorage instance.
+  /// Creates a browser storage wrapper.
   const BrowserStorage();
 
+  /// The browser storage object used by this wrapper.
   web.Storage get storage;
 
-  /// Runs the read operation.
+  /// Reads a string value by [key].
   String? read(String key) {
     return storage.getItem(key);
   }
 
-  /// Runs the write operation.
+  /// Writes a string [value] by [key].
   void write(String key, String value) {
     storage.setItem(key, value);
   }
 
-  /// Runs the has operation.
+  /// Whether [key] currently exists in storage.
   bool has(String key) {
     return read(key) != null;
   }
 
+  /// Reads and decodes a JSON value by [key].
   Object? readJson(String key) {
     final value = read(key);
     if (value == null || value.isEmpty) return null;
     return jsonDecode(value);
   }
 
-  /// Runs the readMap operation.
+  /// Reads a JSON object by [key], returning an empty map when absent.
   Map<String, dynamic> readMap(String key) {
     final decoded = readJson(key);
     if (decoded is Map<String, dynamic>) return decoded;
@@ -40,19 +42,19 @@ abstract class BrowserStorage {
     return const {};
   }
 
-  /// Runs the writeJson operation.
+  /// Encodes and writes [value] as JSON by [key].
   void writeJson(String key, Object? value) {
     write(key, jsonEncode(value));
   }
 
-  /// Runs the remove operation.
+  /// Removes [key] and returns the previous value when present.
   String? remove(String key) {
     final value = read(key);
     storage.removeItem(key);
     return value;
   }
 
-  /// Runs the clear operation.
+  /// Removes every value from this storage backend.
   void clear() {
     storage.clear();
   }

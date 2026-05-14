@@ -2,6 +2,7 @@ import 'component.dart';
 import 'node.dart';
 import 'style.dart';
 
+/// Merges component props, classes, inline styles, and scoped Dart styles.
 Map<String, Object?> mergeComponentProps(
   Map<String, Object?> props, {
   String? className,
@@ -52,6 +53,7 @@ Map<String, Object?> mergeComponentProps(
   };
 }
 
+/// Combines style maps from left to right, ignoring null values.
 Map<String, Object?> mergeStyles(
   Map<String, Object?> first,
   Map<String, Object?> second, [
@@ -67,26 +69,24 @@ Map<String, Object?> mergeStyles(
   };
 }
 
+/// Normalizes a single child and additional children into Flint nodes.
 List<FlintNode> normalizeChildren(Object? child, List<Object?> children) {
   final values = [if (child != null) child, ...children];
 
   return values.map(toFlintNode).toList(growable: false);
 }
 
+/// Converts common Dart values into a renderable Flint node.
 FlintNode toFlintNode(Object? value) {
-  /// Creates a if instance.
   if (value is FlintNode) return value;
-
-  /// Creates a if instance.
   if (value is FlintComponent) return FlintComponentNode(value);
-
-  /// Creates a if instance.
   if (value is Iterable<Object?>) {
     return FlintFragment(value.map(toFlintNode).toList(growable: false));
   }
   return FlintText(value?.toString() ?? '');
 }
 
+/// Joins non-empty CSS class names with spaces.
 String joinClassNames(Iterable<String?> values) {
   return values
       .where((value) => value != null && value.trim().isNotEmpty)
@@ -94,6 +94,7 @@ String joinClassNames(Iterable<String?> values) {
       .join(' ');
 }
 
+/// Converts a style map into a CSS declaration string.
 String styleToCss(Map<String, Object?> style) {
   return style.entries
       .where((entry) => entry.value != null && entry.key != '_cssText')
@@ -108,14 +109,12 @@ String _scopedClassName(DartStyle style) {
 String _scopedCss(String className, DartStyle style) {
   final chunks = <String>[];
 
-  /// Creates a for instance.
   for (final entry in style.stateStyles.entries) {
     final body = _styleToCssImportant(entry.value.toMap());
     if (body.isEmpty) continue;
     chunks.add('.$className${entry.key} { $body; }');
   }
 
-  /// Creates a for instance.
   for (final entry in style.breakpointStyles.entries) {
     final body = _styleToCssImportant(entry.value.toMap());
     if (body.isEmpty) continue;
@@ -147,7 +146,6 @@ String _styleToCssImportant(Map<String, Object?> style) {
 int _stableHash(String value) {
   var hash = 0x811c9dc5;
 
-  /// Creates a for instance.
   for (final unit in value.codeUnits) {
     hash ^= unit;
     hash = (hash * 0x01000193) & 0xffffffff;

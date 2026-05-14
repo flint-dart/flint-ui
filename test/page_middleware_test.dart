@@ -68,9 +68,7 @@ void main() {
       createFlintApp(
         '#middleware-test-root',
         pages: {'MiddlewareTest': _MiddlewareTestPage.new},
-        middlewares: [
-          (_) {},
-        ],
+        middlewares: [(_) {}],
       );
 
       await Future<void>.delayed(Duration.zero);

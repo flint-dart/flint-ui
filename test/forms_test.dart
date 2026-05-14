@@ -78,10 +78,7 @@ void main() {
     });
 
     test('useForm tracks data, errors, reset, and processing state', () async {
-      final form = useForm({
-        'email': 'ada@example.com',
-        'password': '',
-      });
+      final form = useForm({'email': 'ada@example.com', 'password': ''});
       var notifications = 0;
       form.addListener(() => notifications++);
 
@@ -133,25 +130,27 @@ void main() {
       expect(errors.has('missing'), isFalse);
     });
 
-    test('FormController captures validation errors thrown on submit',
-        () async {
-      final form = useForm({'email': ''});
-      FormErrors? reported;
+    test(
+      'FormController captures validation errors thrown on submit',
+      () async {
+        final form = useForm({'email': ''});
+        FormErrors? reported;
 
-      final result = await form.submit<int>(
-        (_) async => throw {
-          'errors': {
-            'email': ['Email is required'],
+        final result = await form.submit<int>(
+          (_) async => throw {
+            'errors': {
+              'email': ['Email is required'],
+            },
           },
-        },
-        onValidationError: (errors) => reported = errors,
-      );
+          onValidationError: (errors) => reported = errors,
+        );
 
-      expect(result, isNull);
-      expect(form.processing, false);
-      expect(form.error('email'), 'Email is required');
-      expect(reported?.field('email'), 'Email is required');
-    });
+        expect(result, isNull);
+        expect(form.processing, false);
+        expect(form.error('email'), 'Email is required');
+        expect(reported?.field('email'), 'Email is required');
+      },
+    );
 
     test('controls can resolve errors from FormErrors by name', () {
       final errors = FormErrors.from({
@@ -167,15 +166,21 @@ void main() {
       expect(input.props['aria-invalid'], 'true');
       final fieldError = field.children.last as FlintElement;
       expect(
-          (fieldError.children.single as FlintText).value, 'Email is required');
+        (fieldError.children.single as FlintText).value,
+        'Email is required',
+      );
 
       final area = TextArea(name: 'bio', errors: errors);
-      expect((area.children.last as FlintElement).props['id'],
-          'flint-textarea-bio-error');
+      expect(
+        (area.children.last as FlintElement).props['id'],
+        'flint-textarea-bio-error',
+      );
 
       final select = Select(name: 'plan', errors: errors);
-      expect((select.children.first as FlintElement).props['aria-invalid'],
-          'true');
+      expect(
+        (select.children.first as FlintElement).props['aria-invalid'],
+        'true',
+      );
 
       final checkbox = Checkbox(name: 'terms', errors: errors);
       final checkboxLabel = checkbox.children.first as FlintElement;
@@ -188,8 +193,10 @@ void main() {
         options: const [RadioOption(label: 'Admin', value: 'admin')],
       );
       expect(group.props['aria-invalid'], 'true');
-      expect((group.children.last as FlintElement).props['id'],
-          'flint-radio-role-error');
+      expect(
+        (group.children.last as FlintElement).props['id'],
+        'flint-radio-role-error',
+      );
     });
 
     test('TextArea renders value as child text', () {
@@ -204,7 +211,9 @@ void main() {
       expect(textarea.tag, 'textarea');
       expect(textarea.props['rows'], 6);
       expect(
-          (textarea.children.single as FlintText).value, 'Provision manually');
+        (textarea.children.single as FlintText).value,
+        'Provision manually',
+      );
     });
 
     test('Checkbox and Switch render checked states', () {
@@ -278,7 +287,9 @@ void main() {
       );
       final textarea = area.children.single as FlintElement;
       expect(
-          textarea.props['style'], containsPair('background', 'transparent'));
+        textarea.props['style'],
+        containsPair('background', 'transparent'),
+      );
       expect(textarea.props['style'], containsPair('min-height', '96px'));
 
       final select = Select(

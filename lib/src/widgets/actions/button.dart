@@ -4,9 +4,9 @@ import '../../style.dart';
 import '../feedback/spinner.dart';
 import '../shared/theme.dart';
 
-/// Represents the Button API in Flint UI.
+/// Semantic button with Flint UI variants, tones, sizes, and loading state.
 class Button extends FlintElement {
-  /// Creates a Button instance.
+  /// Creates a button with optional child content and click handling.
   Button({
     Object? child,
     List<Object?> children = const [],

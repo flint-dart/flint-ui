@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the ButtonGroup API in Flint UI.
+/// Inline container for grouping related action buttons.
 class ButtonGroup extends FlintElement {
-  /// Creates a ButtonGroup instance.
+  /// Creates a button group with optional child content and styles.
   ButtonGroup({
     Object? child,
     List<Object?> children = const [],

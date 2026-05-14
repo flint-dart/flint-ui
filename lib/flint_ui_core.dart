@@ -1,6 +1,8 @@
-/// Core Flint UI component, node, style, storage, navigation, and widget APIs.
+/// Core component, node, style, storage, navigation, and widget APIs.
 ///
-/// This library is useful for tests, shared components, and lower-level APIs.
+/// Import this from tests, shared component packages, and lower-level code that
+/// should use Flint UI primitives without directly depending on app mounting
+/// helpers.
 library;
 
 export 'src/auth/auth_session.dart';

@@ -3,21 +3,21 @@ import 'package:universal_web/web.dart' as web;
 import 'component.dart';
 import 'node.dart';
 
-/// Represents the HeadTag API in Flint UI.
+/// Describes a browser `<head>` tag managed by Flint UI.
 class HeadTag {
-  /// The tag value.
+  /// Tag name, such as `meta`, `link`, `script`, or `style`.
   final String tag;
 
-  /// The props value.
+  /// Attributes applied to the head element.
   final Map<String, Object?> props;
 
-  /// The content value.
+  /// Optional text content for tags such as `script` and `style`.
   final String? content;
 
-  /// Creates a HeadTag instance.
+  /// Creates a head tag descriptor.
   const HeadTag(this.tag, {this.props = const {}, this.content});
 
-  /// Returns the key value.
+  /// Stable key used to update or replace matching head elements.
   String get key {
     final id = props['id'];
     if (id != null) return '$tag:id:$id';
@@ -39,36 +39,36 @@ class HeadTag {
   }
 }
 
-/// Represents the Head API in Flint UI.
+/// Component that synchronizes page title and head metadata.
 class Head extends FlintComponent {
-  /// The tags value.
+  /// Additional head tags to synchronize.
   final List<HeadTag> tags;
 
-  /// The title value.
+  /// Browser document title and Open Graph title.
   final String? title;
 
-  /// The description value.
+  /// Meta description and Open Graph description.
   final String? description;
 
-  /// The canonical value.
+  /// Canonical URL and Open Graph URL.
   final String? canonical;
 
-  /// The image value.
+  /// Open Graph image URL.
   final String? image;
 
-  /// The type value.
+  /// Open Graph type value.
   final String? type;
 
-  /// The siteName value.
+  /// Open Graph site name.
   final String? siteName;
 
-  /// The locale value.
+  /// Open Graph locale value.
   final String? locale;
 
-  /// The replace value.
+  /// Whether matching existing head tags should be reused and updated.
   final bool replace;
 
-  /// Creates a Head instance.
+  /// Creates a head component from common SEO fields and custom [tags].
   Head({
     this.title,
     this.description,
@@ -81,11 +81,11 @@ class Head extends FlintComponent {
     this.tags = const [],
   });
 
-  /// Creates a Head instance.
+  /// Creates a head component from raw [tags].
   Head.withTags(List<HeadTag> tags, {String? title})
     : this(title: title, tags: tags);
 
-  /// Creates a Head instance.
+  /// Creates a head component with common SEO and Open Graph metadata.
   Head.seo({
     String? title,
     String? description,
@@ -106,6 +106,7 @@ class Head extends FlintComponent {
          tags: tags,
        );
 
+  /// Creates a `meta` head tag descriptor.
   static HeadTag meta({
     String? charset,
     String? name,
@@ -125,6 +126,7 @@ class Head extends FlintComponent {
     );
   }
 
+  /// Creates a `link` head tag descriptor.
   static HeadTag link({
     required String href,
     String rel = 'stylesheet',
@@ -133,6 +135,7 @@ class Head extends FlintComponent {
     return HeadTag('link', props: {...props, 'rel': rel, 'href': href});
   }
 
+  /// Creates a `script` head tag descriptor.
   static HeadTag script({
     String? src,
     String? content,
@@ -152,6 +155,7 @@ class Head extends FlintComponent {
     );
   }
 
+  /// Creates a `style` head tag descriptor.
   static HeadTag style(
     String content, {
     Map<String, Object?> props = const {},
@@ -159,18 +163,18 @@ class Head extends FlintComponent {
     return HeadTag('style', props: props, content: content);
   }
 
+  /// Renders no visible nodes because this component only updates `<head>`.
   @override
-  /// Runs the build operation.
   FlintNode build() => const FlintFragment([]);
 
+  /// Synchronizes metadata after the component first mounts.
   @override
-  /// Runs the didMount operation.
   void didMount() {
     _sync();
   }
 
+  /// Synchronizes metadata after the component updates.
   @override
-  /// Runs the didUpdate operation.
   void didUpdate() {
     _sync();
   }

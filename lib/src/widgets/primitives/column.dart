@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the Column API in Flint UI.
+/// Vertical flex container.
 class Column extends FlintElement {
-  /// Creates a Column instance.
+  /// Creates a column with optional child content and styles.
   Column({
     Object? child,
     List<Object?> children = const [],

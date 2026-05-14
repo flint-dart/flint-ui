@@ -1,32 +1,32 @@
 part of '../style.dart';
 
-/// Represents the Color API in Flint UI.
+/// CSS color value used by typed Flint UI styles.
 class Color {
-  /// The value value.
+  /// CSS color string.
   final String value;
 
-  /// Creates a Color instance.
+  /// Creates a color from a raw CSS color [value].
   const Color(this.value);
 
-  /// Creates a Color instance.
+  /// Creates a color from a hex string.
   const Color.hex(String value) : value = value;
 
-  /// Creates a Color instance.
+  /// Creates an `rgb(...)` color.
   const Color.rgb(int red, int green, int blue)
     : value = 'rgb($red, $green, $blue)';
 
-  /// Creates a Color instance.
+  /// Creates an `rgba(...)` color.
   const Color.rgba(int red, int green, int blue, double alpha)
     : value = 'rgba($red, $green, $blue, $alpha)';
 
+  /// Returns the CSS color string.
   @override
-  /// Runs the toString operation.
   String toString() => value;
 }
 
-/// Represents the Colors API in Flint UI.
+/// Built-in color tokens for Flint UI examples and components.
 class Colors {
-  /// Creates a Colors instance.
+  /// Prevents creating a color token container.
   const Colors._();
 
   static const white = Color('#ffffff');

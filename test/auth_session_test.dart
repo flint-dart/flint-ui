@@ -17,10 +17,7 @@ void main() {
         userKey: 'flint.auth.user',
       );
 
-      manager.save(
-        token: 'token-123',
-        user: {'id': 1, 'role': 'admin'},
-      );
+      manager.save(token: 'token-123', user: {'id': 1, 'role': 'admin'});
 
       expect(manager.isLoggedIn, isTrue);
       expect(manager.token, 'token-123');

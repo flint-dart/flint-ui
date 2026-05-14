@@ -1,19 +1,28 @@
 import 'package:universal_web/web.dart' as web;
 
-/// Options for the CookieSameSite API.
-enum CookieSameSite { lax, strict, none }
+/// SameSite policy values for browser cookies.
+enum CookieSameSite {
+  /// Sends cookies for same-site requests and top-level cross-site navigation.
+  lax,
 
-/// Represents the Cookies API in Flint UI.
+  /// Sends cookies only for same-site requests.
+  strict,
+
+  /// Sends cookies for cross-site requests when paired with `Secure`.
+  none,
+}
+
+/// Reads and writes browser cookies for Flint UI apps.
 class Cookies {
-  /// Creates a Cookies instance.
+  /// Creates a browser cookie helper.
   const Cookies();
 
-  /// Runs the read operation.
+  /// Reads one cookie by [name].
   String? read(String name) {
     return readAll()[name];
   }
 
-  /// Runs the readAll operation.
+  /// Reads all currently visible cookies.
   Map<String, String> readAll() {
     final cookie = web.document.cookie;
     if (cookie.isEmpty) return const {};
@@ -37,12 +46,12 @@ class Cookies {
     return values;
   }
 
-  /// Runs the has operation.
+  /// Whether a cookie named [name] is currently visible.
   bool has(String name) {
     return read(name) != null;
   }
 
-  /// Runs the write operation.
+  /// Writes a browser cookie with common security and lifetime options.
   void write(
     String name,
     String value, {
@@ -65,7 +74,7 @@ class Cookies {
     );
   }
 
-  /// Runs the remove operation.
+  /// Removes a cookie by writing an expired value for [name].
   void remove(
     String name, {
     String path = '/',
@@ -85,7 +94,7 @@ class Cookies {
     );
   }
 
-  /// Runs the clear operation.
+  /// Removes all currently visible cookies for [path].
   void clear({String path = '/'}) {
     for (final name in readAll().keys) {
       remove(name, path: path);
@@ -156,4 +165,5 @@ class Cookies {
   String _decode(String value) => Uri.decodeComponent(value);
 }
 
+/// Shared browser cookie helper.
 const cookies = Cookies();

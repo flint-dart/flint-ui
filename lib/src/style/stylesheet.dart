@@ -1,115 +1,122 @@
 part of '../style.dart';
 
-/// Options for the Breakpoint API.
+/// Responsive breakpoint used by scoped Dart styles.
 enum Breakpoint {
-  /// Creates a sm instance.
+  /// Small screens, starting at 640px.
   sm(640),
 
-  /// Creates a md instance.
+  /// Medium screens, starting at 768px.
   md(768),
 
-  /// Creates a lg instance.
+  /// Large screens, starting at 1024px.
   lg(1024),
 
-  /// Creates a xl instance.
+  /// Extra-large screens, starting at 1280px.
   xl(1280);
 
-  /// The minWidth value.
+  /// Minimum viewport width for this breakpoint.
   final int minWidth;
 
-  /// Creates a Breakpoint instance.
+  /// Creates a breakpoint with a minimum width.
   const Breakpoint(this.minWidth);
 }
 
-/// Represents the ThemeTokens API in Flint UI.
+/// Collection of design token values that compile to CSS variables.
 class ThemeTokens {
-  /// The values value.
+  /// Token values keyed by logical token name.
   final Map<String, Object?> values;
 
-  /// Creates a ThemeTokens instance.
+  /// Creates a token collection from [values].
   const ThemeTokens(this.values);
 
+  /// Resolves a token by [name].
   Object? resolve(String name) => values[name];
 
-  /// Returns the cssVariables value.
+  /// CSS custom properties generated from token values.
   Map<String, Object?> get cssVariables => {
     for (final entry in values.entries)
       '--${_tokenCssName(entry.key)}': entry.value,
   };
 }
 
-/// Represents the TokenRef API in Flint UI.
+/// Reference to a design token CSS variable.
 class TokenRef {
-  /// The name value.
+  /// Logical token name.
   final String name;
 
-  /// The fallback value.
+  /// Optional fallback value used when the CSS variable is missing.
   final Object? fallback;
 
-  /// Creates a TokenRef instance.
+  /// Creates a token reference.
   const TokenRef(this.name, {this.fallback});
 
-  /// Runs the toCss operation.
+  /// Converts this reference to a CSS `var(...)` expression.
   String toCss() {
     final variable = 'var(--${_tokenCssName(name)}';
     if (fallback == null) return '$variable)';
     return '$variable, ${cssValue(fallback)})';
   }
 
+  /// Returns the CSS variable reference.
   @override
-  /// Runs the toString operation.
   String toString() => toCss();
 }
 
+/// Creates a reference to a design token.
 TokenRef token(String name, {Object? fallback}) {
   return TokenRef(name, fallback: fallback);
 }
 
-/// Represents the ThemeToken API in Flint UI.
+/// Convenience factories for common theme token namespaces.
 class ThemeToken {
-  /// Creates a ThemeToken instance.
+  /// Prevents creating a token factory container.
   const ThemeToken._();
 
+  /// References a color token.
   static TokenRef color(String name, {Object? fallback}) =>
       token('color.$name', fallback: fallback);
 
+  /// References a spacing token.
   static TokenRef space(String name, {Object? fallback}) =>
       token('space.$name', fallback: fallback);
 
+  /// References a radius token.
   static TokenRef radius(String name, {Object? fallback}) =>
       token('radius.$name', fallback: fallback);
 
+  /// References a shadow token.
   static TokenRef shadow(String name, {Object? fallback}) =>
       token('shadow.$name', fallback: fallback);
 
+  /// References a font token.
   static TokenRef font(String name, {Object? fallback}) =>
       token('font.$name', fallback: fallback);
 }
 
-/// Represents the FlintTheme API in Flint UI.
+/// Design theme that groups colors, spacing, radii, shadows, and fonts.
 class FlintTheme {
-  /// The name value.
+  /// Theme name used for identification.
   final String name;
 
-  /// The colors value.
+  /// Color token values keyed by color name.
   final Map<String, Object?> colors;
 
-  /// The spacing value.
+  /// Spacing token values keyed by spacing name.
   final Map<String, Object?> spacing;
 
-  /// The radii value.
+  /// Radius token values keyed by radius name.
   final Map<String, Object?> radii;
 
-  /// The shadows value.
+  /// Shadow token values keyed by shadow name.
   final Map<String, Object?> shadows;
 
-  /// The fonts value.
+  /// Font token values keyed by font name.
   final Map<String, Object?> fonts;
 
-  /// The tokens value.
+  /// Additional token values merged with the named token groups.
   final ThemeTokens tokens;
 
-  /// Creates a FlintTheme instance.
+  /// Creates a Flint UI design theme.
   const FlintTheme({
     this.name = 'flint',
     this.colors = const {},
@@ -120,7 +127,7 @@ class FlintTheme {
     this.tokens = const ThemeTokens({}),
   });
 
-  /// Returns the allTokens value.
+  /// All theme token groups flattened into one token collection.
   ThemeTokens get allTokens {
     return ThemeTokens({
       for (final entry in colors.entries) 'color.${entry.key}': entry.value,
@@ -132,46 +139,46 @@ class FlintTheme {
     });
   }
 
-  /// Returns the cssVariables value.
+  /// CSS custom properties generated from all theme tokens.
   Map<String, Object?> get cssVariables => allTokens.cssVariables;
 }
 
-/// Represents the StyleRule API in Flint UI.
+/// CSS rule with base styles and common interaction state styles.
 class StyleRule {
-  /// The styles value.
+  /// Base CSS declarations.
   final Map<String, Object?> styles;
 
-  /// The hover value.
+  /// CSS declarations for `:hover`.
   final Map<String, Object?> hover;
 
-  /// The focus value.
+  /// CSS declarations for `:focus`.
   final Map<String, Object?> focus;
 
-  /// The focusVisible value.
+  /// CSS declarations for `:focus-visible`.
   final Map<String, Object?> focusVisible;
 
-  /// The active value.
+  /// CSS declarations for `:active`.
   final Map<String, Object?> active;
 
-  /// The disabled value.
+  /// CSS declarations for `:disabled`.
   final Map<String, Object?> disabled;
 
-  /// The checked value.
+  /// CSS declarations for `:checked`.
   final Map<String, Object?> checked;
 
-  /// The selected value.
+  /// CSS declarations for `[aria-selected="true"]`.
   final Map<String, Object?> selected;
 
-  /// The expanded value.
+  /// CSS declarations for `[aria-expanded="true"]`.
   final Map<String, Object?> expanded;
 
-  /// The invalid value.
+  /// CSS declarations for `[aria-invalid="true"]`.
   final Map<String, Object?> invalid;
 
-  /// The nestedRules value.
+  /// Nested rules used inside at-rules such as media queries.
   final Map<String, Map<String, Object?>> nestedRules;
 
-  /// Creates a StyleRule instance.
+  /// Creates a style rule with optional interaction state declarations.
   const StyleRule(
     this.styles, {
     this.hover = const {},
@@ -185,7 +192,7 @@ class StyleRule {
     this.invalid = const {},
   }) : nestedRules = const {};
 
-  /// Creates a StyleRule instance.
+  /// Creates a nested style rule for an at-rule.
   const StyleRule.nested(this.nestedRules)
     : styles = const {},
       hover = const {},
@@ -199,27 +206,27 @@ class StyleRule {
       invalid = const {};
 }
 
-/// Represents the StyleSheet API in Flint UI.
+/// Named stylesheet that compiles class-based style rules to CSS text.
 class StyleSheet {
-  /// The name value.
+  /// Stylesheet namespace used in generated class names.
   final String name;
 
-  /// The rules value.
+  /// Style rules keyed by selector or class key.
   final Map<String, StyleRule> rules;
 
-  /// The tokens value.
+  /// Optional tokens used to resolve [TokenRef] values.
   final ThemeTokens? tokens;
 
-  /// Creates a StyleSheet instance.
+  /// Creates a named stylesheet from [rules].
   const StyleSheet(this.name, this.rules, {this.tokens});
 
-  /// Runs the className operation.
+  /// Returns the generated class name for [key].
   String className(String key) {
     final normalized = key.startsWith('.') ? key.substring(1) : key;
     return '${_safeCssIdent(name)}-${_safeCssIdent(normalized)}';
   }
 
-  /// Returns the cssText value.
+  /// Compiled CSS text for this stylesheet.
   String get cssText {
     final chunks = <String>[];
 
@@ -311,45 +318,45 @@ class StyleSheet {
   }
 }
 
-/// Represents the KeyframeStep API in Flint UI.
+/// One step in a CSS `@keyframes` animation.
 class KeyframeStep {
-  /// The offset value.
+  /// Step offset such as `from`, `to`, or a percentage.
   final Object offset;
 
-  /// The style value.
+  /// Style declarations for this keyframe step.
   final DartStyle style;
 
-  /// Creates a KeyframeStep instance.
+  /// Creates a keyframe step at [offset].
   const KeyframeStep(this.offset, this.style);
 
-  /// Creates a KeyframeStep instance.
+  /// Creates a `from` keyframe step.
   const KeyframeStep.from(this.style) : offset = 'from';
 
-  /// Creates a KeyframeStep instance.
+  /// Creates a `to` keyframe step.
   const KeyframeStep.to(this.style) : offset = 'to';
 
-  /// Creates a KeyframeStep instance.
+  /// Creates a percentage keyframe step.
   const KeyframeStep.percent(num percent, this.style) : offset = percent;
 
-  /// Returns the selector value.
+  /// CSS selector for this keyframe step.
   String get selector {
     if (offset is num) return '${offset}%';
     return offset.toString();
   }
 }
 
-/// Represents the StyleKeyframes API in Flint UI.
+/// CSS `@keyframes` animation built from typed style steps.
 class StyleKeyframes {
-  /// The name value.
+  /// Animation name.
   final String name;
 
-  /// The steps value.
+  /// Ordered keyframe steps.
   final List<KeyframeStep> steps;
 
-  /// Creates a StyleKeyframes instance.
+  /// Creates keyframes from a [name] and [steps].
   const StyleKeyframes(this.name, this.steps);
 
-  /// Creates a StyleKeyframes instance.
+  /// Creates keyframes with `from` and `to` steps.
   factory StyleKeyframes.fromTo({
     required String name,
     required DartStyle from,
@@ -358,6 +365,7 @@ class StyleKeyframes {
     return StyleKeyframes(name, [KeyframeStep.from(from), KeyframeStep.to(to)]);
   }
 
+  /// Creates a reusable rotate animation.
   static StyleKeyframes spin({String name = 'flint-spin'}) {
     return StyleKeyframes.fromTo(
       name: name,
@@ -366,6 +374,7 @@ class StyleKeyframes {
     );
   }
 
+  /// Creates a reusable fade-in animation.
   static StyleKeyframes fadeIn({String name = 'flint-fade-in'}) {
     return StyleKeyframes.fromTo(
       name: name,
@@ -374,7 +383,7 @@ class StyleKeyframes {
     );
   }
 
-  /// Returns the cssText value.
+  /// Compiled CSS `@keyframes` text.
   String get cssText {
     final body = steps
         .map((step) {
@@ -389,36 +398,36 @@ class StyleKeyframes {
   }
 }
 
-/// Represents the RootDesign API in Flint UI.
+/// Global design CSS for root, document, and app-wide selectors.
 class RootDesign {
-  /// The name value.
+  /// Unique name used when registering this root design.
   final String name;
 
-  /// The theme value.
+  /// Optional theme whose tokens are emitted as CSS variables.
   final FlintTheme? theme;
 
-  /// The root value.
+  /// Styles emitted for the `:root` selector.
   final DartStyle? root;
 
-  /// The html value.
+  /// Styles emitted for the `html` selector.
   final DartStyle? html;
 
-  /// The body value.
+  /// Styles emitted for the `body` selector.
   final DartStyle? body;
 
-  /// The all value.
+  /// Styles emitted for the universal `*` selector.
   final DartStyle? all;
 
-  /// The links value.
+  /// Styles emitted for the `a` selector.
   final DartStyle? links;
 
-  /// The selectors value.
+  /// Additional global selectors and their styles.
   final Map<String, DartStyle> selectors;
 
-  /// The keyframes value.
+  /// Global keyframes emitted with the root design.
   final List<StyleKeyframes> keyframes;
 
-  /// Creates a RootDesign instance.
+  /// Creates a global root design.
   const RootDesign({
     this.name = 'root',
     this.theme,
@@ -431,7 +440,7 @@ class RootDesign {
     this.keyframes = const [],
   });
 
-  /// Returns the cssText value.
+  /// Compiled global CSS text.
   String get cssText {
     final chunks = <String>[
       if (theme != null) _compileRootMap(':root', theme!.cssVariables),
@@ -465,6 +474,7 @@ class RootDesign {
   }
 }
 
+/// Converts a style map into root-level CSS declarations.
 String rootStyleToCss(Map<String, Object?> style) {
   return style.entries
       .where((entry) => entry.value != null && entry.key != '_cssText')

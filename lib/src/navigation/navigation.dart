@@ -2,62 +2,62 @@ import 'dart:js_interop';
 
 import 'package:universal_web/web.dart' as web;
 
-/// Represents the BrowserNavigation API in Flint UI.
+/// Wraps browser location and history navigation for Flint UI apps.
 class BrowserNavigation {
-  /// Creates a BrowserNavigation instance.
+  /// Creates a browser navigation helper.
   const BrowserNavigation();
 
-  /// Returns the currentUrl value.
+  /// The full current browser URL.
   String get currentUrl => web.window.location.href;
 
-  /// Returns the currentPath value.
+  /// The current browser path without query string or hash.
   String get currentPath => web.window.location.pathname;
 
-  /// Returns the currentQuery value.
+  /// The current browser query string, including the leading `?`.
   String get currentQuery => web.window.location.search;
 
-  /// Returns the currentHash value.
+  /// The current browser hash, including the leading `#`.
   String get currentHash => web.window.location.hash;
 
-  /// Returns the currentUri value.
+  /// The current browser URL parsed as a [Uri].
   Uri get currentUri => Uri.parse(currentUrl);
 
-  /// Runs the navigate operation.
+  /// Pushes a new browser history entry without reloading the page.
   void navigate(String url, {Object? state}) {
     web.window.history.pushState(_toJsState(state), '', url);
   }
 
-  /// Runs the replace operation.
+  /// Replaces the current browser history entry without reloading the page.
   void replace(String url, {Object? state}) {
     web.window.history.replaceState(_toJsState(state), '', url);
   }
 
-  /// Runs the assign operation.
+  /// Loads [url] through `window.location.assign`.
   void assign(String url) {
     web.window.location.assign(url);
   }
 
-  /// Runs the redirect operation.
+  /// Replaces the current page with [url] through `window.location.replace`.
   void redirect(String url) {
     web.window.location.replace(url);
   }
 
-  /// Runs the back operation.
+  /// Moves one entry back in browser history.
   void back() {
     web.window.history.back();
   }
 
-  /// Runs the forward operation.
+  /// Moves one entry forward in browser history.
   void forward() {
     web.window.history.forward();
   }
 
-  /// Runs the go operation.
+  /// Moves by [delta] entries in browser history.
   void go(int delta) {
     web.window.history.go(delta);
   }
 
-  /// Runs the reload operation.
+  /// Reloads the current browser page.
   void reload() {
     web.window.location.reload();
   }
@@ -67,44 +67,50 @@ class BrowserNavigation {
   }
 }
 
+/// Shared browser navigation helper for Flint UI apps.
 const navigation = BrowserNavigation();
 
+/// The full current browser URL.
 String get currentUrl => navigation.currentUrl;
 
+/// The current browser path without query string or hash.
 String get currentPath => navigation.currentPath;
 
+/// The current browser query string, including the leading `?`.
 String get currentQuery => navigation.currentQuery;
 
+/// The current browser hash, including the leading `#`.
 String get currentHash => navigation.currentHash;
 
+/// The current browser URL parsed as a [Uri].
 Uri get currentUri => navigation.currentUri;
 
+/// Pushes a new browser history entry without reloading the page.
 void navigate(String url, {Object? state}) {
-  /// Creates a navigation instance.
   navigation.navigate(url, state: state);
 }
 
+/// Replaces the current browser history entry without reloading the page.
 void replace(String url, {Object? state}) {
-  /// Creates a navigation instance.
   navigation.replace(url, state: state);
 }
 
+/// Moves one entry back in browser history.
 void back() {
-  /// Creates a navigation instance.
   navigation.back();
 }
 
+/// Moves one entry forward in browser history.
 void forward() {
-  /// Creates a navigation instance.
   navigation.forward();
 }
 
+/// Moves by [delta] entries in browser history.
 void go(int delta) {
-  /// Creates a navigation instance.
   navigation.go(delta);
 }
 
+/// Reloads the current browser page.
 void reload() {
-  /// Creates a navigation instance.
   navigation.reload();
 }

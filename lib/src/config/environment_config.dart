@@ -3,15 +3,18 @@ import 'dart:js_interop_unsafe';
 
 import 'package:universal_web/web.dart' as web;
 
-/// Represents the EnvironmentConfig API in Flint UI.
+/// Reads browser-side environment configuration for Flint UI apps.
 class EnvironmentConfig {
-  /// Creates a EnvironmentConfig instance.
+  /// Creates an environment config with explicit override [values].
   const EnvironmentConfig([this.values = const {}]);
 
-  /// The values value.
+  /// Explicit configuration values checked before browser-provided values.
   final Map<String, String> values;
 
-  /// Runs the get operation.
+  /// Reads a string value by [key].
+  ///
+  /// Values are checked from explicit overrides, meta tags, browser globals,
+  /// and finally [fallback].
   String? get(String key, {String? fallback}) {
     return values[key] ??
         _fromMeta(key) ??
@@ -20,7 +23,7 @@ class EnvironmentConfig {
         fallback;
   }
 
-  /// Runs the getBool operation.
+  /// Reads a boolean value by [key].
   bool getBool(String key, {bool fallback = false}) {
     final value = get(key);
     if (value == null) return fallback;
@@ -31,16 +34,17 @@ class EnvironmentConfig {
     };
   }
 
-  /// Runs the getInt operation.
+  /// Reads an integer value by [key].
   int getInt(String key, {int fallback = 0}) {
     return int.tryParse(get(key) ?? '') ?? fallback;
   }
 
-  /// Runs the getDouble operation.
+  /// Reads a double value by [key].
   double getDouble(String key, {double fallback = 0}) {
     return double.tryParse(get(key) ?? '') ?? fallback;
   }
 
+  /// Returns a new config with [values] layered over the current values.
   EnvironmentConfig merge(Map<String, String> values) {
     return EnvironmentConfig({...this.values, ...values});
   }
@@ -67,4 +71,5 @@ class EnvironmentConfig {
   }
 }
 
+/// Shared browser environment configuration helper.
 const env = EnvironmentConfig();

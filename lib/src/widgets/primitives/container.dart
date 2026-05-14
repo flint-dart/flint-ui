@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the Container API in Flint UI.
+/// Generic `div` wrapper for grouping and styling content.
 class Container extends FlintElement {
-  /// Creates a Container instance.
+  /// Creates a container with optional child content and styles.
   Container({
     Object? child,
     List<Object?> children = const [],

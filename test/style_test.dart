@@ -19,11 +19,7 @@ void main() {
         background: '#fff',
         radius: 8,
         border: const Border.all(color: '#d0d5dd'),
-        shadow: const Shadow(
-          y: 4,
-          blur: 12,
-          color: 'rgba(16, 24, 40, 0.12)',
-        ),
+        shadow: const Shadow(y: 4, blur: 12, color: 'rgba(16, 24, 40, 0.12)'),
       );
 
       expect(style.toMap(), {
@@ -46,15 +42,9 @@ void main() {
     });
 
     test('supports flex value helpers', () {
-      expect(const DartStyle(flex: Flex.grow()).toMap(), {
-        'flex': '1 1 0%',
-      });
-      expect(const DartStyle(flex: Flex.auto()).toMap(), {
-        'flex': '1 1 auto',
-      });
-      expect(const DartStyle(flex: Flex.none()).toMap(), {
-        'flex': '0 0 auto',
-      });
+      expect(const DartStyle(flex: Flex.grow()).toMap(), {'flex': '1 1 0%'});
+      expect(const DartStyle(flex: Flex.auto()).toMap(), {'flex': '1 1 auto'});
+      expect(const DartStyle(flex: Flex.none()).toMap(), {'flex': '0 0 auto'});
       expect(const DartStyle(flex: Flex(2, 0, SizeValue.auto)).toMap(), {
         'flex': '2 0 auto',
       });
@@ -116,11 +106,7 @@ void main() {
         color: Colors.slate900,
         background: Color.rgba(14, 165, 233, 0.12),
         border: Border.all(color: Colors.blue600),
-        shadow: Shadow(
-          y: 8,
-          blur: 20,
-          color: Color.rgba(15, 23, 42, 0.18),
-        ),
+        shadow: Shadow(y: 8, blur: 20, color: Color.rgba(15, 23, 42, 0.18)),
       );
 
       expect(style.toMap(), {
@@ -188,13 +174,10 @@ void main() {
               GradientStop(Colors.transparent, 34),
             ],
           ),
-          Gradient.linear(
-            180,
-            const [
-              GradientStop(Color.rgba(18, 23, 34, 0.88)),
-              GradientStop(Color.rgba(9, 11, 16, 0.76)),
-            ],
-          ),
+          Gradient.linear(180, const [
+            GradientStop(Color.rgba(18, 23, 34, 0.88)),
+            GradientStop(Color.rgba(9, 11, 16, 0.76)),
+          ]),
         ]),
       );
 
@@ -214,10 +197,7 @@ void main() {
           fontFamily: FontFamily.systemSans,
           background: Background.layers([
             const Color('#090b10'),
-            Gradient.linearColors(
-              135,
-              const [Colors.blue600, Colors.sky500],
-            ),
+            Gradient.linearColors(135, const [Colors.blue600, Colors.sky500]),
           ]),
         ),
         links: const DartStyle(
@@ -227,27 +207,16 @@ void main() {
         keyframes: [
           StyleKeyframes.spin(),
           StyleKeyframes.fadeIn(),
-          StyleKeyframes(
-            'flint-rise',
-            [
-              KeyframeStep.from(
-                DartStyle(
-                  opacity: 0,
-                  transform: StyleTransform.translateY(8),
-                ),
-              ),
-              KeyframeStep.percent(
-                70,
-                DartStyle(
-                  opacity: 1,
-                  transform: StyleTransform.translateY(-1),
-                ),
-              ),
-              KeyframeStep.to(
-                const DartStyle(opacity: 1),
-              ),
-            ],
-          ),
+          StyleKeyframes('flint-rise', [
+            KeyframeStep.from(
+              DartStyle(opacity: 0, transform: StyleTransform.translateY(8)),
+            ),
+            KeyframeStep.percent(
+              70,
+              DartStyle(opacity: 1, transform: StyleTransform.translateY(-1)),
+            ),
+            KeyframeStep.to(const DartStyle(opacity: 1)),
+          ]),
         ],
       );
 
@@ -262,22 +231,17 @@ void main() {
       expect(design.cssText, contains('transform: rotate(360deg)'));
       expect(design.cssText, contains('@keyframes flint-fade-in'));
       expect(design.cssText, contains('@keyframes flint-rise'));
-      expect(design.cssText,
-          contains('70% { transform: translateY(-1px); opacity: 1'));
+      expect(
+        design.cssText,
+        contains('70% { transform: translateY(-1px); opacity: 1'),
+      );
     });
 
     test('supports theme tokens in root design and DartStyle', () {
       final theme = FlintTheme(
-        colors: const {
-          'primary': Colors.blue600,
-          'surface': Color('#121722'),
-        },
-        spacing: const {
-          '4': SizeValue.rem(1),
-        },
-        radii: const {
-          'md': 8,
-        },
+        colors: const {'primary': Colors.blue600, 'surface': Color('#121722')},
+        spacing: const {'4': SizeValue.rem(1)},
+        radii: const {'md': 8},
         shadows: const {
           'focus': Shadow(
             y: 0,
@@ -286,9 +250,7 @@ void main() {
             color: Color.rgba(37, 99, 235, 0.28),
           ),
         },
-        fonts: const {
-          'sans': FontFamily.systemSans,
-        },
+        fonts: const {'sans': FontFamily.systemSans},
       );
 
       final design = RootDesign(theme: theme);
@@ -334,9 +296,7 @@ void main() {
       expect(style.toMap(), {'width': '44px'});
       expect(style.hasBreakpoints, isTrue);
       expect(style.hasScopedStyles, isTrue);
-      expect(style.breakpointStyles[Breakpoint.md]!.toMap(), {
-        'width': '52px',
-      });
+      expect(style.breakpointStyles[Breakpoint.md]!.toMap(), {'width': '52px'});
     });
 
     test('keeps state styles out of inline base styles', () {
@@ -388,10 +348,7 @@ void main() {
         className: 'from-arg',
         defaultStyle: {'display': 'block', 'padding': '8px'},
         variantStyle: {'padding': '12px', 'background': '#f8fafc'},
-        dartStyle: DartStyle(
-          padding: EdgeInsets.all(16),
-          color: '#111827',
-        ),
+        dartStyle: DartStyle(padding: EdgeInsets.all(16), color: '#111827'),
         style: {'background': '#fff'},
       );
 

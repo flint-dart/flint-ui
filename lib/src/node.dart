@@ -1,40 +1,41 @@
 import 'component.dart';
 
+/// Base type for all renderable Flint UI nodes.
 sealed class FlintNode {
-  /// Creates a FlintNode instance.
+  /// Creates a Flint UI node.
   const FlintNode();
 }
 
-/// Represents the FlintText API in Flint UI.
+/// Text node rendered into the browser DOM.
 class FlintText extends FlintNode {
-  /// The value value.
+  /// Text content for this node.
   final String value;
 
-  /// Creates a FlintText instance.
+  /// Creates a text node containing [value].
   const FlintText(this.value);
 }
 
-/// Represents the FlintFragment API in Flint UI.
+/// Groups multiple child nodes without adding an element wrapper.
 class FlintFragment extends FlintNode {
-  /// The children value.
+  /// Child nodes rendered in order.
   final List<FlintNode> children;
 
-  /// Creates a FlintFragment instance.
+  /// Creates a fragment from [children].
   const FlintFragment(this.children);
 }
 
-/// Represents the FlintElement API in Flint UI.
+/// DOM element node with a tag, properties, and children.
 class FlintElement extends FlintNode {
-  /// The tag value.
+  /// HTML tag name for this element.
   final String tag;
 
-  /// The props value.
+  /// Element attributes, event handlers, classes, and styles.
   final Map<String, Object?> props;
 
-  /// The children value.
+  /// Child nodes rendered inside the element.
   final List<FlintNode> children;
 
-  /// Creates a FlintElement instance.
+  /// Creates an element with [tag], optional [props], and [children].
   const FlintElement(
     this.tag, {
     this.props = const {},
@@ -42,11 +43,11 @@ class FlintElement extends FlintNode {
   });
 }
 
-/// Represents the FlintComponentNode API in Flint UI.
+/// Node wrapper that lets a [FlintComponent] render in the node tree.
 class FlintComponentNode extends FlintNode {
-  /// The component value.
+  /// Component rendered by this node.
   final FlintComponent component;
 
-  /// Creates a FlintComponentNode instance.
+  /// Creates a node for [component].
   const FlintComponentNode(this.component);
 }

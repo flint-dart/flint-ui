@@ -1,21 +1,21 @@
 part of '../style.dart';
 
-/// Represents the Gradient API in Flint UI.
+/// CSS gradient value for typed backgrounds.
 class Gradient {
-  /// The value value.
+  /// CSS gradient string.
   final String value;
 
-  /// Creates a Gradient instance.
+  /// Creates a gradient from a raw CSS [value].
   const Gradient(this.value);
 
-  /// Creates a Gradient instance.
+  /// Creates a `linear-gradient(...)` from [angle] and color stops.
   factory Gradient.linear(num angle, List<Object> stops) {
     return Gradient(
       'linear-gradient(${angle}deg, ${stops.map(_gradientStopValue).join(', ')})',
     );
   }
 
-  /// Creates a Gradient instance.
+  /// Creates an evenly distributed linear gradient from colors.
   factory Gradient.linearColors(num angle, List<Object> colors) {
     if (colors.isEmpty) {
       throw ArgumentError.value(colors, 'colors', 'Must not be empty.');
@@ -32,33 +32,33 @@ class Gradient {
     return Gradient.linear(angle, stops);
   }
 
-  /// Creates a Gradient instance.
+  /// Creates a `radial-gradient(...)` from [shape] and color stops.
   factory Gradient.radial(String shape, List<Object> stops) {
     return Gradient(
       'radial-gradient($shape, ${stops.map(_gradientStopValue).join(', ')})',
     );
   }
 
-  /// Creates a Gradient instance.
+  /// Creates a circular radial gradient.
   factory Gradient.radialCircle({Object? at, required List<Object> stops}) {
     final shape = at == null ? 'circle' : 'circle at ${cssValue(at)}';
     return Gradient.radial(shape, stops);
   }
 
+  /// Returns the CSS gradient string.
   @override
-  /// Runs the toString operation.
   String toString() => value;
 }
 
-/// Represents the Background API in Flint UI.
+/// CSS background value that can combine multiple layers.
 class Background {
-  /// The value value.
+  /// CSS background string.
   final String value;
 
-  /// Creates a Background instance.
+  /// Creates a background from a raw CSS [value].
   const Background(this.value);
 
-  /// Creates a Background instance.
+  /// Creates a comma-separated layered background.
   factory Background.layers(List<Object> layers) {
     if (layers.isEmpty) {
       throw ArgumentError.value(layers, 'layers', 'Must not be empty.');
@@ -66,60 +66,69 @@ class Background {
     return Background(layers.map(cssValue).join(', '));
   }
 
+  /// Returns the CSS background string.
   @override
-  /// Runs the toString operation.
   String toString() => value;
 }
 
-/// Represents the GradientPosition API in Flint UI.
+/// Position value used by radial gradients.
 class GradientPosition {
-  /// The value value.
+  /// CSS position string.
   final String value;
 
-  /// Creates a GradientPosition instance.
+  /// Creates a gradient position from a raw CSS [value].
   const GradientPosition(this.value);
 
-  /// Creates a GradientPosition instance.
+  /// Creates a percentage-based gradient position.
   const GradientPosition.percent(num x, num y) : value = '$x% $y%';
 
+  /// Top-left gradient position.
   static const topLeft = GradientPosition('top left');
+
+  /// Top-right gradient position.
   static const topRight = GradientPosition('top right');
+
+  /// Bottom-left gradient position.
   static const bottomLeft = GradientPosition('bottom left');
+
+  /// Bottom-right gradient position.
   static const bottomRight = GradientPosition('bottom right');
+
+  /// Center gradient position.
   static const center = GradientPosition('center');
 
+  /// Returns the CSS position string.
   @override
-  /// Runs the toString operation.
   String toString() => value;
 }
 
-/// Represents the Flex API in Flint UI.
+/// Typed CSS `flex` shorthand value.
 class Flex {
-  /// The grow value.
+  /// CSS `flex-grow` component.
   final Object grow;
 
-  /// The shrink value.
+  /// CSS `flex-shrink` component.
   final Object shrink;
 
-  /// The basis value.
+  /// CSS `flex-basis` component.
   final Object basis;
 
-  /// Creates a Flex instance.
+  /// Creates a custom flex shorthand value.
   const Flex(this.grow, this.shrink, this.basis);
 
-  /// Creates a Flex instance.
+  /// Creates `1 1 0%` by default.
   const Flex.grow([this.grow = 1]) : shrink = 1, basis = '0%';
 
-  /// Creates a Flex instance.
+  /// Creates `1 1 auto`.
   const Flex.auto() : grow = 1, shrink = 1, basis = 'auto';
 
-  /// Creates a Flex instance.
+  /// Creates `0 0 auto`.
   const Flex.none() : grow = 0, shrink = 0, basis = 'auto';
 
-  /// Creates a Flex instance.
+  /// Creates `1 1 auto`.
   const Flex.fill() : grow = 1, shrink = 1, basis = 'auto';
 
-  /// Runs the toCss operation.
+  /// Converts this shorthand to a CSS `flex` value.
   String toCss() {
     return [
       cssValue(grow, unitlessNumber: true),
@@ -128,23 +137,23 @@ class Flex {
     ].join(' ');
   }
 
+  /// Returns the CSS `flex` value.
   @override
-  /// Runs the toString operation.
   String toString() => toCss();
 }
 
-/// Represents the GradientStop API in Flint UI.
+/// Color stop used in typed gradient factories.
 class GradientStop {
-  /// The color value.
+  /// Stop color.
   final Object color;
 
-  /// The position value.
+  /// Optional stop position.
   final Object? position;
 
-  /// Creates a GradientStop instance.
+  /// Creates a gradient stop from a [color] and optional [position].
   const GradientStop(this.color, [this.position]);
 
-  /// Runs the toCss operation.
+  /// Converts this stop to a CSS gradient stop.
   String toCss() {
     final colorValue = cssValue(color);
     if (position == null) return colorValue;
@@ -153,13 +162,11 @@ class GradientStop {
 }
 
 String _gradientStopValue(Object stop) {
-  /// Creates a if instance.
   if (stop is GradientStop) return stop.toCss();
   return cssValue(stop);
 }
 
 String _gradientPositionValue(Object? position) {
-  /// Creates a if instance.
   if (position is num) {
     final value = position % 1 == 0 ? position.toInt() : position;
     return '$value%';
@@ -167,19 +174,22 @@ String _gradientPositionValue(Object? position) {
   return cssValue(position);
 }
 
-/// Represents the Gradients API in Flint UI.
+/// Built-in gradients for Flint UI examples and components.
 class Gradients {
-  /// Creates a Gradients instance.
+  /// Prevents creating a gradient token container.
   const Gradients._();
 
+  /// Blue ocean linear gradient.
   static const ocean = Gradient(
     'linear-gradient(135deg, #0ea5e9 0%, #2563eb 58%, #1d4ed8 100%)',
   );
 
+  /// Blue-to-sky linear gradient.
   static const sky = Gradient(
     'linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%)',
   );
 
+  /// Layered soft panel background gradient.
   static const softPanel = Gradient(
     'radial-gradient(circle at top left, rgba(56, 189, 248, 0.22), transparent 34%), '
     'radial-gradient(circle at bottom right, rgba(37, 99, 235, 0.18), transparent 32%), '

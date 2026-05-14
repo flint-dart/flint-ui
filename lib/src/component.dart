@@ -1,46 +1,45 @@
 import 'node.dart';
 
-/// Function signature used by the FlintStateUpdater API.
+/// Callback used to mutate component state before a rerender is scheduled.
 typedef FlintStateUpdater = void Function();
 
-/// Represents the FlintComponent API in Flint UI.
+/// Base class for reusable Flint UI components.
 abstract class FlintComponent {
-  /// Runs the Function operation.
   void Function()? _scheduleRender;
 
-  /// Runs the build operation.
+  /// Builds the node tree for this component.
   FlintNode build();
 
-  /// Runs the setState operation.
+  /// Applies [update] and schedules this component to render again.
   void setState(FlintStateUpdater update) {
     update();
     _scheduleRender?.call();
   }
 
-  /// Runs the didMount operation.
+  /// Called after the component is first mounted in the browser.
   void didMount() {}
 
-  /// Runs the didUpdate operation.
+  /// Called after the component updates following a rerender.
   void didUpdate() {}
 
-  /// Runs the willUnmount operation.
+  /// Called before the component is removed from the tree.
   void willUnmount() {}
 
-  /// Runs the attach operation.
+  /// Attaches the render scheduler used by [setState].
   void attach(void Function() scheduleRender) {
     _scheduleRender = scheduleRender;
   }
 }
 
-/// Represents the FunctionalComponent API in Flint UI.
+/// Component wrapper for a function that returns a [FlintNode].
 class FunctionalComponent extends FlintComponent {
-  /// The builder value.
+  /// Builds the node tree for this functional component.
   final FlintNode Function() builder;
 
-  /// Creates a FunctionalComponent instance.
+  /// Creates a component backed by [builder].
   FunctionalComponent(this.builder);
 
+  /// Builds this component by calling [builder].
   @override
-  /// Runs the build operation.
   FlintNode build() => builder();
 }

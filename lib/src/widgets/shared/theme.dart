@@ -1,26 +1,108 @@
 import '../../style.dart';
 
-/// Options for the Tone API.
-enum Tone { neutral, primary, success, warning, danger, info }
+/// Semantic tone used by shared widget theme helpers.
+enum Tone {
+  /// Neutral tone for default UI surfaces and actions.
+  neutral,
 
-/// Options for the ComponentSize API.
-enum ComponentSize { xs, sm, md, lg }
+  /// Primary brand/action tone.
+  primary,
 
-/// Options for the ButtonVariant API.
-enum ButtonVariant { solid, soft, outline, ghost }
+  /// Success or positive status tone.
+  success,
 
-/// Options for the BadgeVariant API.
-enum BadgeVariant { soft, outline, solid }
+  /// Warning or caution status tone.
+  warning,
 
-/// Options for the CardVariant API.
-enum CardVariant { outline, elevated, soft, ghost }
+  /// Danger or destructive status tone.
+  danger,
 
-/// Options for the InputVariant API.
-enum InputVariant { outline, soft, ghost }
+  /// Informational status tone.
+  info,
+}
 
-/// Options for the NavVariant API.
-enum NavVariant { underline, pill, ghost }
+/// Shared component size scale.
+enum ComponentSize {
+  /// Extra-small component size.
+  xs,
 
+  /// Small component size.
+  sm,
+
+  /// Medium component size.
+  md,
+
+  /// Large component size.
+  lg,
+}
+
+/// Visual variants for button-like actions.
+enum ButtonVariant {
+  /// Filled button with solid tone color.
+  solid,
+
+  /// Soft button with tinted background.
+  soft,
+
+  /// Outlined button with transparent background.
+  outline,
+
+  /// Minimal button with transparent background and border.
+  ghost,
+}
+
+/// Visual variants for badges and status pills.
+enum BadgeVariant {
+  /// Soft badge with tinted background.
+  soft,
+
+  /// Outlined badge with transparent background.
+  outline,
+
+  /// Solid badge with filled tone color.
+  solid,
+}
+
+/// Visual variants for card-like surfaces.
+enum CardVariant {
+  /// Outlined card surface.
+  outline,
+
+  /// Elevated card surface with shadow.
+  elevated,
+
+  /// Soft tinted card surface.
+  soft,
+
+  /// Ghost card with transparent surface.
+  ghost,
+}
+
+/// Visual variants for form inputs.
+enum InputVariant {
+  /// Outlined input surface.
+  outline,
+
+  /// Soft input surface.
+  soft,
+
+  /// Ghost input with transparent surface.
+  ghost,
+}
+
+/// Visual variants for navigation items.
+enum NavVariant {
+  /// Underlined navigation item.
+  underline,
+
+  /// Pill-shaped navigation item.
+  pill,
+
+  /// Ghost navigation item.
+  ghost,
+}
+
+/// Base style shared by button-like components.
 final buttonBaseStyle = DartStyle(
   display: Display.inlineFlex,
   alignItems: AlignItems.center,
@@ -34,6 +116,7 @@ final buttonBaseStyle = DartStyle(
   transition: StyleTransition.colors(milliseconds: 120),
 );
 
+/// Resolves a complete button style from variant, tone, size, and state.
 DartStyle buttonComponentStyle({
   required ButtonVariant variant,
   required Tone tone,
@@ -64,6 +147,7 @@ DartStyle buttonComponentStyle({
   return base;
 }
 
+/// Resolves button sizing styles for [size].
 DartStyle buttonSizeStyle(ComponentSize size) {
   return switch (size) {
     ComponentSize.xs => const DartStyle(
@@ -89,6 +173,7 @@ DartStyle buttonSizeStyle(ComponentSize size) {
   };
 }
 
+/// Resolves badge sizing styles for [size].
 DartStyle badgeSizeStyle(ComponentSize size) {
   return switch (size) {
     ComponentSize.xs => const DartStyle(
@@ -114,6 +199,7 @@ DartStyle badgeSizeStyle(ComponentSize size) {
   };
 }
 
+/// Resolves button variant styles for [variant] and [tone].
 DartStyle buttonVariantStyle(ButtonVariant variant, Tone tone) {
   return switch (variant) {
     ButtonVariant.solid => DartStyle(
@@ -139,6 +225,7 @@ DartStyle buttonVariantStyle(ButtonVariant variant, Tone tone) {
   };
 }
 
+/// Resolves button hover styles for [variant] and [tone].
 DartStyle buttonHoverStyle(ButtonVariant variant, Tone tone) {
   return switch (variant) {
     ButtonVariant.solid => DartStyle(
@@ -154,6 +241,7 @@ DartStyle buttonHoverStyle(ButtonVariant variant, Tone tone) {
   };
 }
 
+/// Resolves a complete badge style from variant, tone, and size.
 DartStyle badgeComponentStyle({
   required BadgeVariant variant,
   required Tone tone,
@@ -184,6 +272,7 @@ DartStyle badgeComponentStyle({
   });
 }
 
+/// Resolves a complete card style from variant and tone.
 DartStyle cardComponentStyle({
   required CardVariant variant,
   required Tone tone,
@@ -229,6 +318,7 @@ DartStyle cardComponentStyle({
   });
 }
 
+/// Resolves a complete input style from variant, size, and state.
 DartStyle inputComponentStyle({
   required InputVariant variant,
   required ComponentSize size,
@@ -322,6 +412,7 @@ DartStyle inputComponentStyle({
       );
 }
 
+/// Resolves input sizing styles for [size].
 DartStyle inputSizeStyle(ComponentSize size) {
   return switch (size) {
     ComponentSize.xs => const DartStyle(
@@ -347,6 +438,7 @@ DartStyle inputSizeStyle(ComponentSize size) {
   };
 }
 
+/// Resolves a complete navigation item style from variant, tone, size, and state.
 DartStyle navItemComponentStyle({
   required NavVariant variant,
   required Tone tone,
@@ -416,6 +508,7 @@ DartStyle navItemComponentStyle({
       );
 }
 
+/// Resolves navigation item sizing styles for [size].
 DartStyle navItemSizeStyle(ComponentSize size) {
   return switch (size) {
     ComponentSize.xs => const DartStyle(
@@ -441,6 +534,7 @@ DartStyle navItemSizeStyle(ComponentSize size) {
   };
 }
 
+/// Returns a square icon button size for [size].
 String iconButtonSize(ComponentSize size) {
   return switch (size) {
     ComponentSize.xs => '28px',
@@ -450,6 +544,7 @@ String iconButtonSize(ComponentSize size) {
   };
 }
 
+/// Returns a spinner size for [size].
 String spinnerSize(ComponentSize size) {
   return switch (size) {
     ComponentSize.xs => '14px',
@@ -459,6 +554,7 @@ String spinnerSize(ComponentSize size) {
   };
 }
 
+/// Resolves the solid color for [tone].
 Object toneSolid(Tone tone) {
   return switch (tone) {
     Tone.neutral => ThemeToken.color(
@@ -482,6 +578,7 @@ Object toneSolid(Tone tone) {
   };
 }
 
+/// Resolves the solid hover color for [tone].
 Object toneSolidHover(Tone tone) {
   return switch (tone) {
     Tone.neutral => ThemeToken.color(
@@ -511,6 +608,7 @@ Object toneSolidHover(Tone tone) {
   };
 }
 
+/// Resolves the soft background color for [tone].
 Object toneSoft(Tone tone) {
   return switch (tone) {
     Tone.neutral => ThemeToken.color(
@@ -534,6 +632,7 @@ Object toneSoft(Tone tone) {
   };
 }
 
+/// Resolves the soft hover background color for [tone].
 Object toneSoftHover(Tone tone) {
   return switch (tone) {
     Tone.neutral => ThemeToken.color(
@@ -560,6 +659,7 @@ Object toneSoftHover(Tone tone) {
   };
 }
 
+/// Resolves the border color for [tone].
 Object toneBorder(Tone tone) {
   return switch (tone) {
     Tone.neutral => ThemeToken.color(
@@ -586,6 +686,7 @@ Object toneBorder(Tone tone) {
   };
 }
 
+/// Resolves the text color for [tone].
 Object toneText(Tone tone) {
   return switch (tone) {
     Tone.neutral => ThemeToken.color(
@@ -609,6 +710,7 @@ Object toneText(Tone tone) {
   };
 }
 
+/// Resolves the foreground color used on solid tone backgrounds.
 Object toneOnSolid(Tone tone) {
   return switch (tone) {
     Tone.warning => ThemeToken.color(
@@ -619,6 +721,7 @@ Object toneOnSolid(Tone tone) {
   };
 }
 
+/// Resolves the focus ring color for [tone].
 Object toneFocus(Tone tone) {
   return switch (tone) {
     Tone.neutral => ThemeToken.color(

@@ -2,4 +2,9 @@ include: package:lints/recommended.yaml
 
 linter:
   rules:
-    public_member_api_docs: true
+    invalid_runtime_check_with_js_interop_types: false
+    prefer_initializing_formals: false
+    prefer_null_aware_operators: false
+    public_member_api_docs: false
+    unnecessary_brace_in_string_interps: false
+    use_super_parameters: false

@@ -34,10 +34,7 @@ void main() {
     });
 
     test('supports state objects', () {
-      navigation.navigate(
-        '/flint-navigation-state',
-        state: {'from': 'test'},
-      );
+      navigation.navigate('/flint-navigation-state', state: {'from': 'test'});
 
       expect(currentPath, '/flint-navigation-state');
     });

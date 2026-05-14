@@ -4,9 +4,9 @@ import '../../style.dart';
 import '../feedback/spinner.dart';
 import '../shared/theme.dart';
 
-/// Represents the IconButton API in Flint UI.
+/// Accessible icon-only button with Flint UI variants and loading state.
 class IconButton extends FlintElement {
-  /// Creates a IconButton instance.
+  /// Creates an icon button with an accessible [label].
   IconButton({
     required Object icon,
     required String label,

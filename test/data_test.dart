@@ -72,8 +72,12 @@ void main() {
       expect(progress.props['aria-valuenow'], 40);
       expect(progress.props['aria-valuemax'], 80);
 
-      final usage =
-          UsageMeter(label: 'Storage', used: 25, limit: 100, unit: 'GB');
+      final usage = UsageMeter(
+        label: 'Storage',
+        used: 25,
+        limit: 100,
+        unit: 'GB',
+      );
       expect(usage.children.last, isA<ProgressBar>());
     });
 

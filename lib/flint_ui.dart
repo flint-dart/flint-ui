@@ -1,6 +1,8 @@
-/// Dart-first UI components, browser rendering, pages, and styling for Flint.
+/// Browser entrypoint APIs for building Flint UI applications.
 ///
-/// Import this library from browser entrypoints that mount a Flint UI app.
+/// Import this from Dart files that mount a browser UI with `createFlintApp`.
+/// It includes the core component/widget APIs plus browser rendering, page
+/// registry, and stylesheet registration helpers.
 library;
 
 export 'flint_ui_core.dart';

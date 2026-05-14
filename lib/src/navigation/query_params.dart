@@ -1,43 +1,46 @@
 import 'navigation.dart';
 
-/// Represents the QueryParams API in Flint UI.
+/// Reads and updates the current browser URL query string.
 class QueryParams {
-  /// Creates a QueryParams instance.
+  /// Creates a query parameter helper for the current browser URL.
   const QueryParams();
 
   Uri get _uri => currentUri;
 
-  /// Runs the get operation.
+  /// Returns the first value for [key], or `null` when it is absent.
   String? get(String key) {
     return _uri.queryParameters[key];
   }
 
-  /// Runs the getAll operation.
+  /// Returns all values for [key].
   List<String> getAll(String key) {
     return _uri.queryParametersAll[key] ?? const [];
   }
 
-  /// Returns the all value.
+  /// All query parameters as a single-value map.
   Map<String, String> get all {
     return Map.unmodifiable(_uri.queryParameters);
   }
 
-  /// Returns the allValues value.
+  /// All query parameters, preserving repeated values.
   Map<String, List<String>> get allValues {
     return Map.unmodifiable(_uri.queryParametersAll);
   }
 
-  /// Runs the has operation.
+  /// Whether the current URL contains [key].
   bool has(String key) {
     return _uri.queryParameters.containsKey(key);
   }
 
-  /// Runs the set operation.
+  /// Sets one query parameter and writes the updated URL to browser history.
   void set(String key, Object? value, {bool push = false, Object? state}) {
     update({key: value}, push: push, state: state);
   }
 
-  /// Runs the update operation.
+  /// Updates multiple query parameters and writes the updated URL.
+  ///
+  /// `null` values remove their keys. Iterable values become repeated query
+  /// values.
   void update(Map<String, Object?> values, {bool push = false, Object? state}) {
     final next = Map<String, dynamic>.from(_uri.queryParameters);
 
@@ -55,13 +58,13 @@ class QueryParams {
     _write(next, push: push, state: state);
   }
 
-  /// Runs the remove operation.
+  /// Removes [key] from the current query string.
   void remove(String key, {bool push = false, Object? state}) {
     final next = Map<String, dynamic>.from(_uri.queryParameters)..remove(key);
     _write(next, push: push, state: state);
   }
 
-  /// Runs the clear operation.
+  /// Removes all query parameters from the current URL.
   void clear({bool push = false, Object? state}) {
     _write(const {}, push: push, state: state);
   }
@@ -85,4 +88,5 @@ class QueryParams {
   }
 }
 
+/// Shared query string helper for the current browser URL.
 const query = QueryParams();

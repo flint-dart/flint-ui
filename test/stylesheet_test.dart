@@ -51,9 +51,7 @@ void main() {
           selected: {'font-weight': 700},
         ),
         '@media (max-width: 760px)': const StyleRule.nested({
-          '.link': {
-            'display': 'none',
-          },
+          '.link': {'display': 'none'},
         }),
       });
 

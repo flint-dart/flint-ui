@@ -22,9 +22,7 @@ void main() {
     });
 
     test('reads explicit values before fallback', () {
-      final config = const EnvironmentConfig({
-        'API_URL': '/api',
-      });
+      final config = const EnvironmentConfig({'API_URL': '/api'});
 
       expect(config.get('API_URL', fallback: '/fallback'), '/api');
       expect(config.get('MISSING', fallback: '/fallback'), '/fallback');
@@ -39,9 +37,7 @@ void main() {
     test('reads browser global values', () {
       globalContext.setProperty(
         '__FLINT_ENV__'.toJS,
-        {
-          'API_URL': '/global-api',
-        }.jsify(),
+        {'API_URL': '/global-api'}.jsify(),
       );
 
       expect(env.get('API_URL'), '/global-api');
@@ -62,10 +58,7 @@ void main() {
     test('merges values into a new config', () {
       final config = const EnvironmentConfig({
         'API_URL': '/api',
-      }).merge({
-        'API_URL': '/v2',
-        'APP_NAME': 'Flint',
-      });
+      }).merge({'API_URL': '/v2', 'APP_NAME': 'Flint'});
 
       expect(config.get('API_URL'), '/v2');
       expect(config.get('APP_NAME'), 'Flint');

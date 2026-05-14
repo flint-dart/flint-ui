@@ -13,7 +13,10 @@ void main() {
             SidebarItem(label: 'Users', href: '/users'),
           ],
         ),
-        topbar: Topbar(title: 'Users', actions: Button(child: 'Create')),
+        topbar: Topbar(
+          title: 'Users',
+          actions: Button(child: 'Create'),
+        ),
         child: Text('Main content'),
       );
 
@@ -87,45 +90,47 @@ void main() {
       expect(header.children.last, isA<Button>());
     });
 
-    test('Section, Panel, StatCard, and EmptyState render expected surfaces',
-        () {
-      final section = Section(
-        title: 'Recent jobs',
-        description: 'Provisioning activity',
-        child: Text('Jobs list'),
-      );
-      expect(section.tag, 'section');
-      expect(section.children, hasLength(2));
+    test(
+      'Section, Panel, StatCard, and EmptyState render expected surfaces',
+      () {
+        final section = Section(
+          title: 'Recent jobs',
+          description: 'Provisioning activity',
+          child: Text('Jobs list'),
+        );
+        expect(section.tag, 'section');
+        expect(section.children, hasLength(2));
 
-      final panel = Panel(title: 'Plan', child: Text('Starter'));
-      expect(panel.tag, 'section');
-      expect(panel.props['style'], containsPair('border-radius', '8px'));
+        final panel = Panel(title: 'Plan', child: Text('Starter'));
+        expect(panel.tag, 'section');
+        expect(panel.props['style'], containsPair('border-radius', '8px'));
 
-      final stat = StatCard(
-        label: 'Active users',
-        value: 42,
-        trend: '+12%',
-        tone: Tone.success,
-        variant: CardVariant.elevated,
-      );
-      expect(stat.tag, 'article');
-      expect(
-        stat.props['style'],
-        containsPair(
-          'box-shadow',
-          '0px 8px 24px -8px var(--shadow-card, rgba(16, 24, 40, 0.18))',
-        ),
-      );
-      expect(stat.children.last, isA<StatusBadge>());
+        final stat = StatCard(
+          label: 'Active users',
+          value: 42,
+          trend: '+12%',
+          tone: Tone.success,
+          variant: CardVariant.elevated,
+        );
+        expect(stat.tag, 'article');
+        expect(
+          stat.props['style'],
+          containsPair(
+            'box-shadow',
+            '0px 8px 24px -8px var(--shadow-card, rgba(16, 24, 40, 0.18))',
+          ),
+        );
+        expect(stat.children.last, isA<StatusBadge>());
 
-      final empty = EmptyState(
-        title: 'No domains',
-        message: 'Connect a domain to continue.',
-        action: Button(child: 'Add domain'),
-      );
-      expect(empty.tag, 'div');
-      expect(empty.children.last, isA<Button>());
-    });
+        final empty = EmptyState(
+          title: 'No domains',
+          message: 'Connect a domain to continue.',
+          action: Button(child: 'Add domain'),
+        );
+        expect(empty.tag, 'div');
+        expect(empty.children.last, isA<Button>());
+      },
+    );
 
     test('layout primitives render grid, wrap, stack, spacer, and divider', () {
       final grid = Grid(
@@ -156,42 +161,47 @@ void main() {
       expect(divider.props['style'], containsPair('width', '2px'));
     });
 
-    test('box, center, safe area, and constraints render typed layout styles',
-        () {
-      final box = Box(
-        tag: 'section',
-        padding: 16,
-        radius: 12,
-        background: '#fff',
-        child: Text('Surface'),
-      );
-      expect(box.tag, 'section');
-      expect(box.props['style'], containsPair('padding', '16px'));
-      expect(box.props['style'], containsPair('border-radius', '12px'));
+    test(
+      'box, center, safe area, and constraints render typed layout styles',
+      () {
+        final box = Box(
+          tag: 'section',
+          padding: 16,
+          radius: 12,
+          background: '#fff',
+          child: Text('Surface'),
+        );
+        expect(box.tag, 'section');
+        expect(box.props['style'], containsPair('padding', '16px'));
+        expect(box.props['style'], containsPair('border-radius', '12px'));
 
-      final center = Center(inline: true, child: Text('Centered'));
-      expect(center.props['style'], containsPair('display', 'inline-flex'));
-      expect(center.props['style'], containsPair('align-items', 'center'));
-      expect(center.props['style'], containsPair('justify-content', 'center'));
+        final center = Center(inline: true, child: Text('Centered'));
+        expect(center.props['style'], containsPair('display', 'inline-flex'));
+        expect(center.props['style'], containsPair('align-items', 'center'));
+        expect(
+          center.props['style'],
+          containsPair('justify-content', 'center'),
+        );
 
-      final safe = SafeArea(minimum: 12, child: Text('Safe'));
-      expect(
-        safe.props['style'],
-        containsPair(
-          'padding',
-          'max(env(safe-area-inset-top), 12px) max(env(safe-area-inset-right), 12px) max(env(safe-area-inset-bottom), 12px) max(env(safe-area-inset-left), 12px)',
-        ),
-      );
+        final safe = SafeArea(minimum: 12, child: Text('Safe'));
+        expect(
+          safe.props['style'],
+          containsPair(
+            'padding',
+            'max(env(safe-area-inset-top), 12px) max(env(safe-area-inset-right), 12px) max(env(safe-area-inset-bottom), 12px) max(env(safe-area-inset-left), 12px)',
+          ),
+        );
 
-      final constrained = ConstrainedBox(
-        maxWidth: 960,
-        center: true,
-        child: Text('Content'),
-      );
-      expect(constrained.props['style'], containsPair('width', '100%'));
-      expect(constrained.props['style'], containsPair('max-width', '960px'));
-      expect(constrained.props['style'], containsPair('margin', '0px auto'));
-    });
+        final constrained = ConstrainedBox(
+          maxWidth: 960,
+          center: true,
+          child: Text('Content'),
+        );
+        expect(constrained.props['style'], containsPair('width', '100%'));
+        expect(constrained.props['style'], containsPair('max-width', '960px'));
+        expect(constrained.props['style'], containsPair('margin', '0px auto'));
+      },
+    );
 
     test('responsive grid and aspect ratio box use scoped Dart styles', () {
       final responsive = ResponsiveGrid(
@@ -254,12 +264,16 @@ void main() {
       expect(portfolio.children.first, isA<Text>());
       final portfolioContent = portfolio.children[1] as ConstrainedBox;
       expect(
-          portfolioContent.props['style'], containsPair('max-width', '1120px'));
+        portfolioContent.props['style'],
+        containsPair('max-width', '1120px'),
+      );
       expect(portfolioContent.children[1], isA<FlintElement>());
 
       final dashboard = DashboardShell(
         brand: 'Flint',
-        sidebar: Sidebar(items: const [SidebarItem(label: 'Home', href: '/')]),
+        sidebar: Sidebar(
+          items: const [SidebarItem(label: 'Home', href: '/')],
+        ),
         title: 'Dashboard',
         child: Text('Metrics'),
       );
@@ -284,9 +298,9 @@ void main() {
         child: Text('Install Flint UI'),
       );
       final docsSafe = docs.children.single as SafeArea;
-      final docsGrid = (docsSafe.children.single as ConstrainedBox)
-          .children
-          .single as ResponsiveGrid;
+      final docsGrid =
+          (docsSafe.children.single as ConstrainedBox).children.single
+              as ResponsiveGrid;
       expect(docsGrid.children.first, isA<FlintElement>());
       expect(docsGrid.children.last, isA<FlintElement>());
 

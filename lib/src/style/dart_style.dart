@@ -1,215 +1,223 @@
 part of '../style.dart';
 
-/// Represents the DartStyle API in Flint UI.
+/// Typed CSS style object for Flint UI components.
+///
+/// Use this when you want Dart-friendly values that compile to inline CSS and
+/// scoped responsive or state styles.
 class DartStyle {
-  /// The padding value.
+  /// CSS `padding` using typed edge inset values.
   final EdgeInsets? padding;
 
-  /// The margin value.
+  /// CSS `margin` using typed edge inset values.
   final EdgeInsets? margin;
 
-  /// The width value.
+  /// CSS `width` value.
   final Object? width;
 
-  /// The height value.
+  /// CSS `height` value.
   final Object? height;
 
-  /// The minWidth value.
+  /// CSS `min-width` value.
   final Object? minWidth;
 
-  /// The maxWidth value.
+  /// CSS `max-width` value.
   final Object? maxWidth;
 
-  /// The minHeight value.
+  /// CSS `min-height` value.
   final Object? minHeight;
 
-  /// The maxHeight value.
+  /// CSS `max-height` value.
   final Object? maxHeight;
 
-  /// The display value.
+  /// CSS `display` value.
   final Display? display;
 
-  /// The gap value.
+  /// CSS `gap` value.
   final Object? gap;
 
-  /// The alignItems value.
+  /// CSS `align-items` value.
   final AlignItems? alignItems;
 
-  /// The justifyItems value.
+  /// CSS `justify-items` value.
   final Object? justifyItems;
 
-  /// The justifyContent value.
+  /// CSS `justify-content` value.
   final JustifyContent? justifyContent;
 
-  /// The flex value.
+  /// CSS `flex` shorthand value.
   final Object? flex;
 
-  /// The flexDirection value.
+  /// CSS `flex-direction` value.
   final FlexDirection? flexDirection;
 
-  /// The flexWrap value.
+  /// CSS `flex-wrap` value.
   final Object? flexWrap;
 
-  /// The flexGrow value.
+  /// CSS `flex-grow` value.
   final Object? flexGrow;
 
-  /// The flexShrink value.
+  /// CSS `flex-shrink` value.
   final Object? flexShrink;
 
-  /// The flexBasis value.
+  /// CSS `flex-basis` value.
   final Object? flexBasis;
 
-  /// The gridTemplateColumns value.
+  /// CSS `grid-template-columns` value.
   final String? gridTemplateColumns;
 
-  /// The position value.
+  /// CSS `position` value.
   final Position? position;
 
-  /// The top value.
+  /// CSS `top` offset value.
   final Object? top;
 
-  /// The right value.
+  /// CSS `right` offset value.
   final Object? right;
 
-  /// The bottom value.
+  /// CSS `bottom` offset value.
   final Object? bottom;
 
-  /// The left value.
+  /// CSS `left` offset value.
   final Object? left;
 
-  /// The zIndex value.
+  /// CSS `z-index` value.
   final int? zIndex;
 
-  /// The overflow value.
+  /// CSS `overflow` value.
   final Object? overflow;
 
-  /// The boxSizing value.
+  /// CSS `box-sizing` value.
   final Object? boxSizing;
 
-  /// The scrollBehavior value.
+  /// CSS `scroll-behavior` value.
   final Object? scrollBehavior;
 
-  /// The aspectRatio value.
+  /// CSS `aspect-ratio` value.
   final Object? aspectRatio;
 
-  /// The objectFit value.
+  /// CSS `object-fit` value for replaced elements such as images.
   final Object? objectFit;
 
-  /// The transform value.
+  /// CSS `transform` value.
   final Object? transform;
 
-  /// The backdropFilter value.
+  /// CSS `backdrop-filter` value.
   final Object? backdropFilter;
 
-  /// The fontFamily value.
+  /// CSS `font-family` value.
   final Object? fontFamily;
 
-  /// The fontSize value.
+  /// CSS `font-size` value.
   final Object? fontSize;
 
-  /// The fontWeight value.
+  /// CSS `font-weight` value.
   final Object? fontWeight;
 
-  /// The lineHeight value.
+  /// CSS `line-height` value.
   final Object? lineHeight;
 
-  /// The color value.
+  /// CSS `color` value.
   final Object? color;
 
-  /// The textAlign value.
+  /// CSS `text-align` value.
   final TextAlign? textAlign;
 
-  /// The textTransform value.
+  /// CSS `text-transform` value.
   final Object? textTransform;
 
-  /// The textDecoration value.
+  /// CSS `text-decoration` value.
   final Object? textDecoration;
 
-  /// The cursor value.
+  /// CSS `cursor` value.
   final Object? cursor;
 
-  /// The resize value.
+  /// CSS `resize` value.
   final Object? resize;
 
-  /// The background value.
+  /// CSS `background` value used when [gradient] is not set.
   final Object? background;
 
-  /// The radius value.
+  /// CSS `border-radius` value.
   final Object? radius;
 
-  /// The border value.
+  /// CSS `border` shorthand value.
   final Border? border;
 
-  /// The borderTop value.
+  /// CSS `border-top` value.
   final Border? borderTop;
 
-  /// The borderRight value.
+  /// CSS `border-right` value.
   final Border? borderRight;
 
-  /// The borderBottom value.
+  /// CSS `border-bottom` value.
   final Border? borderBottom;
 
-  /// The borderLeft value.
+  /// CSS `border-left` value.
   final Border? borderLeft;
 
-  /// The shadow value.
+  /// CSS `box-shadow` value.
   final Object? shadow;
 
-  /// The opacity value.
+  /// CSS `opacity` value.
   final double? opacity;
 
-  /// The gradient value.
+  /// CSS background gradient value.
+  ///
+  /// When provided, this takes precedence over [background].
   final Object? gradient;
 
-  /// The transition value.
+  /// CSS `transition` value.
   final Object? transition;
 
-  /// The animation value.
+  /// CSS `animation` value.
   final Object? animation;
 
-  /// The willChange value.
+  /// CSS `will-change` value.
   final Object? willChange;
 
-  /// The hover value.
+  /// Scoped style applied for the CSS `:hover` state.
   final DartStyle? hover;
 
-  /// The focus value.
+  /// Scoped style applied for the CSS `:focus` state.
   final DartStyle? focus;
 
-  /// The focusVisible value.
+  /// Scoped style applied for the CSS `:focus-visible` state.
   final DartStyle? focusVisible;
 
-  /// The active value.
+  /// Scoped style applied for the CSS `:active` state.
   final DartStyle? active;
 
-  /// The disabled value.
+  /// Scoped style applied for disabled controls and `aria-disabled`.
   final DartStyle? disabled;
 
-  /// The checked value.
+  /// Scoped style applied for the CSS `:checked` state.
   final DartStyle? checked;
 
-  /// The selected value.
+  /// Scoped style applied when `aria-selected="true"`.
   final DartStyle? selected;
 
-  /// The expanded value.
+  /// Scoped style applied when `aria-expanded="true"`.
   final DartStyle? expanded;
 
-  /// The invalid value.
+  /// Scoped style applied when `aria-invalid="true"`.
   final DartStyle? invalid;
 
-  /// The sm value.
+  /// Responsive style applied from the small breakpoint.
   final DartStyle? sm;
 
-  /// The md value.
+  /// Responsive style applied from the medium breakpoint.
   final DartStyle? md;
 
-  /// The lg value.
+  /// Responsive style applied from the large breakpoint.
   final DartStyle? lg;
 
-  /// The xl value.
+  /// Responsive style applied from the extra-large breakpoint.
   final DartStyle? xl;
 
-  /// Creates a DartStyle instance.
+  /// Creates a typed style object.
+  ///
+  /// Numeric size-like values compile to pixels unless a typed value such as
+  /// [SizeValue] is provided.
   const DartStyle({
     this.padding,
     this.margin,
@@ -282,7 +290,10 @@ class DartStyle {
     this.xl,
   });
 
-  /// Runs the toMap operation.
+  /// Converts base style values to a CSS property map.
+  ///
+  /// State and breakpoint styles are intentionally excluded from this map and
+  /// are exposed through [stateStyles] and [breakpointStyles].
   Map<String, Object?> toMap() {
     return _withoutNulls({
       'padding': padding?.toCss(),
@@ -345,11 +356,11 @@ class DartStyle {
     });
   }
 
-  /// Returns the hasBreakpoints value.
+  /// Whether this style contains responsive breakpoint overrides.
   bool get hasBreakpoints =>
       sm != null || md != null || lg != null || xl != null;
 
-  /// Returns the hasStateStyles value.
+  /// Whether this style contains scoped state overrides.
   bool get hasStateStyles =>
       hover != null ||
       focus != null ||
@@ -361,10 +372,10 @@ class DartStyle {
       expanded != null ||
       invalid != null;
 
-  /// Returns the hasScopedStyles value.
+  /// Whether this style contains any responsive or state overrides.
   bool get hasScopedStyles => hasBreakpoints || hasStateStyles;
 
-  /// Returns the breakpointStyles value.
+  /// Responsive styles keyed by their breakpoint.
   Map<Breakpoint, DartStyle> get breakpointStyles => {
     if (sm != null) Breakpoint.sm: sm!,
     if (md != null) Breakpoint.md: md!,
@@ -372,7 +383,7 @@ class DartStyle {
     if (xl != null) Breakpoint.xl: xl!,
   };
 
-  /// Returns the stateStyles value.
+  /// Scoped state styles keyed by CSS selector suffix.
   Map<String, DartStyle> get stateStyles => {
     if (hover != null) ':hover': hover!,
     if (focus != null) ':focus': focus!,
@@ -386,7 +397,7 @@ class DartStyle {
     if (invalid != null) '[aria-invalid="true"]': invalid!,
   };
 
-  /// Runs the merge operation.
+  /// Returns a new style with non-null values from [override] applied.
   DartStyle merge(DartStyle? override) {
     if (override == null) return this;
 

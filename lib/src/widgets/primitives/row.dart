@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the Row API in Flint UI.
+/// Horizontal flex container.
 class Row extends FlintElement {
-  /// Creates a Row instance.
+  /// Creates a row with optional child content and styles.
   Row({
     Object? child,
     List<Object?> children = const [],

@@ -17,8 +17,10 @@ void main() {
     });
 
     test('Tooltip and Popover render trigger plus overlay content', () {
-      final tooltip =
-          Tooltip(content: 'More info', child: Button(child: 'Info'));
+      final tooltip = Tooltip(
+        content: 'More info',
+        child: Button(child: 'Info'),
+      );
       expect(tooltip.children.first, isA<Button>());
       final tip = tooltip.children.last as FlintElement;
       expect(tip.props['role'], 'tooltip');
