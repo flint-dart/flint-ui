@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the Topbar API in Flint UI.
+/// Top navigation bar with title, leading content, actions, and user slot.
 class Topbar extends FlintElement {
-  /// Creates a Topbar instance.
+  /// Creates a topbar for app shells and dashboards.
   Topbar({
     String? title,
     String? subtitle,

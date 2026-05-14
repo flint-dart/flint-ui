@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the ConstrainedBox API in Flint UI.
+/// Box that applies min/max size constraints.
 class ConstrainedBox extends FlintElement {
-  /// Creates a ConstrainedBox instance.
+  /// Creates a constrained wrapper around child content.
   ConstrainedBox({
     Object? child,
     List<Object?> children = const [],

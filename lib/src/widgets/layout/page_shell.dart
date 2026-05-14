@@ -4,9 +4,9 @@ import '../../style.dart';
 import 'constrained_box.dart';
 import 'safe_area.dart';
 
-/// Represents the PageShell API in Flint UI.
+/// Full-page layout with optional navigation, header, content, and footer.
 class PageShell extends FlintElement {
-  /// Creates a PageShell instance.
+  /// Creates a centered page shell with configurable spacing and safe area.
   PageShell({
     Object? nav,
     Object? header,

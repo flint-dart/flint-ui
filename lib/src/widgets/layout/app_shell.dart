@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the AppShell API in Flint UI.
+/// Two-column application shell with sidebar, optional brand, and topbar.
 class AppShell extends FlintElement {
-  /// Creates a AppShell instance.
+  /// Creates an app shell around sidebar and main page content.
   AppShell({
     Object? brand,
     Object? sidebar,

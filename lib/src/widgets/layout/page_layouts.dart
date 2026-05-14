@@ -9,9 +9,9 @@ import 'responsive_grid.dart';
 import 'safe_area.dart';
 import 'topbar.dart';
 
-/// Represents the PortfolioShell API in Flint UI.
+/// Portfolio-oriented page shell with optional nav, hero, content, and footer.
 class PortfolioShell extends FlintElement {
-  /// Creates a PortfolioShell instance.
+  /// Creates a portfolio shell with centered content.
   PortfolioShell({
     Object? nav,
     Object? hero,
@@ -61,9 +61,9 @@ class PortfolioShell extends FlintElement {
        );
 }
 
-/// Represents the DashboardShell API in Flint UI.
+/// Dashboard page shell built around [AppShell] and [Topbar].
 class DashboardShell extends FlintElement {
-  /// Creates a DashboardShell instance.
+  /// Creates a dashboard shell with sidebar, topbar, and main content.
   DashboardShell({
     Object? brand,
     Object? sidebar,
@@ -114,9 +114,9 @@ class DashboardShell extends FlintElement {
        );
 }
 
-/// Represents the AuthShell API in Flint UI.
+/// Authentication page shell with centered card content.
 class AuthShell extends FlintElement {
-  /// Creates a AuthShell instance.
+  /// Creates an auth shell for login, register, and recovery screens.
   AuthShell({
     Object? brand,
     String? title,
@@ -197,9 +197,9 @@ class AuthShell extends FlintElement {
        );
 }
 
-/// Represents the DocsShell API in Flint UI.
+/// Documentation page shell with optional nav and sidebar.
 class DocsShell extends FlintElement {
-  /// Creates a DocsShell instance.
+  /// Creates a docs shell with responsive content and sidebar columns.
   DocsShell({
     Object? nav,
     Object? sidebar,
@@ -266,9 +266,9 @@ class DocsShell extends FlintElement {
        );
 }
 
-/// Represents the MarketingShell API in Flint UI.
+/// Marketing page shell with optional nav, hero, content, and footer.
 class MarketingShell extends FlintElement {
-  /// Creates a MarketingShell instance.
+  /// Creates a marketing shell with centered page content.
   MarketingShell({
     Object? nav,
     Object? hero,

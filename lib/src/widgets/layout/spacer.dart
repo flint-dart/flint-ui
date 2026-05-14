@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the Spacer API in Flint UI.
+/// Empty flex/grid spacer element.
 class Spacer extends FlintElement {
-  /// Creates a Spacer instance.
+  /// Creates a spacer with optional flex and fixed size.
   Spacer({
     int flex = 1,
     Object? size,

@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the PageHeader API in Flint UI.
+/// Page header with title, optional description, breadcrumbs, and actions.
 class PageHeader extends FlintElement {
-  /// Creates a PageHeader instance.
+  /// Creates a page header for a top-level screen.
   PageHeader({
     required String title,
     String? description,

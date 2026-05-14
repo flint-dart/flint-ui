@@ -3,9 +3,9 @@ import '../../node.dart';
 import '../../style.dart';
 import 'section.dart';
 
-/// Represents the Panel API in Flint UI.
+/// Bordered content panel with optional section heading.
 class Panel extends FlintElement {
-  /// Creates a Panel instance.
+  /// Creates a panel around child content.
   Panel({
     String? title,
     String? description,

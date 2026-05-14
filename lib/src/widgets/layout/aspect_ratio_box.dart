@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the AspectRatioBox API in Flint UI.
+/// Box that preserves a CSS aspect ratio.
 class AspectRatioBox extends FlintElement {
-  /// Creates a AspectRatioBox instance.
+  /// Creates an aspect-ratio box from [ratio].
   AspectRatioBox({
     required Object ratio,
     Object? child,
@@ -30,7 +30,7 @@ class AspectRatioBox extends FlintElement {
          children: normalizeChildren(child, children),
        );
 
-  /// Creates a AspectRatioBox instance.
+  /// Creates a square aspect-ratio box.
   AspectRatioBox.square({
     Object? child,
     List<Object?> children = const [],
@@ -52,7 +52,7 @@ class AspectRatioBox extends FlintElement {
          dartStyle: dartStyle,
        );
 
-  /// Creates a AspectRatioBox instance.
+  /// Creates a 16:9 aspect-ratio box.
   AspectRatioBox.video({
     Object? child,
     List<Object?> children = const [],

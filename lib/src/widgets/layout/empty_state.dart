@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the EmptyState API in Flint UI.
+/// Empty-state surface with title, message, icon, and action slots.
 class EmptyState extends FlintElement {
-  /// Creates a EmptyState instance.
+  /// Creates an empty-state message.
   EmptyState({
     required String title,
     String? message,

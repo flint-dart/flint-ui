@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the SafeArea API in Flint UI.
+/// Container that pads content away from browser safe-area insets.
 class SafeArea extends FlintElement {
-  /// Creates a SafeArea instance.
+  /// Creates a safe-area wrapper with optional side controls.
   SafeArea({
     Object? child,
     List<Object?> children = const [],

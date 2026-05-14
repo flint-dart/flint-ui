@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the Box API in Flint UI.
+/// Low-level box element with common size, spacing, and surface props.
 class Box extends FlintElement {
-  /// Creates a Box instance.
+  /// Creates a box using [tag] and optional style shortcuts.
   Box({
     Object? child,
     List<Object?> children = const [],

@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the Section API in Flint UI.
+/// Content section with optional heading, description, and actions.
 class Section extends FlintElement {
-  /// Creates a Section instance.
+  /// Creates a section around child content.
   Section({
     String? title,
     String? description,

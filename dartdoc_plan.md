@@ -257,6 +257,14 @@ Document:
 - `EmptyState`
 - layout utility widgets
 
+Status: completed.
+
+Notes:
+
+- App shells, page shells, layout primitives, utility boxes, sidebar, and dashboard/stat surfaces are documented.
+- Placeholder generated comments were removed from layout widget files.
+- `dart analyze` passes after this pass.
+
 ### 8. Forms
 
 Files:

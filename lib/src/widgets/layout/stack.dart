@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the Stack API in Flint UI.
+/// Relative-positioned container for layered content.
 class Stack extends FlintElement {
-  /// Creates a Stack instance.
+  /// Creates a stack around child content.
   Stack({
     Object? child,
     List<Object?> children = const [],

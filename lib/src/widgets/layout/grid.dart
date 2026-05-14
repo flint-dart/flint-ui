@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the Grid API in Flint UI.
+/// CSS grid container with optional template and alignment controls.
 class Grid extends FlintElement {
-  /// Creates a Grid instance.
+  /// Creates a grid around child content.
   Grid({
     Object? child,
     List<Object?> children = const [],

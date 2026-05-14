@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the Divider API in Flint UI.
+/// Horizontal or vertical separator.
 class Divider extends FlintElement {
-  /// Creates a Divider instance.
+  /// Creates a divider with separator semantics.
   Divider({
     bool vertical = false,
     String color = '#e4e7ec',

@@ -4,9 +4,9 @@ import '../../style.dart';
 import '../feedback/status_badge.dart';
 import '../shared/theme.dart';
 
-/// Represents the StatCard API in Flint UI.
+/// Metric card for dashboard statistics.
 class StatCard extends FlintElement {
-  /// Creates a StatCard instance.
+  /// Creates a stat card with label, value, and optional trend.
   StatCard({
     required String label,
     required Object value,

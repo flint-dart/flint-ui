@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the ResponsiveGrid API in Flint UI.
+/// Responsive grid that uses auto-fit columns by default.
 class ResponsiveGrid extends FlintElement {
-  /// Creates a ResponsiveGrid instance.
+  /// Creates a responsive grid with optional breakpoint column overrides.
   ResponsiveGrid({
     Object? child,
     List<Object?> children = const [],

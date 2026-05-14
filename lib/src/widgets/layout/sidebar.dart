@@ -2,36 +2,36 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the SidebarItem API in Flint UI.
+/// Navigation item rendered by [Sidebar].
 class SidebarItem {
-  /// The label value.
+  /// Visible text shown for the navigation link.
   final String label;
 
-  /// The href value.
+  /// Destination URL for the navigation link.
   final String href;
 
-  /// The icon value.
+  /// Optional leading icon or element.
   final Object? icon;
 
-  /// The active value.
+  /// Whether this item is currently selected.
   final bool active;
 
-  /// The disabled value.
+  /// Whether this item should render as unavailable.
   final bool disabled;
 
-  /// The className value.
+  /// Additional CSS class for the item link.
   final String? className;
 
-  /// The props value.
+  /// Additional element props for the item link.
   final Map<String, Object?> props;
 
-  /// The style value.
+  /// Additional inline styles for the item link.
   final Map<String, Object?> style;
 
-  /// The dartStyle value.
+  /// Additional typed styles for the item link.
   final DartStyle? dartStyle;
 
-  /// Creates a SidebarItem instance.
+  /// Creates a sidebar navigation item.
   const SidebarItem({
     required this.label,
     required this.href,
@@ -45,9 +45,9 @@ class SidebarItem {
   });
 }
 
-/// Represents the Sidebar API in Flint UI.
+/// Vertical navigation sidebar with active and collapsed states.
 class Sidebar extends FlintElement {
-  /// Creates a Sidebar instance.
+  /// Creates a sidebar from navigation [items].
   Sidebar({
     List<SidebarItem> items = const [],
     String? activePath,

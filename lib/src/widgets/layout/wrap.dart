@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the Wrap API in Flint UI.
+/// Flex container that wraps child items onto multiple lines.
 class Wrap extends FlintElement {
-  /// Creates a Wrap instance.
+  /// Creates a wrapping flex layout.
   Wrap({
     Object? child,
     List<Object?> children = const [],

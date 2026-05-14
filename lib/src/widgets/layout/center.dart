@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the Center API in Flint UI.
+/// Flex container that centers child content on both axes.
 class Center extends FlintElement {
-  /// Creates a Center instance.
+  /// Creates a centering container.
   Center({
     Object? child,
     List<Object?> children = const [],
