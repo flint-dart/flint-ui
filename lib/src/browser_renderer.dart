@@ -11,6 +11,7 @@ class FlintRoot {
   /// Host element that receives rendered DOM nodes.
   final web.Element host;
   FlintNode? _node;
+  Map<String, _ComponentMount> _componentSlots = {};
   bool _renderQueued = false;
   bool _mounted = false;
 
@@ -36,28 +37,61 @@ class FlintRoot {
     final node = _node;
     if (node == null) return;
 
+    final previousSlots = _componentSlots;
+    final nextSlots = <String, _ComponentMount>{};
     host.textContent = '';
-    host.appendChild(_createDom(node));
+    host.appendChild(_createDom(node, '0', previousSlots, nextSlots));
+    for (final entry in previousSlots.entries) {
+      if (!nextSlots.containsKey(entry.key)) {
+        _unmountComponentTree(entry.value);
+      }
+    }
+    _componentSlots = nextSlots;
     _mounted = true;
   }
 
-  web.Node _createDom(FlintNode node) {
+  web.Node _createDom(
+    FlintNode node,
+    String path,
+    Map<String, _ComponentMount> previousSlots,
+    Map<String, _ComponentMount> nextSlots,
+  ) {
     return switch (node) {
       FlintText(:final value) => web.document.createTextNode(value),
-      FlintFragment(:final children) => _createFragment(children),
+      FlintFragment(:final children) => _createFragment(
+        children,
+        path,
+        previousSlots,
+        nextSlots,
+      ),
       FlintElement(:final tag, :final props, :final children) => _createElement(
         tag,
         props,
         children,
+        path,
+        previousSlots,
+        nextSlots,
       ),
-      FlintComponentNode(:final component) => _createComponent(component),
+      FlintComponentNode(:final component) => _createComponent(
+        component,
+        path,
+        previousSlots,
+        nextSlots,
+      ),
     };
   }
 
-  web.DocumentFragment _createFragment(List<FlintNode> children) {
+  web.DocumentFragment _createFragment(
+    List<FlintNode> children,
+    String path,
+    Map<String, _ComponentMount> previousSlots,
+    Map<String, _ComponentMount> nextSlots,
+  ) {
     final fragment = web.document.createDocumentFragment();
-    for (final child in children) {
-      fragment.appendChild(_createDom(child));
+    for (var i = 0; i < children.length; i++) {
+      fragment.appendChild(
+        _createDom(children[i], '$path.$i', previousSlots, nextSlots),
+      );
     }
     return fragment;
   }
@@ -66,28 +100,92 @@ class FlintRoot {
     String tag,
     Map<String, Object?> props,
     List<FlintNode> children,
+    String path,
+    Map<String, _ComponentMount> previousSlots,
+    Map<String, _ComponentMount> nextSlots,
   ) {
     final element = web.document.createElement(tag);
     _applyProps(element, props);
 
-    for (final child in children) {
-      element.appendChild(_createDom(child));
+    for (var i = 0; i < children.length; i++) {
+      element.appendChild(
+        _createDom(children[i], '$path.$i', previousSlots, nextSlots),
+      );
     }
 
     return element;
   }
 
-  web.Node _createComponent(FlintComponent component) {
-    component.attach(_scheduleRender);
-    final child = _createDom(component.build());
+  web.Node _createComponent(
+    FlintComponent component,
+    String path,
+    Map<String, _ComponentMount> previousSlots,
+    Map<String, _ComponentMount> nextSlots,
+  ) {
+    final previous = previousSlots[path];
+    final hasExisting =
+        previous != null &&
+        previous.component.runtimeType == component.runtimeType;
+    final mount = hasExisting
+        ? previous
+        : _ComponentMount(
+            component,
+            web.document.createElement('flint-component'),
+          );
+    if (previous != null && !hasExisting) {
+      _unmountComponentTree(previous);
+    }
+    nextSlots[path] = mount;
 
-    if (_mounted) {
-      component.didUpdate();
+    mount.component.attach(() => _scheduleComponentRender(mount));
+    _renderComponent(mount);
+
+    if (_mounted && hasExisting) {
+      mount.component.didUpdate();
     } else {
-      scheduleMicrotask(component.didMount);
+      scheduleMicrotask(mount.component.didMount);
     }
 
-    return child;
+    return mount.boundary;
+  }
+
+  void _scheduleComponentRender(_ComponentMount mount) {
+    if (mount.renderQueued) return;
+    mount.renderQueued = true;
+    scheduleMicrotask(() {
+      mount.renderQueued = false;
+      _renderComponent(mount);
+      if (mount.mounted) {
+        mount.component.didUpdate();
+      }
+    });
+  }
+
+  void _renderComponent(_ComponentMount mount) {
+    final previousSlots = mount.childSlots;
+    final nextSlots = <String, _ComponentMount>{};
+
+    mount.boundary.textContent = '';
+    mount.boundary.setAttribute('style', 'display: contents;');
+    mount.boundary.appendChild(
+      _createDom(mount.component.build(), 'c', previousSlots, nextSlots),
+    );
+
+    for (final entry in previousSlots.entries) {
+      if (!nextSlots.containsKey(entry.key)) {
+        _unmountComponentTree(entry.value);
+      }
+    }
+
+    mount.childSlots = nextSlots;
+    mount.mounted = true;
+  }
+
+  void _unmountComponentTree(_ComponentMount mount) {
+    for (final child in mount.childSlots.values) {
+      _unmountComponentTree(child);
+    }
+    mount.component.willUnmount();
   }
 
   void _applyProps(web.Element element, Map<String, Object?> props) {
@@ -185,3 +283,13 @@ FlintRoot createRoot(String selector) {
 
 /// Creates a root renderer for an existing browser [element].
 FlintRoot createRootForElement(web.Element element) => FlintRoot(element);
+
+class _ComponentMount {
+  final FlintComponent component;
+  final web.Element boundary;
+  Map<String, _ComponentMount> childSlots = {};
+  bool renderQueued = false;
+  bool mounted = false;
+
+  _ComponentMount(this.component, this.boundary);
+}

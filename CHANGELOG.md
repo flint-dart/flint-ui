@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.4 - 2026-05-14
+
+### Fixed
+- Scoped `setState` rerenders to the component instance that owns the state.
+- Preserved nested component state while rerendering component-local DOM boundaries.
+
 ## 0.1.3 - 2026-05-14
 
 ### Improved
