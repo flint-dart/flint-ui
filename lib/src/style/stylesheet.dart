@@ -18,9 +18,9 @@ class ThemeTokens {
   Object? resolve(String name) => values[name];
 
   Map<String, Object?> get cssVariables => {
-        for (final entry in values.entries)
-          '--${_tokenCssName(entry.key)}': entry.value,
-      };
+    for (final entry in values.entries)
+      '--${_tokenCssName(entry.key)}': entry.value,
+  };
 }
 
 class TokenRef {
@@ -122,16 +122,16 @@ class StyleRule {
   }) : nestedRules = const {};
 
   const StyleRule.nested(this.nestedRules)
-      : styles = const {},
-        hover = const {},
-        focus = const {},
-        focusVisible = const {},
-        active = const {},
-        disabled = const {},
-        checked = const {},
-        selected = const {},
-        expanded = const {},
-        invalid = const {};
+    : styles = const {},
+      hover = const {},
+      focus = const {},
+      focusVisible = const {},
+      active = const {},
+      disabled = const {},
+      checked = const {},
+      selected = const {},
+      expanded = const {},
+      invalid = const {};
 }
 
 class StyleSheet {
@@ -139,11 +139,7 @@ class StyleSheet {
   final Map<String, StyleRule> rules;
   final ThemeTokens? tokens;
 
-  const StyleSheet(
-    this.name,
-    this.rules, {
-    this.tokens,
-  });
+  const StyleSheet(this.name, this.rules, {this.tokens});
 
   String className(String key) {
     final normalized = key.startsWith('.') ? key.substring(1) : key;
@@ -158,9 +154,14 @@ class StyleSheet {
       final rule = entry.value;
 
       if (selector.startsWith('@')) {
-        final nested = rule.nestedRules.entries.map((nestedEntry) {
-          return _compileRule(_selector(nestedEntry.key), nestedEntry.value);
-        }).join('\n');
+        final nested = rule.nestedRules.entries
+            .map((nestedEntry) {
+              return _compileRule(
+                _selector(nestedEntry.key),
+                nestedEntry.value,
+              );
+            })
+            .join('\n');
         chunks.add('$selector {\n$nested\n}');
         continue;
       }
@@ -169,21 +170,28 @@ class StyleSheet {
       chunks.add(_compileRule(classSelector, rule.styles));
       _appendState(chunks, classSelector, ':hover', rule.hover);
       _appendState(chunks, classSelector, ':focus', rule.focus);
-      _appendState(
-        chunks,
-        classSelector,
-        ':focus-visible',
-        rule.focusVisible,
-      );
+      _appendState(chunks, classSelector, ':focus-visible', rule.focusVisible);
       _appendState(chunks, classSelector, ':active', rule.active);
       _appendState(chunks, classSelector, ':disabled', rule.disabled);
       _appendState(chunks, classSelector, ':checked', rule.checked);
       _appendState(
-          chunks, classSelector, '[aria-selected="true"]', rule.selected);
+        chunks,
+        classSelector,
+        '[aria-selected="true"]',
+        rule.selected,
+      );
       _appendState(
-          chunks, classSelector, '[aria-expanded="true"]', rule.expanded);
+        chunks,
+        classSelector,
+        '[aria-expanded="true"]',
+        rule.expanded,
+      );
       _appendState(
-          chunks, classSelector, '[aria-invalid="true"]', rule.invalid);
+        chunks,
+        classSelector,
+        '[aria-invalid="true"]',
+        rule.invalid,
+      );
     }
 
     return chunks.where((chunk) => chunk.trim().isNotEmpty).join('\n');
@@ -256,10 +264,7 @@ class StyleKeyframes {
     required DartStyle from,
     required DartStyle to,
   }) {
-    return StyleKeyframes(name, [
-      KeyframeStep.from(from),
-      KeyframeStep.to(to),
-    ]);
+    return StyleKeyframes(name, [KeyframeStep.from(from), KeyframeStep.to(to)]);
   }
 
   static StyleKeyframes spin({String name = 'flint-spin'}) {

@@ -195,8 +195,9 @@ class DartStyle {
       'border-right': borderRight?.toCss(),
       'border-bottom': borderBottom?.toCss(),
       'border-left': borderLeft?.toCss(),
-      'box-shadow':
-          shadow is Shadow ? (shadow as Shadow).toCss() : cssValue(shadow),
+      'box-shadow': shadow is Shadow
+          ? (shadow as Shadow).toCss()
+          : cssValue(shadow),
       'opacity': opacity,
       'transition': cssValue(transition, unitlessNumber: true),
       'animation': cssValue(animation, unitlessNumber: true),
@@ -221,24 +222,24 @@ class DartStyle {
   bool get hasScopedStyles => hasBreakpoints || hasStateStyles;
 
   Map<Breakpoint, DartStyle> get breakpointStyles => {
-        if (sm != null) Breakpoint.sm: sm!,
-        if (md != null) Breakpoint.md: md!,
-        if (lg != null) Breakpoint.lg: lg!,
-        if (xl != null) Breakpoint.xl: xl!,
-      };
+    if (sm != null) Breakpoint.sm: sm!,
+    if (md != null) Breakpoint.md: md!,
+    if (lg != null) Breakpoint.lg: lg!,
+    if (xl != null) Breakpoint.xl: xl!,
+  };
 
   Map<String, DartStyle> get stateStyles => {
-        if (hover != null) ':hover': hover!,
-        if (focus != null) ':focus': focus!,
-        if (focusVisible != null) ':focus-visible': focusVisible!,
-        if (active != null) ':active': active!,
-        if (disabled != null) ':disabled': disabled!,
-        if (disabled != null) '[aria-disabled="true"]': disabled!,
-        if (checked != null) ':checked': checked!,
-        if (selected != null) '[aria-selected="true"]': selected!,
-        if (expanded != null) '[aria-expanded="true"]': expanded!,
-        if (invalid != null) '[aria-invalid="true"]': invalid!,
-      };
+    if (hover != null) ':hover': hover!,
+    if (focus != null) ':focus': focus!,
+    if (focusVisible != null) ':focus-visible': focusVisible!,
+    if (active != null) ':active': active!,
+    if (disabled != null) ':disabled': disabled!,
+    if (disabled != null) '[aria-disabled="true"]': disabled!,
+    if (checked != null) ':checked': checked!,
+    if (selected != null) '[aria-selected="true"]': selected!,
+    if (expanded != null) '[aria-expanded="true"]': expanded!,
+    if (invalid != null) '[aria-invalid="true"]': invalid!,
+  };
 
   DartStyle merge(DartStyle? override) {
     if (override == null) return this;

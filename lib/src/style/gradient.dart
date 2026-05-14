@@ -5,19 +5,13 @@ class Gradient {
 
   const Gradient(this.value);
 
-  factory Gradient.linear(
-    num angle,
-    List<Object> stops,
-  ) {
+  factory Gradient.linear(num angle, List<Object> stops) {
     return Gradient(
       'linear-gradient(${angle}deg, ${stops.map(_gradientStopValue).join(', ')})',
     );
   }
 
-  factory Gradient.linearColors(
-    num angle,
-    List<Object> colors,
-  ) {
+  factory Gradient.linearColors(num angle, List<Object> colors) {
     if (colors.isEmpty) {
       throw ArgumentError.value(colors, 'colors', 'Must not be empty.');
     }
@@ -33,19 +27,13 @@ class Gradient {
     return Gradient.linear(angle, stops);
   }
 
-  factory Gradient.radial(
-    String shape,
-    List<Object> stops,
-  ) {
+  factory Gradient.radial(String shape, List<Object> stops) {
     return Gradient(
       'radial-gradient($shape, ${stops.map(_gradientStopValue).join(', ')})',
     );
   }
 
-  factory Gradient.radialCircle({
-    Object? at,
-    required List<Object> stops,
-  }) {
+  factory Gradient.radialCircle({Object? at, required List<Object> stops}) {
     final shape = at == null ? 'circle' : 'circle at ${cssValue(at)}';
     return Gradient.radial(shape, stops);
   }
@@ -94,24 +82,13 @@ class Flex {
 
   const Flex(this.grow, this.shrink, this.basis);
 
-  const Flex.grow([this.grow = 1])
-      : shrink = 1,
-        basis = '0%';
+  const Flex.grow([this.grow = 1]) : shrink = 1, basis = '0%';
 
-  const Flex.auto()
-      : grow = 1,
-        shrink = 1,
-        basis = 'auto';
+  const Flex.auto() : grow = 1, shrink = 1, basis = 'auto';
 
-  const Flex.none()
-      : grow = 0,
-        shrink = 0,
-        basis = 'auto';
+  const Flex.none() : grow = 0, shrink = 0, basis = 'auto';
 
-  const Flex.fill()
-      : grow = 1,
-        shrink = 1,
-        basis = 'auto';
+  const Flex.fill() : grow = 1, shrink = 1, basis = 'auto';
 
   String toCss() {
     return [

@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.1 - 2026-05-14
+
+### Added
+- Added a package example entrypoint for pub.dev.
+- Added documentation comments across the public style API.
+
+### Improved
+- Improved pub.dev documentation scoring for the first Flint UI release.
+
 ## 0.1.0 - 2026-05-14
 
 ### Added

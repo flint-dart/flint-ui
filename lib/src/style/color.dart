@@ -6,9 +6,9 @@ class Color {
   const Color(this.value);
   const Color.hex(String value) : value = value;
   const Color.rgb(int red, int green, int blue)
-      : value = 'rgb($red, $green, $blue)';
+    : value = 'rgb($red, $green, $blue)';
   const Color.rgba(int red, int green, int blue, double alpha)
-      : value = 'rgba($red, $green, $blue, $alpha)';
+    : value = 'rgba($red, $green, $blue, $alpha)';
 
   @override
   String toString() => value;

@@ -6,26 +6,19 @@ class EdgeInsets {
   final Object? bottom;
   final Object? left;
 
-  const EdgeInsets.only({
-    this.top,
-    this.right,
-    this.bottom,
-    this.left,
-  });
+  const EdgeInsets.only({this.top, this.right, this.bottom, this.left});
 
   const EdgeInsets.all(Object value)
-      : top = value,
-        right = value,
-        bottom = value,
-        left = value;
+    : top = value,
+      right = value,
+      bottom = value,
+      left = value;
 
-  const EdgeInsets.symmetric({
-    Object? vertical,
-    Object? horizontal,
-  })  : top = vertical,
-        right = horizontal,
-        bottom = vertical,
-        left = horizontal;
+  const EdgeInsets.symmetric({Object? vertical, Object? horizontal})
+    : top = vertical,
+      right = horizontal,
+      bottom = vertical,
+      left = horizontal;
 
   String toCss() {
     final values = [
@@ -67,11 +60,8 @@ class Border {
   final Object color;
   final String style;
 
-  const Border({
-    this.width = 1,
-    required Object color,
-    this.style = 'solid',
-  }) : color = color;
+  const Border({this.width = 1, required Object color, this.style = 'solid'})
+    : color = color;
 
   const Border.all({
     Object width = 1,
@@ -116,10 +106,7 @@ class StyleTransform {
 
   const StyleTransform(this.value);
 
-  factory StyleTransform.translate({
-    Object x = 0,
-    Object y = 0,
-  }) {
+  factory StyleTransform.translate({Object x = 0, Object y = 0}) {
     return StyleTransform('translate(${cssValue(x)}, ${cssValue(y)})');
   }
 
@@ -141,11 +128,7 @@ class StyleTransform {
 
   factory StyleTransform.combine(List<StyleTransform> transforms) {
     if (transforms.isEmpty) {
-      throw ArgumentError.value(
-        transforms,
-        'transforms',
-        'Must not be empty.',
-      );
+      throw ArgumentError.value(transforms, 'transforms', 'Must not be empty.');
     }
     return StyleTransform(transforms.map((item) => item.value).join(' '));
   }
@@ -410,9 +393,7 @@ class StyleTransition {
         'Must not be empty.',
       );
     }
-    return StyleTransition(
-      transitions.map((item) => item.value).join(', '),
-    );
+    return StyleTransition(transitions.map((item) => item.value).join(', '));
   }
 
   @override
@@ -538,15 +519,9 @@ class StyleAnimation {
 
   factory StyleAnimation.combine(List<StyleAnimation> animations) {
     if (animations.isEmpty) {
-      throw ArgumentError.value(
-        animations,
-        'animations',
-        'Must not be empty.',
-      );
+      throw ArgumentError.value(animations, 'animations', 'Must not be empty.');
     }
-    return StyleAnimation(
-      animations.map((item) => item.value).join(', '),
-    );
+    return StyleAnimation(animations.map((item) => item.value).join(', '));
   }
 
   @override
@@ -566,11 +541,7 @@ class WillChange {
 
   factory WillChange.properties(List<Object> properties) {
     if (properties.isEmpty) {
-      throw ArgumentError.value(
-        properties,
-        'properties',
-        'Must not be empty.',
-      );
+      throw ArgumentError.value(properties, 'properties', 'Must not be empty.');
     }
     return WillChange(
       properties.map((item) => cssValue(item, unitlessNumber: true)).join(', '),
