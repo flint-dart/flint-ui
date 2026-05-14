@@ -3,21 +3,21 @@ import '../../node.dart';
 import '../../style.dart';
 import '../shared/theme.dart';
 
-/// Represents the TabItem API in Flint UI.
+/// Tab option rendered by [Tabs].
 class TabItem {
-  /// The key value.
+  /// Stable key used to identify the tab.
   final String key;
 
-  /// The label value.
+  /// Visible tab label.
   final String label;
 
-  /// The icon value.
+  /// Optional leading icon or element.
   final Object? icon;
 
-  /// The disabled value.
+  /// Whether this tab should be unavailable.
   final bool disabled;
 
-  /// Creates a TabItem instance.
+  /// Creates a tab item.
   const TabItem({
     required this.key,
     required this.label,
@@ -26,9 +26,9 @@ class TabItem {
   });
 }
 
-/// Represents the Tabs API in Flint UI.
+/// Tablist control for switching between keyed tabs.
 class Tabs extends FlintElement {
-  /// Creates a Tabs instance.
+  /// Creates a tablist from [tabs].
   Tabs({
     List<TabItem> tabs = const [],
     String? activeKey,

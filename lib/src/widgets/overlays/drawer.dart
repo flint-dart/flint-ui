@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the Drawer API in Flint UI.
+/// Slide-out dialog panel anchored to the left or right side.
 class Drawer extends FlintElement {
-  /// Creates a Drawer instance.
+  /// Creates a drawer controlled by [open].
   Drawer({
     required bool open,
     String? title,

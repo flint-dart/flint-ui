@@ -2,17 +2,17 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
+/// Resolves a stable HTML id for a form control.
 String fieldId(String prefix, String? name, Map<String, Object?> props) {
   final explicit = props['id']?.toString();
 
-  /// Creates a if instance.
   if (explicit != null && explicit.isNotEmpty) return explicit;
 
-  /// The name value.
   final base = (name == null || name.isEmpty) ? prefix : name;
   return 'flint-$prefix-${_safeId(base)}';
 }
 
+/// Builds an `aria-describedby` value from help and error message ids.
 String? describedBy({
   required String id,
   required String? helpText,
@@ -28,6 +28,7 @@ String? describedBy({
   return values.isEmpty ? null : values.join(' ');
 }
 
+/// Builds help and error message elements for a field.
 List<FlintNode> fieldMessages({
   required String id,
   required String? helpText,
@@ -49,6 +50,7 @@ List<FlintNode> fieldMessages({
   ];
 }
 
+/// Builds a label element for a field.
 FlintElement fieldLabel({
   required String id,
   required String label,
@@ -61,6 +63,7 @@ FlintElement fieldLabel({
   );
 }
 
+/// Merges common wrapper props for field components.
 Map<String, Object?> fieldWrapperProps({
   required Map<String, Object?> props,
   required String? className,
@@ -76,6 +79,7 @@ Map<String, Object?> fieldWrapperProps({
   );
 }
 
+/// Builds shared HTML attributes for form controls.
 Map<String, Object?> controlProps({
   required Map<String, Object?> props,
   required String id,
@@ -96,18 +100,23 @@ Map<String, Object?> controlProps({
   };
 }
 
+/// Default wrapper style used by field components.
 const fieldWrapperStyle = {'display': 'grid', 'gap': '6px'};
 
+/// Default label style used by field components.
 const fieldLabelStyle = {
   'font-size': '14px',
   'font-weight': 600,
   'color': '#344054',
 };
 
+/// Default help text style used by field components.
 const fieldHelpStyle = {'margin': 0, 'font-size': '13px', 'color': '#667085'};
 
+/// Default validation error style used by field components.
 const fieldErrorStyle = {'margin': 0, 'font-size': '13px', 'color': '#b42318'};
 
+/// Default input style used by simple field components.
 const inputBaseStyle = {
   'width': '100%',
   'min-height': '40px',
@@ -119,6 +128,7 @@ const inputBaseStyle = {
   'background': '#ffffff',
 };
 
+/// Default inline row style for checkbox, switch, and radio choices.
 const choiceRowStyle = {
   'display': 'inline-flex',
   'align-items': 'center',

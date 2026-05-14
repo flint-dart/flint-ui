@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the Popover API in Flint UI.
+/// Inline popover with trigger content and floating dialog content.
 class Popover extends FlintElement {
-  /// Creates a Popover instance.
+  /// Creates a popover controlled by [open].
   Popover({
     required Object trigger,
     Object? child,

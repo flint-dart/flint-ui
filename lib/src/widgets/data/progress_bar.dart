@@ -3,9 +3,9 @@ import '../../node.dart';
 import '../../style.dart';
 import '../shared/theme.dart';
 
-/// Represents the ProgressBar API in Flint UI.
+/// Accessible progress indicator with tone-colored fill.
 class ProgressBar extends FlintElement {
-  /// Creates a ProgressBar instance.
+  /// Creates a progress bar for [value] out of [max].
   ProgressBar({
     required num value,
     num max = 100,
@@ -62,7 +62,6 @@ class ProgressBar extends FlintElement {
 }
 
 num _percent(num value, num max) {
-  /// Creates a if instance.
   if (max <= 0) return 0;
   final percent = (value / max) * 100;
   return percent.clamp(0, 100);

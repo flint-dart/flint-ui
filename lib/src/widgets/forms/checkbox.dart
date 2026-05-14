@@ -3,9 +3,9 @@ import '../../style.dart';
 import 'field_helpers.dart';
 import 'validation.dart';
 
-/// Represents the Checkbox API in Flint UI.
+/// Checkbox field with label, help text, and validation message support.
 class Checkbox extends FlintElement {
-  /// Creates a Checkbox instance.
+  /// Creates a checkbox field.
   Checkbox({
     String? label,
     String? name,

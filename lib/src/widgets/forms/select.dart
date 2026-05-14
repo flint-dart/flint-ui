@@ -5,18 +5,18 @@ import '../shared/theme.dart';
 import 'field_helpers.dart';
 import 'validation.dart';
 
-/// Represents the SelectOption API in Flint UI.
+/// Option rendered inside a [Select] field.
 class SelectOption {
-  /// The label value.
+  /// Visible option label.
   final String label;
 
-  /// The value value.
+  /// Submitted option value.
   final Object value;
 
-  /// The disabled value.
+  /// Whether this option should be unavailable.
   final bool disabled;
 
-  /// Creates a SelectOption instance.
+  /// Creates a select option.
   const SelectOption({
     required this.label,
     required this.value,
@@ -24,9 +24,9 @@ class SelectOption {
   });
 }
 
-/// Represents the Select API in Flint UI.
+/// Select field with options, placeholder, help text, and validation support.
 class Select extends FlintElement {
-  /// Creates a Select instance.
+  /// Creates a select field.
   Select({
     String? label,
     String? name,

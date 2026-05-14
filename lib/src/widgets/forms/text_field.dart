@@ -7,9 +7,9 @@ import 'field_helpers.dart';
 import 'validation.dart';
 import 'package:universal_web/web.dart' as web;
 
-/// Represents the TextField API in Flint UI.
+/// Text input field with label, help text, validation, and controller support.
 class TextField extends FlintElement {
-  /// Creates a TextField instance.
+  /// Creates a text input field.
   TextField({
     String? label,
     String? name,

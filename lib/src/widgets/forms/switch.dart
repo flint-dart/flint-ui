@@ -2,9 +2,9 @@ import '../../style.dart';
 import 'checkbox.dart';
 import 'validation.dart';
 
-/// Represents the Switch API in Flint UI.
+/// Checkbox-based switch control with ARIA switch semantics.
 class Switch extends Checkbox {
-  /// Creates a Switch instance.
+  /// Creates a switch field.
   Switch({
     String? label,
     String? name,

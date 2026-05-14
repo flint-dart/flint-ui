@@ -3,9 +3,9 @@ import '../../node.dart';
 import '../../style.dart';
 import '../shared/theme.dart';
 
-/// Represents the Avatar API in Flint UI.
+/// Circular user avatar that renders an image or initials.
 class Avatar extends FlintElement {
-  /// Creates a Avatar instance.
+  /// Creates an avatar for [name].
   Avatar({
     required String name,
     String? imageUrl,

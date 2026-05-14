@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the Modal API in Flint UI.
+/// Modal dialog overlay with optional header, close action, and footer actions.
 class Modal extends FlintElement {
-  /// Creates a Modal instance.
+  /// Creates a modal dialog controlled by [open].
   Modal({
     required bool open,
     String? title,

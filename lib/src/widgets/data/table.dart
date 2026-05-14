@@ -2,36 +2,36 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the TableColumn API in Flint UI.
+/// Column definition used by [Table].
 class TableColumn {
-  /// The key value.
+  /// Key used to read each row cell value.
   final String key;
 
-  /// The label value.
+  /// Fallback text rendered in the column header.
   final String label;
 
-  /// The header value.
+  /// Optional custom header content.
   final Object? header;
 
-  /// The align value.
+  /// CSS text alignment for header and body cells.
   final String? align;
 
-  /// The className value.
+  /// Additional CSS class for this column's cells.
   final String? className;
 
-  /// The headerStyle value.
+  /// Additional inline styles for this column's header cell.
   final Map<String, Object?> headerStyle;
 
-  /// The cellStyle value.
+  /// Additional inline styles for this column's body cells.
   final Map<String, Object?> cellStyle;
 
-  /// The headerDartStyle value.
+  /// Additional typed styles for this column's header cell.
   final DartStyle? headerDartStyle;
 
-  /// The cellDartStyle value.
+  /// Additional typed styles for this column's body cells.
   final DartStyle? cellDartStyle;
 
-  /// Creates a TableColumn instance.
+  /// Creates a table column definition.
   const TableColumn({
     required this.key,
     required this.label,
@@ -45,33 +45,33 @@ class TableColumn {
   });
 }
 
-/// Represents the TableRowData API in Flint UI.
+/// Row data rendered by [Table].
 class TableRowData {
-  /// The key value.
+  /// Optional stable row key emitted as `data-row-key`.
   final String? key;
 
-  /// The cells value.
+  /// Cell content keyed by [TableColumn.key].
   final Map<String, Object?> cells;
 
-  /// The actions value.
+  /// Optional action content rendered at the end of the row.
   final Object? actions;
 
-  /// The selected value.
+  /// Whether this row should render as selected.
   final bool selected;
 
-  /// The className value.
+  /// Additional CSS class for this row.
   final String? className;
 
-  /// The props value.
+  /// Additional element props for this row.
   final Map<String, Object?> props;
 
-  /// The style value.
+  /// Additional inline styles for this row.
   final Map<String, Object?> style;
 
-  /// The dartStyle value.
+  /// Additional typed styles for this row.
   final DartStyle? dartStyle;
 
-  /// Creates a TableRowData instance.
+  /// Creates table row data.
   const TableRowData({
     this.key,
     required this.cells,
@@ -84,9 +84,9 @@ class TableRowData {
   });
 }
 
-/// Represents the Table API in Flint UI.
+/// Scrollable data table with loading, empty, and selectable row states.
 class Table extends FlintElement {
-  /// Creates a Table instance.
+  /// Creates a table from [columns] and [rows].
   Table({
     List<TableColumn> columns = const [],
     List<TableRowData> rows = const [],

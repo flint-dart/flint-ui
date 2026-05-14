@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the Form API in Flint UI.
+/// Semantic form container with Flint UI spacing and submit handling.
 class Form extends FlintElement {
-  /// Creates a Form instance.
+  /// Creates a form around child fields and actions.
   Form({
     Object? child,
     List<Object?> children = const [],

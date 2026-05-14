@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the SearchBox API in Flint UI.
+/// Search form with accessible input and submit handling.
 class SearchBox extends FlintElement {
-  /// Creates a SearchBox instance.
+  /// Creates a search box.
   SearchBox({
     String? value,
     String placeholder = 'Search',

@@ -4,9 +4,9 @@ import '../feedback/spinner.dart';
 import '../layout/empty_state.dart';
 import 'table.dart';
 
-/// Represents the DataTable API in Flint UI.
+/// Opinionated [Table] with default loading and empty states.
 class DataTable extends Table {
-  /// Creates a DataTable instance.
+  /// Creates a data table with Flint UI defaults.
   DataTable({
     required List<TableColumn> columns,
     List<TableRowData> rows = const [],

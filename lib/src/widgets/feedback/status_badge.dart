@@ -3,9 +3,9 @@ import '../../node.dart';
 import '../../style.dart';
 import '../shared/theme.dart';
 
-/// Represents the StatusBadge API in Flint UI.
+/// Compact badge for status labels and optional icons.
 class StatusBadge extends FlintElement {
-  /// Creates a StatusBadge instance.
+  /// Creates a status badge.
   StatusBadge({
     required String label,
     Object? icon,

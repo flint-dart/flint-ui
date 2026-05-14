@@ -2,24 +2,24 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the BreadcrumbItem API in Flint UI.
+/// Item rendered inside [Breadcrumbs].
 class BreadcrumbItem {
-  /// The label value.
+  /// Visible breadcrumb label.
   final String label;
 
-  /// The href value.
+  /// Optional destination URL.
   final String? href;
 
-  /// The current value.
+  /// Whether this item represents the current page.
   final bool current;
 
-  /// Creates a BreadcrumbItem instance.
+  /// Creates a breadcrumb item.
   const BreadcrumbItem({required this.label, this.href, this.current = false});
 }
 
-/// Represents the Breadcrumbs API in Flint UI.
+/// Breadcrumb navigation trail for hierarchical pages.
 class Breadcrumbs extends FlintElement {
-  /// Creates a Breadcrumbs instance.
+  /// Creates breadcrumbs from [items].
   Breadcrumbs({
     List<BreadcrumbItem> items = const [],
     String separator = '/',

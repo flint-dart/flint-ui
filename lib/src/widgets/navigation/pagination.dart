@@ -3,9 +3,9 @@ import '../../node.dart';
 import '../../style.dart';
 import '../shared/theme.dart';
 
-/// Represents the Pagination API in Flint UI.
+/// Pagination controls with page summary and sibling page buttons.
 class Pagination extends FlintElement {
-  /// Creates a Pagination instance.
+  /// Creates pagination for [total] items.
   Pagination({
     required int page,
     required int pageSize,

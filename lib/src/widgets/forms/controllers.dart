@@ -1,17 +1,17 @@
 import 'validation.dart';
 
-/// Function signature used by the FlintVoidCallback API.
+/// Listener signature used by form and text editing controllers.
 typedef FlintVoidCallback = void Function();
 
-/// Represents the TextEditingController API in Flint UI.
+/// Mutable text value with listener notifications for controlled inputs.
 class TextEditingController {
-  /// Creates a TextEditingController instance.
+  /// Creates a text editing controller with optional initial [text].
   TextEditingController({String text = ''}) : _text = text;
 
   String _text;
   final List<FlintVoidCallback> _listeners = [];
 
-  /// Returns the text value.
+  /// Current text value.
   String get text => _text;
 
   set text(String value) {
@@ -20,23 +20,23 @@ class TextEditingController {
     _notifyListeners();
   }
 
-  /// Returns the isEmpty value.
+  /// Whether [text] is empty.
   bool get isEmpty => _text.isEmpty;
 
-  /// Returns the isNotEmpty value.
+  /// Whether [text] has at least one character.
   bool get isNotEmpty => _text.isNotEmpty;
 
-  /// Runs the clear operation.
+  /// Clears the current text value.
   void clear() {
     text = '';
   }
 
-  /// Runs the addListener operation.
+  /// Registers a listener called whenever [text] changes.
   void addListener(FlintVoidCallback listener) {
     _listeners.add(listener);
   }
 
-  /// Runs the removeListener operation.
+  /// Removes a previously registered listener.
   void removeListener(FlintVoidCallback listener) {
     _listeners.remove(listener);
   }
@@ -48,13 +48,14 @@ class TextEditingController {
   }
 }
 
+/// Creates a [FormController] initialized with [initialValues].
 FormController useForm(Map<String, Object?> initialValues) {
   return FormController(initialValues);
 }
 
-/// Represents the FormController API in Flint UI.
+/// Stateful helper for form data, validation errors, and submit lifecycle.
 class FormController {
-  /// Creates a FormController instance.
+  /// Creates a form controller from initial field values.
   FormController(Map<String, Object?> initialValues)
     : _defaults = Map<String, Object?>.from(initialValues),
       _data = Map<String, Object?>.from(initialValues);
@@ -64,19 +65,28 @@ class FormController {
   final Map<String, TextEditingController> _controllers = {};
   final List<FlintVoidCallback> _listeners = [];
 
+  /// Current validation errors keyed by field name.
   FormErrors errors = const FormErrors();
+
+  /// Whether a submit action is currently running.
   bool processing = false;
+
+  /// Whether the most recent submit completed successfully.
   bool wasSuccessful = false;
+
+  /// Whether the form has recently completed a successful submit.
   bool recentlySuccessful = false;
 
-  /// Returns the data value.
+  /// Immutable snapshot of current form data.
   Map<String, Object?> get data => Map<String, Object?>.unmodifiable(_data);
 
+  /// Gets the raw value for [key].
   Object? operator [](String key) => _data[key];
 
-  /// Runs the string operation.
+  /// Gets the field value for [key] as a string.
   String string(String key) => _data[key]?.toString() ?? '';
 
+  /// Returns a text controller synchronized with the field named [key].
   TextEditingController controller(String key) {
     return _controllers.putIfAbsent(key, () {
       final controller = TextEditingController(text: string(key));
@@ -88,7 +98,7 @@ class FormController {
     });
   }
 
-  /// Runs the setField operation.
+  /// Updates one field value and notifies listeners.
   void setField(String key, Object? value) {
     _data[key] = value;
     final controller = _controllers[key];
@@ -99,22 +109,22 @@ class FormController {
     _notifyListeners();
   }
 
-  /// Runs the error operation.
+  /// Returns the first validation message for [key], if any.
   String? error(String key) => errors.field(key);
 
-  /// Runs the setError operation.
+  /// Adds a validation error for one field.
   void setError(String key, Object message) {
     errors = errors.merge(FormErrors.from({key: message}));
     _notifyListeners();
   }
 
-  /// Runs the setErrors operation.
+  /// Replaces validation errors from a supported error payload.
   void setErrors(Object? messages) {
     errors = FormErrors.from(messages);
     _notifyListeners();
   }
 
-  /// Runs the clearErrors operation.
+  /// Clears all validation errors, or only errors for [keys].
   void clearErrors([List<String> keys = const []]) {
     if (keys.isEmpty) {
       errors = const FormErrors();
@@ -124,7 +134,7 @@ class FormController {
     _notifyListeners();
   }
 
-  /// Runs the reset operation.
+  /// Resets all fields, or only [keys], to their initial values.
   void reset([List<String> keys = const []]) {
     final resetKeys = keys.isEmpty ? _defaults.keys : keys;
     for (final key in resetKeys) {
@@ -133,6 +143,7 @@ class FormController {
     clearErrors(keys.toList());
   }
 
+  /// Runs [action] with current data and updates submit state.
   Future<T?> submit<T>(
     Future<T> Function(Map<String, Object?> data) action, {
     void Function(T result)? onSuccess,
@@ -166,12 +177,12 @@ class FormController {
     }
   }
 
-  /// Runs the addListener operation.
+  /// Registers a listener called whenever form state changes.
   void addListener(FlintVoidCallback listener) {
     _listeners.add(listener);
   }
 
-  /// Runs the removeListener operation.
+  /// Removes a previously registered form state listener.
   void removeListener(FlintVoidCallback listener) {
     _listeners.remove(listener);
   }

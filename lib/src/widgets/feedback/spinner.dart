@@ -3,9 +3,9 @@ import '../../node.dart';
 import '../../style.dart';
 import '../shared/theme.dart';
 
-/// Represents the Spinner API in Flint UI.
+/// Accessible loading spinner.
 class Spinner extends FlintElement {
-  /// Creates a Spinner instance.
+  /// Creates a spinner with optional status label.
   Spinner({
     String? label,
     String? className,

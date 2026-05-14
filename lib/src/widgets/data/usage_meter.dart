@@ -4,9 +4,9 @@ import '../../style.dart';
 import '../shared/theme.dart';
 import 'progress_bar.dart';
 
-/// Represents the UsageMeter API in Flint UI.
+/// Usage summary paired with a progress bar.
 class UsageMeter extends FlintElement {
-  /// Creates a UsageMeter instance.
+  /// Creates a usage meter for [used] out of [limit].
   UsageMeter({
     required String label,
     required num used,

@@ -3,9 +3,9 @@ import '../../node.dart';
 import '../../style.dart';
 import '../shared/theme.dart';
 
-/// Represents the Toast API in Flint UI.
+/// Toast notification surface with optional message and action content.
 class Toast extends FlintElement {
-  /// Creates a Toast instance.
+  /// Creates a toast notification.
   Toast({
     required String title,
     String? message,

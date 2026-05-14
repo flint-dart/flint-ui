@@ -6,9 +6,9 @@ import '../actions/button_group.dart';
 import '../shared/theme.dart';
 import 'modal.dart';
 
-/// Represents the ConfirmAction API in Flint UI.
+/// Confirmation dialog for dangerous or deliberate user actions.
 class ConfirmAction extends FlintElement {
-  /// Creates a ConfirmAction instance.
+  /// Creates a confirmation modal controlled by [open].
   ConfirmAction({
     required bool open,
     required String title,

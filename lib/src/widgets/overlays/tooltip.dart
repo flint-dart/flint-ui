@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the Tooltip API in Flint UI.
+/// Tooltip content attached to an inline child.
 class Tooltip extends FlintElement {
-  /// Creates a Tooltip instance.
+  /// Creates a tooltip for [child].
   Tooltip({
     required String content,
     required Object child,

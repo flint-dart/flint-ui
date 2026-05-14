@@ -291,6 +291,15 @@ Document:
 - `FormErrors`
 - form helper functions that are public
 
+Status: completed.
+
+Notes:
+
+- Form controls, option models, field groups, controllers, and validation errors are documented.
+- Public form helper functions and shared field styles have reference comments.
+- Placeholder generated comments were removed from form widget files.
+- `dart analyze` passes after this pass.
+
 ### 9. Data, Feedback, Navigation, And Overlays
 
 Files:
@@ -308,6 +317,15 @@ Document:
 - feedback widgets: `Alert`, `Spinner`, `StatusBadge`
 - navigation widgets: `Breadcrumbs`, `Pagination`, `SearchBox`, `Tabs`
 - overlay widgets: `ConfirmAction`, `Drawer`, `Modal`, `Popover`, `Skeleton`, `Toast`, `Tooltip`
+
+Status: completed.
+
+Notes:
+
+- Data display widgets, table models, timeline items, and usage/progress surfaces are documented.
+- Feedback, navigation, and overlay widgets now have focused reference comments.
+- Placeholder generated comments were removed from section 9 widget files.
+- `dart analyze` passes after this pass.
 
 ## Validation
 

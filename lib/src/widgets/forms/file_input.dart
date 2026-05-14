@@ -2,9 +2,9 @@ import '../../style.dart';
 import 'text_field.dart';
 import 'validation.dart';
 
-/// Represents the FileInput API in Flint UI.
+/// File picker field with label, help text, and validation message support.
 class FileInput extends TextField {
-  /// Creates a FileInput instance.
+  /// Creates a file input field.
   FileInput({
     String? label,
     String? name,

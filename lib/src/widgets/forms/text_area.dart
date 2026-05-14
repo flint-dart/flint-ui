@@ -7,9 +7,9 @@ import 'field_helpers.dart';
 import 'validation.dart';
 import 'package:universal_web/web.dart' as web;
 
-/// Represents the TextArea API in Flint UI.
+/// Multiline text input with label, help text, validation, and controller support.
 class TextArea extends FlintElement {
-  /// Creates a TextArea instance.
+  /// Creates a multiline text field.
   TextArea({
     String? label,
     String? name,

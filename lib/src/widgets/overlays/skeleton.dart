@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the Skeleton API in Flint UI.
+/// Placeholder loading shape for content that has not loaded yet.
 class Skeleton extends FlintElement {
-  /// Creates a Skeleton instance.
+  /// Creates one or more skeleton placeholder lines.
   Skeleton({
     String shape = 'line',
     int lines = 1,

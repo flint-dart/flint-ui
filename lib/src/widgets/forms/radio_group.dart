@@ -4,18 +4,18 @@ import '../../style.dart';
 import 'field_helpers.dart';
 import 'validation.dart';
 
-/// Represents the RadioOption API in Flint UI.
+/// Option rendered inside a [RadioGroup].
 class RadioOption {
-  /// The label value.
+  /// Visible option label.
   final String label;
 
-  /// The value value.
+  /// Submitted option value.
   final Object value;
 
-  /// The disabled value.
+  /// Whether this option should be unavailable.
   final bool disabled;
 
-  /// Creates a RadioOption instance.
+  /// Creates a radio option.
   const RadioOption({
     required this.label,
     required this.value,
@@ -23,9 +23,9 @@ class RadioOption {
   });
 }
 
-/// Represents the RadioGroup API in Flint UI.
+/// Fieldset of mutually exclusive radio options.
 class RadioGroup extends FlintElement {
-  /// Creates a RadioGroup instance.
+  /// Creates a radio group field.
   RadioGroup({
     String? label,
     String? name,

@@ -2,21 +2,21 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the DescriptionItem API in Flint UI.
+/// Label/value item rendered by [DescriptionList].
 class DescriptionItem {
-  /// The label value.
+  /// Term or field name.
   final String label;
 
-  /// The value value.
+  /// Description content for [label].
   final Object value;
 
-  /// Creates a DescriptionItem instance.
+  /// Creates a description list item.
   const DescriptionItem({required this.label, required this.value});
 }
 
-/// Represents the DescriptionList API in Flint UI.
+/// Semantic description list for label/value metadata.
 class DescriptionList extends FlintElement {
-  /// Creates a DescriptionList instance.
+  /// Creates a description list from [items].
   DescriptionList({
     List<DescriptionItem> items = const [],
     String? className,

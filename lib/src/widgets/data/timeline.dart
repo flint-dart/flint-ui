@@ -3,21 +3,21 @@ import '../../node.dart';
 import '../../style.dart';
 import '../shared/theme.dart';
 
-/// Represents the TimelineItem API in Flint UI.
+/// Event entry rendered by [Timeline].
 class TimelineItem {
-  /// The title value.
+  /// Primary event title.
   final String title;
 
-  /// The description value.
+  /// Optional event description.
   final String? description;
 
-  /// The time value.
+  /// Optional event time or timestamp label.
   final String? time;
 
-  /// The tone value.
+  /// Tone used for the event marker.
   final Tone tone;
 
-  /// Creates a TimelineItem instance.
+  /// Creates a timeline event item.
   const TimelineItem({
     required this.title,
     this.description,
@@ -26,9 +26,9 @@ class TimelineItem {
   });
 }
 
-/// Represents the Timeline API in Flint UI.
+/// Ordered timeline of events with tone-colored markers.
 class Timeline extends FlintElement {
-  /// Creates a Timeline instance.
+  /// Creates a timeline from [items].
   Timeline({
     List<TimelineItem> items = const [],
     String? className,

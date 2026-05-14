@@ -2,9 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
-/// Represents the FieldGroup API in Flint UI.
+/// Groups related form fields under an optional title and description.
 class FieldGroup extends FlintElement {
-  /// Creates a FieldGroup instance.
+  /// Creates a form field group.
   FieldGroup({
     String? title,
     String? description,

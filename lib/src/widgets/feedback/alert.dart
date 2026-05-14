@@ -3,9 +3,9 @@ import '../../node.dart';
 import '../../style.dart';
 import '../shared/theme.dart';
 
-/// Represents the Alert API in Flint UI.
+/// Tone-aware alert surface for important status messages.
 class Alert extends FlintElement {
-  /// Creates a Alert instance.
+  /// Creates an alert with optional title, message, content, and actions.
   Alert({
     String? title,
     String? message,
