@@ -1,14 +1,19 @@
 import 'package:universal_web/web.dart' as web;
 
+/// Options for the CookieSameSite API.
 enum CookieSameSite { lax, strict, none }
 
+/// Represents the Cookies API in Flint UI.
 class Cookies {
+  /// Creates a Cookies instance.
   const Cookies();
 
+  /// Runs the read operation.
   String? read(String name) {
     return readAll()[name];
   }
 
+  /// Runs the readAll operation.
   Map<String, String> readAll() {
     final cookie = web.document.cookie;
     if (cookie.isEmpty) return const {};
@@ -32,10 +37,12 @@ class Cookies {
     return values;
   }
 
+  /// Runs the has operation.
   bool has(String name) {
     return read(name) != null;
   }
 
+  /// Runs the write operation.
   void write(
     String name,
     String value, {
@@ -58,6 +65,7 @@ class Cookies {
     );
   }
 
+  /// Runs the remove operation.
   void remove(
     String name, {
     String path = '/',
@@ -77,6 +85,7 @@ class Cookies {
     );
   }
 
+  /// Runs the clear operation.
   void clear({String path = '/'}) {
     for (final name in readAll().keys) {
       remove(name, path: path);

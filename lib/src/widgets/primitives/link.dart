@@ -3,7 +3,9 @@ import '../../node.dart';
 import '../../style.dart';
 import '../shared/theme.dart';
 
+/// Represents the Link API in Flint UI.
 class Link extends FlintElement {
+  /// Creates a Link instance.
   Link({
     required String href,
     Object? child,
@@ -19,27 +21,27 @@ class Link extends FlintElement {
     ComponentSize size = ComponentSize.md,
     bool disabled = false,
   }) : super(
-          'a',
-          props: mergeComponentProps(
-            {
-              ...props,
-              'href': href,
-              if (target != null) 'target': target,
-              if (rel != null) 'rel': rel,
-              if (disabled) 'aria-disabled': 'true',
-            },
-            className: className,
-            dartStyle: variant == null
-                ? dartStyle
-                : buttonComponentStyle(
-                    variant: variant,
-                    tone: tone,
-                    size: size,
-                    disabled: disabled,
-                    loading: false,
-                  ).merge(dartStyle),
-            style: style,
-          ),
-          children: normalizeChildren(child, children),
-        );
+         'a',
+         props: mergeComponentProps(
+           {
+             ...props,
+             'href': href,
+             if (target != null) 'target': target,
+             if (rel != null) 'rel': rel,
+             if (disabled) 'aria-disabled': 'true',
+           },
+           className: className,
+           dartStyle: variant == null
+               ? dartStyle
+               : buttonComponentStyle(
+                   variant: variant,
+                   tone: tone,
+                   size: size,
+                   disabled: disabled,
+                   loading: false,
+                 ).merge(dartStyle),
+           style: style,
+         ),
+         children: normalizeChildren(child, children),
+       );
 }

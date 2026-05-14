@@ -5,11 +5,18 @@ import '../shared/theme.dart';
 import 'field_helpers.dart';
 import 'validation.dart';
 
+/// Represents the SelectOption API in Flint UI.
 class SelectOption {
+  /// The label value.
   final String label;
+
+  /// The value value.
   final Object value;
+
+  /// The disabled value.
   final bool disabled;
 
+  /// Creates a SelectOption instance.
   const SelectOption({
     required this.label,
     required this.value,
@@ -17,7 +24,9 @@ class SelectOption {
   });
 }
 
+/// Represents the Select API in Flint UI.
 class Select extends FlintElement {
+  /// Creates a Select instance.
   Select({
     String? label,
     String? name,
@@ -40,31 +49,31 @@ class Select extends FlintElement {
     DartStyle? selectDartStyle,
     void Function(Object event)? onChanged,
   }) : super(
-          'div',
-          props: fieldWrapperProps(
-            props: props,
-            className: className,
-            dartStyle: dartStyle,
-            style: style,
-          ),
-          children: _children(
-            label: label,
-            name: name,
-            value: value,
-            placeholder: placeholder,
-            options: options,
-            required: required,
-            disabled: disabled,
-            variant: variant,
-            size: size,
-            error: resolveFieldError(name: name, error: error, errors: errors),
-            helpText: helpText,
-            selectProps: selectProps,
-            selectStyle: selectStyle,
-            selectDartStyle: selectDartStyle,
-            onChanged: onChanged,
-          ),
-        );
+         'div',
+         props: fieldWrapperProps(
+           props: props,
+           className: className,
+           dartStyle: dartStyle,
+           style: style,
+         ),
+         children: _children(
+           label: label,
+           name: name,
+           value: value,
+           placeholder: placeholder,
+           options: options,
+           required: required,
+           disabled: disabled,
+           variant: variant,
+           size: size,
+           error: resolveFieldError(name: name, error: error, errors: errors),
+           helpText: helpText,
+           selectProps: selectProps,
+           selectStyle: selectStyle,
+           selectDartStyle: selectDartStyle,
+           onChanged: onChanged,
+         ),
+       );
 
   static List<FlintNode> _children({
     required String? label,

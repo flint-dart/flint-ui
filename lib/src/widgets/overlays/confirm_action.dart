@@ -6,7 +6,9 @@ import '../actions/button_group.dart';
 import '../shared/theme.dart';
 import 'modal.dart';
 
+/// Represents the ConfirmAction API in Flint UI.
 class ConfirmAction extends FlintElement {
+  /// Creates a ConfirmAction instance.
   ConfirmAction({
     required bool open,
     required String title,
@@ -21,35 +23,35 @@ class ConfirmAction extends FlintElement {
     void Function(Object event)? onConfirm,
     void Function(Object event)? onCancel,
   }) : super(
-          'div',
-          props: mergeComponentProps(
-            props,
-            className: className,
-            dartStyle: dartStyle,
-            style: style,
-          ),
-          children: [
-            Modal(
-              open: open,
-              title: title,
-              child: message,
-              onClose: onCancel,
-              actions: ButtonGroup(
-                children: [
-                  Button(
-                    child: cancelLabel,
-                    variant: ButtonVariant.outline,
-                    tone: Tone.neutral,
-                    onPressed: onCancel,
-                  ),
-                  Button(
-                    child: confirmLabel,
-                    tone: danger ? Tone.danger : Tone.primary,
-                    onPressed: onConfirm,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        );
+         'div',
+         props: mergeComponentProps(
+           props,
+           className: className,
+           dartStyle: dartStyle,
+           style: style,
+         ),
+         children: [
+           Modal(
+             open: open,
+             title: title,
+             child: message,
+             onClose: onCancel,
+             actions: ButtonGroup(
+               children: [
+                 Button(
+                   child: cancelLabel,
+                   variant: ButtonVariant.outline,
+                   tone: Tone.neutral,
+                   onPressed: onCancel,
+                 ),
+                 Button(
+                   child: confirmLabel,
+                   tone: danger ? Tone.danger : Tone.primary,
+                   onPressed: onConfirm,
+                 ),
+               ],
+             ),
+           ),
+         ],
+       );
 }

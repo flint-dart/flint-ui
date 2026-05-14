@@ -1,34 +1,55 @@
 part of '../style.dart';
 
+/// Options for the Breakpoint API.
 enum Breakpoint {
+  /// Creates a sm instance.
   sm(640),
+
+  /// Creates a md instance.
   md(768),
+
+  /// Creates a lg instance.
   lg(1024),
+
+  /// Creates a xl instance.
   xl(1280);
 
+  /// The minWidth value.
   final int minWidth;
+
+  /// Creates a Breakpoint instance.
   const Breakpoint(this.minWidth);
 }
 
+/// Represents the ThemeTokens API in Flint UI.
 class ThemeTokens {
+  /// The values value.
   final Map<String, Object?> values;
 
+  /// Creates a ThemeTokens instance.
   const ThemeTokens(this.values);
 
   Object? resolve(String name) => values[name];
 
+  /// Returns the cssVariables value.
   Map<String, Object?> get cssVariables => {
     for (final entry in values.entries)
       '--${_tokenCssName(entry.key)}': entry.value,
   };
 }
 
+/// Represents the TokenRef API in Flint UI.
 class TokenRef {
+  /// The name value.
   final String name;
+
+  /// The fallback value.
   final Object? fallback;
 
+  /// Creates a TokenRef instance.
   const TokenRef(this.name, {this.fallback});
 
+  /// Runs the toCss operation.
   String toCss() {
     final variable = 'var(--${_tokenCssName(name)}';
     if (fallback == null) return '$variable)';
@@ -36,6 +57,7 @@ class TokenRef {
   }
 
   @override
+  /// Runs the toString operation.
   String toString() => toCss();
 }
 
@@ -43,7 +65,9 @@ TokenRef token(String name, {Object? fallback}) {
   return TokenRef(name, fallback: fallback);
 }
 
+/// Represents the ThemeToken API in Flint UI.
 class ThemeToken {
+  /// Creates a ThemeToken instance.
   const ThemeToken._();
 
   static TokenRef color(String name, {Object? fallback}) =>
@@ -62,15 +86,30 @@ class ThemeToken {
       token('font.$name', fallback: fallback);
 }
 
+/// Represents the FlintTheme API in Flint UI.
 class FlintTheme {
+  /// The name value.
   final String name;
+
+  /// The colors value.
   final Map<String, Object?> colors;
+
+  /// The spacing value.
   final Map<String, Object?> spacing;
+
+  /// The radii value.
   final Map<String, Object?> radii;
+
+  /// The shadows value.
   final Map<String, Object?> shadows;
+
+  /// The fonts value.
   final Map<String, Object?> fonts;
+
+  /// The tokens value.
   final ThemeTokens tokens;
 
+  /// Creates a FlintTheme instance.
   const FlintTheme({
     this.name = 'flint',
     this.colors = const {},
@@ -81,6 +120,7 @@ class FlintTheme {
     this.tokens = const ThemeTokens({}),
   });
 
+  /// Returns the allTokens value.
   ThemeTokens get allTokens {
     return ThemeTokens({
       for (final entry in colors.entries) 'color.${entry.key}': entry.value,
@@ -92,22 +132,46 @@ class FlintTheme {
     });
   }
 
+  /// Returns the cssVariables value.
   Map<String, Object?> get cssVariables => allTokens.cssVariables;
 }
 
+/// Represents the StyleRule API in Flint UI.
 class StyleRule {
+  /// The styles value.
   final Map<String, Object?> styles;
+
+  /// The hover value.
   final Map<String, Object?> hover;
+
+  /// The focus value.
   final Map<String, Object?> focus;
+
+  /// The focusVisible value.
   final Map<String, Object?> focusVisible;
+
+  /// The active value.
   final Map<String, Object?> active;
+
+  /// The disabled value.
   final Map<String, Object?> disabled;
+
+  /// The checked value.
   final Map<String, Object?> checked;
+
+  /// The selected value.
   final Map<String, Object?> selected;
+
+  /// The expanded value.
   final Map<String, Object?> expanded;
+
+  /// The invalid value.
   final Map<String, Object?> invalid;
+
+  /// The nestedRules value.
   final Map<String, Map<String, Object?>> nestedRules;
 
+  /// Creates a StyleRule instance.
   const StyleRule(
     this.styles, {
     this.hover = const {},
@@ -121,6 +185,7 @@ class StyleRule {
     this.invalid = const {},
   }) : nestedRules = const {};
 
+  /// Creates a StyleRule instance.
   const StyleRule.nested(this.nestedRules)
     : styles = const {},
       hover = const {},
@@ -134,18 +199,27 @@ class StyleRule {
       invalid = const {};
 }
 
+/// Represents the StyleSheet API in Flint UI.
 class StyleSheet {
+  /// The name value.
   final String name;
+
+  /// The rules value.
   final Map<String, StyleRule> rules;
+
+  /// The tokens value.
   final ThemeTokens? tokens;
 
+  /// Creates a StyleSheet instance.
   const StyleSheet(this.name, this.rules, {this.tokens});
 
+  /// Runs the className operation.
   String className(String key) {
     final normalized = key.startsWith('.') ? key.substring(1) : key;
     return '${_safeCssIdent(name)}-${_safeCssIdent(normalized)}';
   }
 
+  /// Returns the cssText value.
   String get cssText {
     final chunks = <String>[];
 
@@ -237,28 +311,45 @@ class StyleSheet {
   }
 }
 
+/// Represents the KeyframeStep API in Flint UI.
 class KeyframeStep {
+  /// The offset value.
   final Object offset;
+
+  /// The style value.
   final DartStyle style;
 
+  /// Creates a KeyframeStep instance.
   const KeyframeStep(this.offset, this.style);
 
+  /// Creates a KeyframeStep instance.
   const KeyframeStep.from(this.style) : offset = 'from';
+
+  /// Creates a KeyframeStep instance.
   const KeyframeStep.to(this.style) : offset = 'to';
+
+  /// Creates a KeyframeStep instance.
   const KeyframeStep.percent(num percent, this.style) : offset = percent;
 
+  /// Returns the selector value.
   String get selector {
     if (offset is num) return '${offset}%';
     return offset.toString();
   }
 }
 
+/// Represents the StyleKeyframes API in Flint UI.
 class StyleKeyframes {
+  /// The name value.
   final String name;
+
+  /// The steps value.
   final List<KeyframeStep> steps;
 
+  /// Creates a StyleKeyframes instance.
   const StyleKeyframes(this.name, this.steps);
 
+  /// Creates a StyleKeyframes instance.
   factory StyleKeyframes.fromTo({
     required String name,
     required DartStyle from,
@@ -283,6 +374,7 @@ class StyleKeyframes {
     );
   }
 
+  /// Returns the cssText value.
   String get cssText {
     final body = steps
         .map((step) {
@@ -297,17 +389,36 @@ class StyleKeyframes {
   }
 }
 
+/// Represents the RootDesign API in Flint UI.
 class RootDesign {
+  /// The name value.
   final String name;
+
+  /// The theme value.
   final FlintTheme? theme;
+
+  /// The root value.
   final DartStyle? root;
+
+  /// The html value.
   final DartStyle? html;
+
+  /// The body value.
   final DartStyle? body;
+
+  /// The all value.
   final DartStyle? all;
+
+  /// The links value.
   final DartStyle? links;
+
+  /// The selectors value.
   final Map<String, DartStyle> selectors;
+
+  /// The keyframes value.
   final List<StyleKeyframes> keyframes;
 
+  /// Creates a RootDesign instance.
   const RootDesign({
     this.name = 'root',
     this.theme,
@@ -320,6 +431,7 @@ class RootDesign {
     this.keyframes = const [],
   });
 
+  /// Returns the cssText value.
   String get cssText {
     final chunks = <String>[
       if (theme != null) _compileRootMap(':root', theme!.cssVariables),

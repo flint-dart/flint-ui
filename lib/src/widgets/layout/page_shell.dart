@@ -4,7 +4,9 @@ import '../../style.dart';
 import 'constrained_box.dart';
 import 'safe_area.dart';
 
+/// Represents the PageShell API in Flint UI.
 class PageShell extends FlintElement {
+  /// Creates a PageShell instance.
   PageShell({
     Object? nav,
     Object? header,
@@ -21,32 +23,32 @@ class PageShell extends FlintElement {
     DartStyle? dartStyle,
     DartStyle? contentDartStyle,
   }) : super(
-          'div',
-          props: mergeComponentProps(
-            props,
-            className: className,
-            dartStyle: DartStyle(
-              minHeight: '100vh',
-              display: Display.grid,
-              gridTemplateColumns: 'minmax(0, 1fr)',
-              gap: gap,
-              padding: EdgeInsets.all(padding),
-            ).merge(dartStyle),
-            style: style,
-          ),
-          children: [
-            if (nav != null) toFlintNode(nav),
-            _content(
-              header: header,
-              child: child,
-              children: children,
-              footer: footer,
-              maxWidth: maxWidth,
-              safeArea: safeArea,
-              contentDartStyle: contentDartStyle,
-            ),
-          ],
-        );
+         'div',
+         props: mergeComponentProps(
+           props,
+           className: className,
+           dartStyle: DartStyle(
+             minHeight: '100vh',
+             display: Display.grid,
+             gridTemplateColumns: 'minmax(0, 1fr)',
+             gap: gap,
+             padding: EdgeInsets.all(padding),
+           ).merge(dartStyle),
+           style: style,
+         ),
+         children: [
+           if (nav != null) toFlintNode(nav),
+           _content(
+             header: header,
+             child: child,
+             children: children,
+             footer: footer,
+             maxWidth: maxWidth,
+             safeArea: safeArea,
+             contentDartStyle: contentDartStyle,
+           ),
+         ],
+       );
 
   static FlintNode _content({
     required Object? header,
@@ -66,19 +68,11 @@ class PageShell extends FlintElement {
       ).merge(contentDartStyle),
       children: [
         if (header != null) header,
-        FlintElement(
-          'main',
-          children: normalizeChildren(child, children),
-        ),
+        FlintElement('main', children: normalizeChildren(child, children)),
         if (footer != null) footer,
       ],
     );
 
-    return safeArea
-        ? SafeArea(
-            minimum: 0,
-            child: content,
-          )
-        : content;
+    return safeArea ? SafeArea(minimum: 0, child: content) : content;
   }
 }

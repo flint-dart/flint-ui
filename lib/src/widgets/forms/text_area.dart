@@ -7,7 +7,9 @@ import 'field_helpers.dart';
 import 'validation.dart';
 import 'package:universal_web/web.dart' as web;
 
+/// Represents the TextArea API in Flint UI.
 class TextArea extends FlintElement {
+  /// Creates a TextArea instance.
   TextArea({
     String? label,
     String? name,
@@ -31,31 +33,31 @@ class TextArea extends FlintElement {
     DartStyle? textareaDartStyle,
     void Function(Object event)? onChanged,
   }) : super(
-          'div',
-          props: fieldWrapperProps(
-            props: props,
-            className: className,
-            dartStyle: dartStyle,
-            style: style,
-          ),
-          children: _children(
-            label: label,
-            name: name,
-            value: controller?.text ?? value,
-            placeholder: placeholder,
-            rows: rows,
-            required: required,
-            disabled: disabled,
-            variant: variant,
-            size: size,
-            error: resolveFieldError(name: name, error: error, errors: errors),
-            helpText: helpText,
-            textareaProps: textareaProps,
-            textareaStyle: textareaStyle,
-            textareaDartStyle: textareaDartStyle,
-            onChanged: _controlledOnChanged(controller, onChanged),
-          ),
-        );
+         'div',
+         props: fieldWrapperProps(
+           props: props,
+           className: className,
+           dartStyle: dartStyle,
+           style: style,
+         ),
+         children: _children(
+           label: label,
+           name: name,
+           value: controller?.text ?? value,
+           placeholder: placeholder,
+           rows: rows,
+           required: required,
+           disabled: disabled,
+           variant: variant,
+           size: size,
+           error: resolveFieldError(name: name, error: error, errors: errors),
+           helpText: helpText,
+           textareaProps: textareaProps,
+           textareaStyle: textareaStyle,
+           textareaDartStyle: textareaDartStyle,
+           onChanged: _controlledOnChanged(controller, onChanged),
+         ),
+       );
 
   static void Function(Object event)? _controlledOnChanged(
     TextEditingController? controller,
@@ -116,14 +118,17 @@ class TextArea extends FlintElement {
             if (placeholder != null) 'placeholder': placeholder,
             if (onChanged != null) 'onInput': onChanged,
           },
-          dartStyle: inputComponentStyle(
-            variant: variant,
-            size: size,
-            disabled: disabled,
-            invalid: error != null && error.isNotEmpty,
-          )
-              .merge(const DartStyle(minHeight: 96, resize: Resize.vertical))
-              .merge(textareaDartStyle),
+          dartStyle:
+              inputComponentStyle(
+                    variant: variant,
+                    size: size,
+                    disabled: disabled,
+                    invalid: error != null && error.isNotEmpty,
+                  )
+                  .merge(
+                    const DartStyle(minHeight: 96, resize: Resize.vertical),
+                  )
+                  .merge(textareaDartStyle),
           style: textareaStyle,
         ),
         children: value == null ? const [] : normalizeChildren(value, const []),

@@ -2,7 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
+/// Represents the Section API in Flint UI.
 class Section extends FlintElement {
+  /// Creates a Section instance.
   Section({
     String? title,
     String? description,
@@ -14,24 +16,24 @@ class Section extends FlintElement {
     Map<String, Object?> style = const {},
     DartStyle? dartStyle,
   }) : super(
-          'section',
-          props: mergeComponentProps(
-            props,
-            className: className,
-            defaultStyle: const {
-              'display': 'grid',
-              'gap': '14px',
-              'margin-bottom': '24px',
-            },
-            dartStyle: dartStyle,
-            style: style,
-          ),
-          children: [
-            if (title != null || description != null || actions != null)
-              _sectionHeader(title, description, actions),
-            ...normalizeChildren(child, children),
-          ],
-        );
+         'section',
+         props: mergeComponentProps(
+           props,
+           className: className,
+           defaultStyle: const {
+             'display': 'grid',
+             'gap': '14px',
+             'margin-bottom': '24px',
+           },
+           dartStyle: dartStyle,
+           style: style,
+         ),
+         children: [
+           if (title != null || description != null || actions != null)
+             _sectionHeader(title, description, actions),
+           ...normalizeChildren(child, children),
+         ],
+       );
 
   static FlintElement _sectionHeader(
     String? title,
@@ -56,10 +58,7 @@ class Section extends FlintElement {
               FlintElement(
                 'h2',
                 props: const {
-                  'style': {
-                    'margin': 0,
-                    'font-size': '18px',
-                  },
+                  'style': {'margin': 0, 'font-size': '18px'},
                 },
                 children: normalizeChildren(title, const []),
               ),
@@ -67,10 +66,7 @@ class Section extends FlintElement {
               FlintElement(
                 'p',
                 props: const {
-                  'style': {
-                    'margin': 0,
-                    'color': '#667085',
-                  },
+                  'style': {'margin': 0, 'color': '#667085'},
                 },
                 children: normalizeChildren(description, const []),
               ),

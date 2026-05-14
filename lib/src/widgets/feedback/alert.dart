@@ -3,7 +3,9 @@ import '../../node.dart';
 import '../../style.dart';
 import '../shared/theme.dart';
 
+/// Represents the Alert API in Flint UI.
 class Alert extends FlintElement {
+  /// Creates a Alert instance.
   Alert({
     String? title,
     String? message,
@@ -16,48 +18,41 @@ class Alert extends FlintElement {
     DartStyle? dartStyle,
     Tone tone = Tone.info,
   }) : super(
-          'div',
-          props: mergeComponentProps(
-            {
-              ...props,
-              'role': props['role'] ?? 'alert',
-            },
-            className: className,
-            defaultStyle: {
-              'display': 'grid',
-              'gap': '6px',
-              'border': '1px solid ${toneBorder(tone)}',
-              'border-radius': '8px',
-              'padding': '12px 14px',
-              'background': toneSoft(tone),
-              'color': toneText(tone),
-            },
-            dartStyle: dartStyle,
-            style: style,
-          ),
-          children: [
-            if (title != null)
-              FlintElement(
-                'strong',
-                props: const {
-                  'style': {
-                    'font-weight': 700,
-                  },
-                },
-                children: normalizeChildren(title, const []),
-              ),
-            if (message != null)
-              FlintElement(
-                'p',
-                props: const {
-                  'style': {
-                    'margin': 0,
-                  },
-                },
-                children: normalizeChildren(message, const []),
-              ),
-            ...normalizeChildren(child, children),
-            if (actions != null) toFlintNode(actions),
-          ],
-        );
+         'div',
+         props: mergeComponentProps(
+           {...props, 'role': props['role'] ?? 'alert'},
+           className: className,
+           defaultStyle: {
+             'display': 'grid',
+             'gap': '6px',
+             'border': '1px solid ${toneBorder(tone)}',
+             'border-radius': '8px',
+             'padding': '12px 14px',
+             'background': toneSoft(tone),
+             'color': toneText(tone),
+           },
+           dartStyle: dartStyle,
+           style: style,
+         ),
+         children: [
+           if (title != null)
+             FlintElement(
+               'strong',
+               props: const {
+                 'style': {'font-weight': 700},
+               },
+               children: normalizeChildren(title, const []),
+             ),
+           if (message != null)
+             FlintElement(
+               'p',
+               props: const {
+                 'style': {'margin': 0},
+               },
+               children: normalizeChildren(message, const []),
+             ),
+           ...normalizeChildren(child, children),
+           if (actions != null) toFlintNode(actions),
+         ],
+       );
 }

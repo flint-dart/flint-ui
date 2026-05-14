@@ -2,19 +2,24 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
+/// Represents the BreadcrumbItem API in Flint UI.
 class BreadcrumbItem {
+  /// The label value.
   final String label;
+
+  /// The href value.
   final String? href;
+
+  /// The current value.
   final bool current;
 
-  const BreadcrumbItem({
-    required this.label,
-    this.href,
-    this.current = false,
-  });
+  /// Creates a BreadcrumbItem instance.
+  const BreadcrumbItem({required this.label, this.href, this.current = false});
 }
 
+/// Represents the Breadcrumbs API in Flint UI.
 class Breadcrumbs extends FlintElement {
+  /// Creates a Breadcrumbs instance.
   Breadcrumbs({
     List<BreadcrumbItem> items = const [],
     String separator = '/',
@@ -23,48 +28,43 @@ class Breadcrumbs extends FlintElement {
     Map<String, Object?> style = const {},
     DartStyle? dartStyle,
   }) : super(
-          'nav',
-          props: mergeComponentProps(
-            {
-              ...props,
-              'aria-label': props['aria-label'] ?? 'Breadcrumb',
-            },
-            className: className,
-            dartStyle: dartStyle,
-            style: style,
-          ),
-          children: [
-            FlintElement(
-              'ol',
-              props: const {
-                'style': {
-                  'display': 'flex',
-                  'align-items': 'center',
-                  'gap': '8px',
-                  'list-style': 'none',
-                  'padding': 0,
-                  'margin': 0,
-                },
-              },
-              children: [
-                for (var i = 0; i < items.length; i++) ...[
-                  if (i > 0)
-                    FlintElement(
-                      'li',
-                      props: const {
-                        'aria-hidden': 'true',
-                        'style': {
-                          'color': '#98a2b3',
-                        },
-                      },
-                      children: normalizeChildren(separator, const []),
-                    ),
-                  _item(items[i]),
-                ],
-              ],
-            ),
-          ],
-        );
+         'nav',
+         props: mergeComponentProps(
+           {...props, 'aria-label': props['aria-label'] ?? 'Breadcrumb'},
+           className: className,
+           dartStyle: dartStyle,
+           style: style,
+         ),
+         children: [
+           FlintElement(
+             'ol',
+             props: const {
+               'style': {
+                 'display': 'flex',
+                 'align-items': 'center',
+                 'gap': '8px',
+                 'list-style': 'none',
+                 'padding': 0,
+                 'margin': 0,
+               },
+             },
+             children: [
+               for (var i = 0; i < items.length; i++) ...[
+                 if (i > 0)
+                   FlintElement(
+                     'li',
+                     props: const {
+                       'aria-hidden': 'true',
+                       'style': {'color': '#98a2b3'},
+                     },
+                     children: normalizeChildren(separator, const []),
+                   ),
+                 _item(items[i]),
+               ],
+             ],
+           ),
+         ],
+       );
 
   static FlintElement _item(BreadcrumbItem item) {
     final current = item.current || item.href == null;
@@ -76,10 +76,7 @@ class Breadcrumbs extends FlintElement {
             'span',
             props: const {
               'aria-current': 'page',
-              'style': {
-                'color': '#344054',
-                'font-weight': 600,
-              },
+              'style': {'color': '#344054', 'font-weight': 600},
             },
             children: normalizeChildren(item.label, const []),
           )

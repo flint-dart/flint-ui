@@ -6,14 +6,18 @@ import 'package:universal_web/web.dart' as web;
 import 'component.dart';
 import 'node.dart';
 
+/// Represents the FlintRoot API in Flint UI.
 class FlintRoot {
+  /// The host value.
   final web.Element host;
   FlintNode? _node;
   bool _renderQueued = false;
   bool _mounted = false;
 
+  /// Creates a FlintRoot instance.
   FlintRoot(this.host);
 
+  /// Runs the render operation.
   void render(Object? node) {
     _node = _normalize(node);
     _scheduleRender();
@@ -41,8 +45,11 @@ class FlintRoot {
     return switch (node) {
       FlintText(:final value) => web.document.createTextNode(value),
       FlintFragment(:final children) => _createFragment(children),
-      FlintElement(:final tag, :final props, :final children) =>
-        _createElement(tag, props, children),
+      FlintElement(:final tag, :final props, :final children) => _createElement(
+        tag,
+        props,
+        children,
+      ),
       FlintComponentNode(:final component) => _createComponent(component),
     };
   }
@@ -151,10 +158,11 @@ class FlintRoot {
 
   void _listen(web.Element element, String eventName, Function handler) {
     element.addEventListener(
-        eventName,
-        ((web.Event event) {
-          handler(event);
-        }).toJS);
+      eventName,
+      ((web.Event event) {
+        handler(event);
+      }).toJS,
+    );
   }
 
   FlintNode _normalize(Object? node) {
@@ -166,6 +174,8 @@ class FlintRoot {
 
 FlintRoot createRoot(String selector) {
   final element = web.document.querySelector(selector);
+
+  /// Creates a if instance.
   if (element == null) {
     throw StateError('No element found for selector "$selector".');
   }

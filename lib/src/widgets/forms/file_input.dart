@@ -2,7 +2,9 @@ import '../../style.dart';
 import 'text_field.dart';
 import 'validation.dart';
 
+/// Represents the FileInput API in Flint UI.
 class FileInput extends TextField {
+  /// Creates a FileInput instance.
   FileInput({
     String? label,
     String? name,
@@ -21,24 +23,24 @@ class FileInput extends TextField {
     DartStyle? dartStyle,
     void Function(Object event)? onChanged,
   }) : super(
-          label: label,
-          name: name,
-          type: 'file',
-          required: required,
-          disabled: disabled,
-          error: error,
-          errors: errors,
-          helpText: helpText,
-          className: className,
-          props: props,
-          inputProps: {
-            ...inputProps,
-            if (accept != null) 'accept': accept,
-            if (multiple) 'multiple': true,
-          },
-          style: style,
-          inputStyle: inputStyle,
-          dartStyle: dartStyle,
-          onChanged: onChanged,
-        );
+         label: label,
+         name: name,
+         type: 'file',
+         required: required,
+         disabled: disabled,
+         error: error,
+         errors: errors,
+         helpText: helpText,
+         className: className,
+         props: props,
+         inputProps: {
+           ...inputProps,
+           if (accept != null) 'accept': accept,
+           if (multiple) 'multiple': true,
+         },
+         style: style,
+         inputStyle: inputStyle,
+         dartStyle: dartStyle,
+         onChanged: onChanged,
+       );
 }

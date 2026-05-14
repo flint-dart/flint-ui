@@ -2,7 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
+/// Represents the Spacer API in Flint UI.
 class Spacer extends FlintElement {
+  /// Creates a Spacer instance.
   Spacer({
     int flex = 1,
     Object? size,
@@ -11,17 +13,17 @@ class Spacer extends FlintElement {
     Map<String, Object?> style = const {},
     DartStyle? dartStyle,
   }) : super(
-          'div',
-          props: mergeComponentProps(
-            props,
-            className: className,
-            defaultStyle: {
-              'flex': flex,
-              if (size != null) 'width': cssValue(size),
-              if (size != null) 'height': cssValue(size),
-            },
-            dartStyle: dartStyle,
-            style: style,
-          ),
-        );
+         'div',
+         props: mergeComponentProps(
+           props,
+           className: className,
+           defaultStyle: {
+             'flex': flex,
+             if (size != null) 'width': cssValue(size),
+             if (size != null) 'height': cssValue(size),
+           },
+           dartStyle: dartStyle,
+           style: style,
+         ),
+       );
 }

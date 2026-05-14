@@ -2,7 +2,9 @@ import '../../style.dart';
 import 'checkbox.dart';
 import 'validation.dart';
 
+/// Represents the Switch API in Flint UI.
 class Switch extends Checkbox {
+  /// Creates a Switch instance.
   Switch({
     String? label,
     String? name,
@@ -18,22 +20,22 @@ class Switch extends Checkbox {
     DartStyle? dartStyle,
     void Function(Object event)? onChanged,
   }) : super(
-          label: label,
-          name: name,
-          checked: checked,
-          disabled: disabled,
-          error: error,
-          errors: errors,
-          helpText: helpText,
-          className: className,
-          props: props,
-          inputProps: {
-            ...inputProps,
-            'role': 'switch',
-            'aria-checked': checked.toString(),
-          },
-          style: style,
-          dartStyle: dartStyle,
-          onChanged: onChanged,
-        );
+         label: label,
+         name: name,
+         checked: checked,
+         disabled: disabled,
+         error: error,
+         errors: errors,
+         helpText: helpText,
+         className: className,
+         props: props,
+         inputProps: {
+           ...inputProps,
+           'role': 'switch',
+           'aria-checked': checked.toString(),
+         },
+         style: style,
+         dartStyle: dartStyle,
+         onChanged: onChanged,
+       );
 }

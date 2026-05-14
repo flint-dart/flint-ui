@@ -25,8 +25,9 @@ Map<String, Object?> mergeComponentProps(
   );
 
   final next = {...props}..remove('style');
-  final scopedClass =
-      dartStyle?.hasScopedStyles == true ? _scopedClassName(dartStyle!) : null;
+  final scopedClass = dartStyle?.hasScopedStyles == true
+      ? _scopedClassName(dartStyle!)
+      : null;
   final classes = joinClassNames([existingClass, className, scopedClass]);
 
   return {
@@ -37,12 +38,14 @@ Map<String, Object?> mergeComponentProps(
     if (mergedStyle.isNotEmpty)
       'style': existingStyle is String
           ? [
-              styleToCss(mergeStyles(
-                defaultStyle,
-                variantStyle,
-                dartStyle?.toMap() ?? const {},
-                style,
-              )),
+              styleToCss(
+                mergeStyles(
+                  defaultStyle,
+                  variantStyle,
+                  dartStyle?.toMap() ?? const {},
+                  style,
+                ),
+              ),
               existingStyle,
             ].where((value) => value.trim().isNotEmpty).join('; ')
           : mergedStyle,
@@ -65,17 +68,19 @@ Map<String, Object?> mergeStyles(
 }
 
 List<FlintNode> normalizeChildren(Object? child, List<Object?> children) {
-  final values = [
-    if (child != null) child,
-    ...children,
-  ];
+  final values = [if (child != null) child, ...children];
 
   return values.map(toFlintNode).toList(growable: false);
 }
 
 FlintNode toFlintNode(Object? value) {
+  /// Creates a if instance.
   if (value is FlintNode) return value;
+
+  /// Creates a if instance.
   if (value is FlintComponent) return FlintComponentNode(value);
+
+  /// Creates a if instance.
   if (value is Iterable<Object?>) {
     return FlintFragment(value.map(toFlintNode).toList(growable: false));
   }
@@ -102,12 +107,15 @@ String _scopedClassName(DartStyle style) {
 
 String _scopedCss(String className, DartStyle style) {
   final chunks = <String>[];
+
+  /// Creates a for instance.
   for (final entry in style.stateStyles.entries) {
     final body = _styleToCssImportant(entry.value.toMap());
     if (body.isEmpty) continue;
     chunks.add('.$className${entry.key} { $body; }');
   }
 
+  /// Creates a for instance.
   for (final entry in style.breakpointStyles.entries) {
     final body = _styleToCssImportant(entry.value.toMap());
     if (body.isEmpty) continue;
@@ -138,6 +146,8 @@ String _styleToCssImportant(Map<String, Object?> style) {
 
 int _stableHash(String value) {
   var hash = 0x811c9dc5;
+
+  /// Creates a for instance.
   for (final unit in value.codeUnits) {
     hash ^= unit;
     hash = (hash * 0x01000193) & 0xffffffff;

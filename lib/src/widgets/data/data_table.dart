@@ -4,7 +4,9 @@ import '../feedback/spinner.dart';
 import '../layout/empty_state.dart';
 import 'table.dart';
 
+/// Represents the DataTable API in Flint UI.
 class DataTable extends Table {
+  /// Creates a DataTable instance.
   DataTable({
     required List<TableColumn> columns,
     List<TableRowData> rows = const [],
@@ -33,50 +35,49 @@ class DataTable extends Table {
     DartStyle? cellDartStyle,
     void Function(Object event, TableRowData row)? onRowClick,
   }) : super(
-          columns: columns,
-          rows: rows,
-          loading: loading,
-          emptyState: emptyState ??
-              EmptyState(
-                title: 'No data',
-                message: 'There are no records to show yet.',
-              ),
-          loadingState: loadingState ??
-              FlintElement(
-                'div',
-                props: const {
-                  'style': {
-                    'display': 'flex',
-                    'align-items': 'center',
-                    'gap': '8px',
-                    'padding': '16px',
-                  },
-                },
-                children: [
-                  Spinner(),
-                  const FlintText('Loading data...'),
-                ],
-              ),
-          className: className,
-          props: props,
-          style: style,
-          dartStyle: dartStyle,
-          tableClassName: tableClassName,
-          tableProps: tableProps,
-          tableStyle: tableStyle,
-          tableDartStyle: tableDartStyle,
-          headerClassName: headerClassName,
-          headerStyle: headerStyle,
-          headerDartStyle: headerDartStyle,
-          rowClassName: rowClassName,
-          selectedRowClassName: selectedRowClassName,
-          rowStyle: rowStyle,
-          selectedRowStyle: selectedRowStyle,
-          rowDartStyle: rowDartStyle,
-          selectedRowDartStyle: selectedRowDartStyle,
-          cellClassName: cellClassName,
-          cellStyle: cellStyle,
-          cellDartStyle: cellDartStyle,
-          onRowClick: onRowClick,
-        );
+         columns: columns,
+         rows: rows,
+         loading: loading,
+         emptyState:
+             emptyState ??
+             EmptyState(
+               title: 'No data',
+               message: 'There are no records to show yet.',
+             ),
+         loadingState:
+             loadingState ??
+             FlintElement(
+               'div',
+               props: const {
+                 'style': {
+                   'display': 'flex',
+                   'align-items': 'center',
+                   'gap': '8px',
+                   'padding': '16px',
+                 },
+               },
+               children: [Spinner(), const FlintText('Loading data...')],
+             ),
+         className: className,
+         props: props,
+         style: style,
+         dartStyle: dartStyle,
+         tableClassName: tableClassName,
+         tableProps: tableProps,
+         tableStyle: tableStyle,
+         tableDartStyle: tableDartStyle,
+         headerClassName: headerClassName,
+         headerStyle: headerStyle,
+         headerDartStyle: headerDartStyle,
+         rowClassName: rowClassName,
+         selectedRowClassName: selectedRowClassName,
+         rowStyle: rowStyle,
+         selectedRowStyle: selectedRowStyle,
+         rowDartStyle: rowDartStyle,
+         selectedRowDartStyle: selectedRowDartStyle,
+         cellClassName: cellClassName,
+         cellStyle: cellStyle,
+         cellDartStyle: cellDartStyle,
+         onRowClick: onRowClick,
+       );
 }

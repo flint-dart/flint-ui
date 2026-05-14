@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.2 - 2026-05-14
+
+### Added
+- Added class-level documentation comments across the public Flint UI API surface.
+
+### Improved
+- Expanded README installation and API documentation guidance.
+- Documented the `dart doc` workflow and generated API output path.
+
 ## 0.1.1 - 2026-05-14
 
 ### Added

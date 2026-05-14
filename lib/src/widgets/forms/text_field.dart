@@ -7,7 +7,9 @@ import 'field_helpers.dart';
 import 'validation.dart';
 import 'package:universal_web/web.dart' as web;
 
+/// Represents the TextField API in Flint UI.
 class TextField extends FlintElement {
+  /// Creates a TextField instance.
   TextField({
     String? label,
     String? name,
@@ -31,31 +33,31 @@ class TextField extends FlintElement {
     DartStyle? inputDartStyle,
     void Function(Object event)? onChanged,
   }) : super(
-          'div',
-          props: fieldWrapperProps(
-            props: props,
-            className: className,
-            dartStyle: dartStyle,
-            style: style,
-          ),
-          children: _children(
-            label: label,
-            name: name,
-            value: controller?.text ?? value,
-            placeholder: placeholder,
-            type: type,
-            required: required,
-            disabled: disabled,
-            variant: variant,
-            size: size,
-            error: resolveFieldError(name: name, error: error, errors: errors),
-            helpText: helpText,
-            inputProps: inputProps,
-            inputStyle: inputStyle,
-            inputDartStyle: inputDartStyle,
-            onChanged: _controlledOnChanged(controller, onChanged),
-          ),
-        );
+         'div',
+         props: fieldWrapperProps(
+           props: props,
+           className: className,
+           dartStyle: dartStyle,
+           style: style,
+         ),
+         children: _children(
+           label: label,
+           name: name,
+           value: controller?.text ?? value,
+           placeholder: placeholder,
+           type: type,
+           required: required,
+           disabled: disabled,
+           variant: variant,
+           size: size,
+           error: resolveFieldError(name: name, error: error, errors: errors),
+           helpText: helpText,
+           inputProps: inputProps,
+           inputStyle: inputStyle,
+           inputDartStyle: inputDartStyle,
+           onChanged: _controlledOnChanged(controller, onChanged),
+         ),
+       );
 
   static void Function(Object event)? _controlledOnChanged(
     TextEditingController? controller,

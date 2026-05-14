@@ -14,7 +14,7 @@ Add `flint_ui` to your app:
 
 ```yaml
 dependencies:
-  flint_ui: ^0.1.0
+  flint_ui: ^0.1.2
 ```
 
 For local Flint development inside this monorepo, use a path override:
@@ -460,6 +460,8 @@ Button(
 
 ## Component Catalog
 
+These are the main public component groups exported by `package:flint_ui/flint_ui.dart`.
+
 ### Primitives
 
 ```dart
@@ -784,6 +786,14 @@ Analyze:
 ```bash
 dart analyze
 ```
+
+Generate API documentation:
+
+```bash
+dart doc
+```
+
+The generated API reference is written to `doc/api/index.html`.
 
 Format:
 

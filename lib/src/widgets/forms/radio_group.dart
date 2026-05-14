@@ -4,11 +4,18 @@ import '../../style.dart';
 import 'field_helpers.dart';
 import 'validation.dart';
 
+/// Represents the RadioOption API in Flint UI.
 class RadioOption {
+  /// The label value.
   final String label;
+
+  /// The value value.
   final Object value;
+
+  /// The disabled value.
   final bool disabled;
 
+  /// Creates a RadioOption instance.
   const RadioOption({
     required this.label,
     required this.value,
@@ -16,7 +23,9 @@ class RadioOption {
   });
 }
 
+/// Represents the RadioGroup API in Flint UI.
 class RadioGroup extends FlintElement {
+  /// Creates a RadioGroup instance.
   RadioGroup({
     String? label,
     String? name,
@@ -33,32 +42,32 @@ class RadioGroup extends FlintElement {
     DartStyle? dartStyle,
     void Function(Object event)? onChanged,
   }) : super(
-          'fieldset',
-          props: mergeComponentProps(
-            {
-              ...props,
-              if (disabled) 'disabled': true,
-              if (resolveFieldError(name: name, error: error, errors: errors) !=
-                  null)
-                'aria-invalid': 'true',
-            },
-            className: className,
-            defaultStyle: fieldWrapperStyle,
-            dartStyle: dartStyle,
-            style: style,
-          ),
-          children: _children(
-            label: label,
-            name: name,
-            value: value,
-            options: options,
-            required: required,
-            disabled: disabled,
-            error: resolveFieldError(name: name, error: error, errors: errors),
-            helpText: helpText,
-            onChanged: onChanged,
-          ),
-        );
+         'fieldset',
+         props: mergeComponentProps(
+           {
+             ...props,
+             if (disabled) 'disabled': true,
+             if (resolveFieldError(name: name, error: error, errors: errors) !=
+                 null)
+               'aria-invalid': 'true',
+           },
+           className: className,
+           defaultStyle: fieldWrapperStyle,
+           dartStyle: dartStyle,
+           style: style,
+         ),
+         children: _children(
+           label: label,
+           name: name,
+           value: value,
+           options: options,
+           required: required,
+           disabled: disabled,
+           error: resolveFieldError(name: name, error: error, errors: errors),
+           helpText: helpText,
+           onChanged: onChanged,
+         ),
+       );
 
   static List<FlintNode> _children({
     required String? label,
@@ -83,10 +92,7 @@ class RadioGroup extends FlintElement {
       FlintElement(
         'div',
         props: const {
-          'style': {
-            'display': 'grid',
-            'gap': '8px',
-          },
+          'style': {'display': 'grid', 'gap': '8px'},
         },
         children: [
           for (var i = 0; i < options.length; i++)

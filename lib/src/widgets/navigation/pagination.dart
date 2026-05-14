@@ -3,7 +3,9 @@ import '../../node.dart';
 import '../../style.dart';
 import '../shared/theme.dart';
 
+/// Represents the Pagination API in Flint UI.
 class Pagination extends FlintElement {
+  /// Creates a Pagination instance.
   Pagination({
     required int page,
     required int pageSize,
@@ -15,66 +17,68 @@ class Pagination extends FlintElement {
     DartStyle? dartStyle,
     void Function(Object event, int page)? onChanged,
   }) : super(
-          'nav',
-          props: mergeComponentProps(
-            {
-              ...props,
-              'aria-label': props['aria-label'] ?? 'Pagination',
-            },
-            className: className,
-            defaultStyle: const {
-              'display': 'flex',
-              'align-items': 'center',
-              'justify-content': 'space-between',
-              'gap': '12px',
-            },
-            dartStyle: dartStyle,
-            style: style,
-          ),
-          children: [
-            FlintElement(
-              'span',
-              props: const {
-                'style': {
-                  'font-size': '13px',
-                  'color': '#667085',
-                },
-              },
-              children: normalizeChildren(
-                _summary(page: page, pageSize: pageSize, total: total),
-                const [],
-              ),
-            ),
-            FlintElement(
-              'div',
-              props: const {
-                'style': {
-                  'display': 'flex',
-                  'align-items': 'center',
-                  'gap': '6px',
-                },
-              },
-              children: [
-                _button('Previous', page - 1,
-                    disabled: page <= 1, onChanged: onChanged),
-                for (final pageNumber
-                    in _pages(page, pageSize, total, siblingCount))
-                  _button(
-                    pageNumber.toString(),
-                    pageNumber,
-                    current: pageNumber == page,
-                    onChanged: onChanged,
-                  ),
-                _button(
-                  'Next',
-                  page + 1,
-                  disabled: page >= _pageCount(pageSize, total),
-                  onChanged: onChanged,
-                ),
-              ],
-            ),
-          ],
-        );
+         'nav',
+         props: mergeComponentProps(
+           {...props, 'aria-label': props['aria-label'] ?? 'Pagination'},
+           className: className,
+           defaultStyle: const {
+             'display': 'flex',
+             'align-items': 'center',
+             'justify-content': 'space-between',
+             'gap': '12px',
+           },
+           dartStyle: dartStyle,
+           style: style,
+         ),
+         children: [
+           FlintElement(
+             'span',
+             props: const {
+               'style': {'font-size': '13px', 'color': '#667085'},
+             },
+             children: normalizeChildren(
+               _summary(page: page, pageSize: pageSize, total: total),
+               const [],
+             ),
+           ),
+           FlintElement(
+             'div',
+             props: const {
+               'style': {
+                 'display': 'flex',
+                 'align-items': 'center',
+                 'gap': '6px',
+               },
+             },
+             children: [
+               _button(
+                 'Previous',
+                 page - 1,
+                 disabled: page <= 1,
+                 onChanged: onChanged,
+               ),
+               for (final pageNumber in _pages(
+                 page,
+                 pageSize,
+                 total,
+                 siblingCount,
+               ))
+                 _button(
+                   pageNumber.toString(),
+                   pageNumber,
+                   current: pageNumber == page,
+                   onChanged: onChanged,
+                 ),
+               _button(
+                 'Next',
+                 page + 1,
+                 disabled: page >= _pageCount(pageSize, total),
+                 onChanged: onChanged,
+               ),
+             ],
+           ),
+         ],
+       );
 
   static FlintElement _button(
     String label,
@@ -93,29 +97,25 @@ class Pagination extends FlintElement {
           if (onChanged != null && !disabled)
             'onClick': (Object event) => onChanged(event, targetPage),
         },
-        dartStyle: buttonComponentStyle(
-          variant: current ? ButtonVariant.soft : ButtonVariant.outline,
-          tone: current ? Tone.primary : Tone.neutral,
-          size: ComponentSize.sm,
-          disabled: disabled,
-          loading: false,
-        ).merge(
-          const DartStyle(
-            minWidth: 34,
-            padding: EdgeInsets.symmetric(horizontal: 8),
-          ),
-        ),
+        dartStyle:
+            buttonComponentStyle(
+              variant: current ? ButtonVariant.soft : ButtonVariant.outline,
+              tone: current ? Tone.primary : Tone.neutral,
+              size: ComponentSize.sm,
+              disabled: disabled,
+              loading: false,
+            ).merge(
+              const DartStyle(
+                minWidth: 34,
+                padding: EdgeInsets.symmetric(horizontal: 8),
+              ),
+            ),
       ),
       children: normalizeChildren(label, const []),
     );
   }
 
-  static List<int> _pages(
-    int page,
-    int pageSize,
-    int total,
-    int siblingCount,
-  ) {
+  static List<int> _pages(int page, int pageSize, int total, int siblingCount) {
     final count = _pageCount(pageSize, total);
     final start = (page - siblingCount).clamp(1, count);
     final end = (page + siblingCount).clamp(1, count);

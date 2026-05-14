@@ -2,7 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
+/// Represents the ButtonGroup API in Flint UI.
 class ButtonGroup extends FlintElement {
+  /// Creates a ButtonGroup instance.
   ButtonGroup({
     Object? child,
     List<Object?> children = const [],
@@ -11,18 +13,18 @@ class ButtonGroup extends FlintElement {
     Map<String, Object?> style = const {},
     DartStyle? dartStyle,
   }) : super(
-          'div',
-          props: mergeComponentProps(
-            props,
-            className: className,
-            defaultStyle: const {
-              'display': 'inline-flex',
-              'align-items': 'center',
-              'gap': '8px',
-            },
-            dartStyle: dartStyle,
-            style: style,
-          ),
-          children: normalizeChildren(child, children),
-        );
+         'div',
+         props: mergeComponentProps(
+           props,
+           className: className,
+           defaultStyle: const {
+             'display': 'inline-flex',
+             'align-items': 'center',
+             'gap': '8px',
+           },
+           dartStyle: dartStyle,
+           style: style,
+         ),
+         children: normalizeChildren(child, children),
+       );
 }

@@ -2,17 +2,36 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
+/// Represents the SidebarItem API in Flint UI.
 class SidebarItem {
+  /// The label value.
   final String label;
+
+  /// The href value.
   final String href;
+
+  /// The icon value.
   final Object? icon;
+
+  /// The active value.
   final bool active;
+
+  /// The disabled value.
   final bool disabled;
+
+  /// The className value.
   final String? className;
+
+  /// The props value.
   final Map<String, Object?> props;
+
+  /// The style value.
   final Map<String, Object?> style;
+
+  /// The dartStyle value.
   final DartStyle? dartStyle;
 
+  /// Creates a SidebarItem instance.
   const SidebarItem({
     required this.label,
     required this.href,
@@ -26,7 +45,9 @@ class SidebarItem {
   });
 }
 
+/// Represents the Sidebar API in Flint UI.
 class Sidebar extends FlintElement {
+  /// Creates a Sidebar instance.
   Sidebar({
     List<SidebarItem> items = const [],
     String? activePath,
@@ -43,47 +64,46 @@ class Sidebar extends FlintElement {
     DartStyle? activeItemDartStyle,
     void Function(Object event)? onToggle,
   }) : super(
-          'nav',
-          props: mergeComponentProps(
-            {
-              ...props,
-              'aria-label': props['aria-label'] ?? 'Sidebar',
-            },
-            className: className,
-            defaultStyle: const {
-              'display': 'grid',
-              'gap': '6px',
-              'padding': '12px',
-            },
-            dartStyle: dartStyle,
-            style: style,
-          ),
-          children: [
-            if (onToggle != null)
-              FlintElement(
-                'button',
-                props: {
-                  'type': 'button',
-                  'aria-expanded': (!collapsed).toString(),
-                  'onClick': onToggle,
-                },
-                children: normalizeChildren(
-                    collapsed ? 'Expand' : 'Collapse', const []),
-              ),
-            for (final item in items)
-              _sidebarLink(
-                item,
-                active: item.active || item.href == activePath,
-                collapsed: collapsed,
-                itemClassName: itemClassName,
-                activeItemClassName: activeItemClassName,
-                itemStyle: itemStyle,
-                activeItemStyle: activeItemStyle,
-                itemDartStyle: itemDartStyle,
-                activeItemDartStyle: activeItemDartStyle,
-              ),
-          ],
-        );
+         'nav',
+         props: mergeComponentProps(
+           {...props, 'aria-label': props['aria-label'] ?? 'Sidebar'},
+           className: className,
+           defaultStyle: const {
+             'display': 'grid',
+             'gap': '6px',
+             'padding': '12px',
+           },
+           dartStyle: dartStyle,
+           style: style,
+         ),
+         children: [
+           if (onToggle != null)
+             FlintElement(
+               'button',
+               props: {
+                 'type': 'button',
+                 'aria-expanded': (!collapsed).toString(),
+                 'onClick': onToggle,
+               },
+               children: normalizeChildren(
+                 collapsed ? 'Expand' : 'Collapse',
+                 const [],
+               ),
+             ),
+           for (final item in items)
+             _sidebarLink(
+               item,
+               active: item.active || item.href == activePath,
+               collapsed: collapsed,
+               itemClassName: itemClassName,
+               activeItemClassName: activeItemClassName,
+               itemStyle: itemStyle,
+               activeItemStyle: activeItemStyle,
+               itemDartStyle: itemDartStyle,
+               activeItemDartStyle: activeItemDartStyle,
+             ),
+         ],
+       );
 
   static FlintElement _sidebarLink(
     SidebarItem item, {
@@ -123,12 +143,10 @@ class Sidebar extends FlintElement {
           'font-weight': active ? 700 : 500,
         },
         variantStyle: active ? activeItemStyle : const {},
-        dartStyle:
-            active ? activeItemDartStyle ?? itemDartStyle : itemDartStyle,
-        style: {
-          ...itemStyle,
-          ...item.style,
-        },
+        dartStyle: active
+            ? activeItemDartStyle ?? itemDartStyle
+            : itemDartStyle,
+        style: {...itemStyle, ...item.style},
       ),
       children: [
         if (item.icon != null) toFlintNode(item.icon),

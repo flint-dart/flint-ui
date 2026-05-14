@@ -1,7 +1,9 @@
 import 'package:flint_client/flint_client.dart';
 import 'package:universal_web/web.dart' as web;
 
+/// Represents the ClientRouter API in Flint UI.
 class ClientRouter {
+  /// Creates a ClientRouter instance.
   ClientRouter({
     String? baseUrl,
     this.prefix = '',
@@ -14,30 +16,28 @@ class ClientRouter {
     RequestDoneCallback? onDone,
     StatusCodeConfig statusCodeConfig = const StatusCodeConfig(),
   }) : client = FlintClient(
-          baseUrl: baseUrl ?? _browserOrigin(),
-          headers: headers,
-          defaultQueryParameters: query,
-          timeout: timeout,
-          debug: debug,
-          throwIfError: throwIfError,
-          onError: onError,
-          onDone: onDone,
-          statusCodeConfig: statusCodeConfig,
-        );
+         baseUrl: baseUrl ?? _browserOrigin(),
+         headers: headers,
+         defaultQueryParameters: query,
+         timeout: timeout,
+         debug: debug,
+         throwIfError: throwIfError,
+         onError: onError,
+         onDone: onDone,
+         statusCodeConfig: statusCodeConfig,
+       );
 
-  ClientRouter.fromClient(
-    this.client, {
-    this.prefix = '',
-  });
+  /// Creates a ClientRouter instance.
+  ClientRouter.fromClient(this.client, {this.prefix = ''});
 
+  /// The client value.
   final FlintClient client;
+
+  /// The prefix value.
   final String prefix;
 
   ClientRouter group(String prefix) {
-    return ClientRouter.fromClient(
-      client,
-      prefix: _join(this.prefix, prefix),
-    );
+    return ClientRouter.fromClient(client, prefix: _join(this.prefix, prefix));
   }
 
   Future<FlintResponse<T>> get<T>(
@@ -159,53 +159,53 @@ class ClientRouter {
   }) {
     return switch (method.toUpperCase()) {
       'GET' => get<T>(
-          path,
-          query: query,
-          headers: headers,
-          parser: parser,
-          onError: onError,
-          onDone: onDone,
-          timeout: timeout,
-        ),
+        path,
+        query: query,
+        headers: headers,
+        parser: parser,
+        onError: onError,
+        onDone: onDone,
+        timeout: timeout,
+      ),
       'POST' => post<T>(
-          path,
-          body: body,
-          query: query,
-          headers: headers,
-          parser: parser,
-          onError: onError,
-          onDone: onDone,
-          timeout: timeout,
-        ),
+        path,
+        body: body,
+        query: query,
+        headers: headers,
+        parser: parser,
+        onError: onError,
+        onDone: onDone,
+        timeout: timeout,
+      ),
       'PUT' => put<T>(
-          path,
-          body: body,
-          query: query,
-          headers: headers,
-          parser: parser,
-          onError: onError,
-          onDone: onDone,
-          timeout: timeout,
-        ),
+        path,
+        body: body,
+        query: query,
+        headers: headers,
+        parser: parser,
+        onError: onError,
+        onDone: onDone,
+        timeout: timeout,
+      ),
       'PATCH' => patch<T>(
-          path,
-          body: body,
-          query: query,
-          headers: headers,
-          parser: parser,
-          onError: onError,
-          onDone: onDone,
-          timeout: timeout,
-        ),
+        path,
+        body: body,
+        query: query,
+        headers: headers,
+        parser: parser,
+        onError: onError,
+        onDone: onDone,
+        timeout: timeout,
+      ),
       'DELETE' => delete<T>(
-          path,
-          query: query,
-          headers: headers,
-          parser: parser,
-          onError: onError,
-          onDone: onDone,
-          timeout: timeout,
-        ),
+        path,
+        query: query,
+        headers: headers,
+        parser: parser,
+        onError: onError,
+        onDone: onDone,
+        timeout: timeout,
+      ),
       _ => throw ArgumentError.value(method, 'method', 'Unsupported method'),
     };
   }
@@ -243,10 +243,14 @@ final clientRouter = ClientRouter();
 String _browserOrigin() {
   final location = web.window.location;
   final origin = location.origin;
+
+  /// Creates a if instance.
   if (origin.isNotEmpty) return origin;
 
   final protocol = location.protocol;
   final host = location.host;
+
+  /// Creates a if instance.
   if (protocol.isNotEmpty && host.isNotEmpty) return '$protocol//$host';
 
   return 'http://localhost';

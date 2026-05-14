@@ -4,8 +4,11 @@ import '../../style.dart';
 
 String fieldId(String prefix, String? name, Map<String, Object?> props) {
   final explicit = props['id']?.toString();
+
+  /// Creates a if instance.
   if (explicit != null && explicit.isNotEmpty) return explicit;
 
+  /// The name value.
   final base = (name == null || name.isEmpty) ? prefix : name;
   return 'flint-$prefix-${_safeId(base)}';
 }
@@ -34,19 +37,13 @@ List<FlintNode> fieldMessages({
     if (helpText != null && helpText.isNotEmpty)
       FlintElement(
         'p',
-        props: {
-          'id': '$id-help',
-          'style': fieldHelpStyle,
-        },
+        props: {'id': '$id-help', 'style': fieldHelpStyle},
         children: normalizeChildren(helpText, const []),
       ),
     if (error != null && error.isNotEmpty)
       FlintElement(
         'p',
-        props: {
-          'id': '$id-error',
-          'style': fieldErrorStyle,
-        },
+        props: {'id': '$id-error', 'style': fieldErrorStyle},
         children: normalizeChildren(error, const []),
       ),
   ];
@@ -59,14 +56,8 @@ FlintElement fieldLabel({
 }) {
   return FlintElement(
     'label',
-    props: {
-      'for': id,
-      'style': fieldLabelStyle,
-    },
-    children: [
-      FlintText(label),
-      if (required) const FlintText(' *'),
-    ],
+    props: {'for': id, 'style': fieldLabelStyle},
+    children: [FlintText(label), if (required) const FlintText(' *')],
   );
 }
 
@@ -105,10 +96,7 @@ Map<String, Object?> controlProps({
   };
 }
 
-const fieldWrapperStyle = {
-  'display': 'grid',
-  'gap': '6px',
-};
+const fieldWrapperStyle = {'display': 'grid', 'gap': '6px'};
 
 const fieldLabelStyle = {
   'font-size': '14px',
@@ -116,17 +104,9 @@ const fieldLabelStyle = {
   'color': '#344054',
 };
 
-const fieldHelpStyle = {
-  'margin': 0,
-  'font-size': '13px',
-  'color': '#667085',
-};
+const fieldHelpStyle = {'margin': 0, 'font-size': '13px', 'color': '#667085'};
 
-const fieldErrorStyle = {
-  'margin': 0,
-  'font-size': '13px',
-  'color': '#b42318',
-};
+const fieldErrorStyle = {'margin': 0, 'font-size': '13px', 'color': '#b42318'};
 
 const inputBaseStyle = {
   'width': '100%',

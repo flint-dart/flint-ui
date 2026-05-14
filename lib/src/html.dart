@@ -33,22 +33,17 @@ FlintNode toFlintNode(Object? value) {
 FlintElement div({
   Map<String, Object?> props = const {},
   List<Object?> children = const [],
-}) =>
-    h('div', props: props, children: children);
+}) => h('div', props: props, children: children);
 
 FlintElement span({
   Map<String, Object?> props = const {},
   List<Object?> children = const [],
-}) =>
-    h('span', props: props, children: children);
+}) => h('span', props: props, children: children);
 
 FlintElement button({
   Map<String, Object?> props = const {},
   List<Object?> children = const [],
-}) =>
-    h('button', props: props, children: children);
+}) => h('button', props: props, children: children);
 
-FlintElement input({
-  Map<String, Object?> props = const {},
-}) =>
+FlintElement input({Map<String, Object?> props = const {}}) =>
     h('input', props: props);

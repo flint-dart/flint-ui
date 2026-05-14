@@ -3,17 +3,21 @@ import 'package:universal_web/web.dart' as web;
 import 'component.dart';
 import 'node.dart';
 
+/// Represents the HeadTag API in Flint UI.
 class HeadTag {
+  /// The tag value.
   final String tag;
+
+  /// The props value.
   final Map<String, Object?> props;
+
+  /// The content value.
   final String? content;
 
-  const HeadTag(
-    this.tag, {
-    this.props = const {},
-    this.content,
-  });
+  /// Creates a HeadTag instance.
+  const HeadTag(this.tag, {this.props = const {}, this.content});
 
+  /// Returns the key value.
   String get key {
     final id = props['id'];
     if (id != null) return '$tag:id:$id';
@@ -35,17 +39,36 @@ class HeadTag {
   }
 }
 
+/// Represents the Head API in Flint UI.
 class Head extends FlintComponent {
+  /// The tags value.
   final List<HeadTag> tags;
+
+  /// The title value.
   final String? title;
+
+  /// The description value.
   final String? description;
+
+  /// The canonical value.
   final String? canonical;
+
+  /// The image value.
   final String? image;
+
+  /// The type value.
   final String? type;
+
+  /// The siteName value.
   final String? siteName;
+
+  /// The locale value.
   final String? locale;
+
+  /// The replace value.
   final bool replace;
 
+  /// Creates a Head instance.
   Head({
     this.title,
     this.description,
@@ -58,11 +81,11 @@ class Head extends FlintComponent {
     this.tags = const [],
   });
 
-  Head.withTags(
-    List<HeadTag> tags, {
-    String? title,
-  }) : this(title: title, tags: tags);
+  /// Creates a Head instance.
+  Head.withTags(List<HeadTag> tags, {String? title})
+    : this(title: title, tags: tags);
 
+  /// Creates a Head instance.
   Head.seo({
     String? title,
     String? description,
@@ -73,15 +96,15 @@ class Head extends FlintComponent {
     String? locale,
     List<HeadTag> tags = const [],
   }) : this(
-          title: title,
-          description: description,
-          canonical: canonical,
-          image: image,
-          type: type,
-          siteName: siteName,
-          locale: locale,
-          tags: tags,
-        );
+         title: title,
+         description: description,
+         canonical: canonical,
+         image: image,
+         type: type,
+         siteName: siteName,
+         locale: locale,
+         tags: tags,
+       );
 
   static HeadTag meta({
     String? charset,
@@ -90,13 +113,16 @@ class Head extends FlintComponent {
     String? property,
     Map<String, Object?> props = const {},
   }) {
-    return HeadTag('meta', props: {
-      ...props,
-      if (charset != null) 'charset': charset,
-      if (name != null) 'name': name,
-      if (content != null) 'content': content,
-      if (property != null) 'property': property,
-    });
+    return HeadTag(
+      'meta',
+      props: {
+        ...props,
+        if (charset != null) 'charset': charset,
+        if (name != null) 'name': name,
+        if (content != null) 'content': content,
+        if (property != null) 'property': property,
+      },
+    );
   }
 
   static HeadTag link({
@@ -104,11 +130,7 @@ class Head extends FlintComponent {
     String rel = 'stylesheet',
     Map<String, Object?> props = const {},
   }) {
-    return HeadTag('link', props: {
-      ...props,
-      'rel': rel,
-      'href': href,
-    });
+    return HeadTag('link', props: {...props, 'rel': rel, 'href': href});
   }
 
   static HeadTag script({
@@ -118,14 +140,16 @@ class Head extends FlintComponent {
     bool async = false,
     Map<String, Object?> props = const {},
   }) {
-    return HeadTag('script',
-        props: {
-          ...props,
-          if (src != null) 'src': src,
-          if (defer) 'defer': true,
-          if (async) 'async': true,
-        },
-        content: content);
+    return HeadTag(
+      'script',
+      props: {
+        ...props,
+        if (src != null) 'src': src,
+        if (defer) 'defer': true,
+        if (async) 'async': true,
+      },
+      content: content,
+    );
   }
 
   static HeadTag style(
@@ -136,14 +160,17 @@ class Head extends FlintComponent {
   }
 
   @override
+  /// Runs the build operation.
   FlintNode build() => const FlintFragment([]);
 
   @override
+  /// Runs the didMount operation.
   void didMount() {
     _sync();
   }
 
   @override
+  /// Runs the didUpdate operation.
   void didUpdate() {
     _sync();
   }
@@ -196,8 +223,9 @@ class Head extends FlintComponent {
       return head.querySelector('${tag.tag}[name="${_attrEscape(name)}"]');
     }
     if (tag.props['property'] case final property?) {
-      return head
-          .querySelector('${tag.tag}[property="${_attrEscape(property)}"]');
+      return head.querySelector(
+        '${tag.tag}[property="${_attrEscape(property)}"]',
+      );
     }
     if (tag.props['rel'] case final rel?) {
       return head.querySelector('${tag.tag}[rel="${_attrEscape(rel)}"]');

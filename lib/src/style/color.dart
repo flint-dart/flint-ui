@@ -1,20 +1,32 @@
 part of '../style.dart';
 
+/// Represents the Color API in Flint UI.
 class Color {
+  /// The value value.
   final String value;
 
+  /// Creates a Color instance.
   const Color(this.value);
+
+  /// Creates a Color instance.
   const Color.hex(String value) : value = value;
+
+  /// Creates a Color instance.
   const Color.rgb(int red, int green, int blue)
     : value = 'rgb($red, $green, $blue)';
+
+  /// Creates a Color instance.
   const Color.rgba(int red, int green, int blue, double alpha)
     : value = 'rgba($red, $green, $blue, $alpha)';
 
   @override
+  /// Runs the toString operation.
   String toString() => value;
 }
 
+/// Represents the Colors API in Flint UI.
 class Colors {
+  /// Creates a Colors instance.
   const Colors._();
 
   static const white = Color('#ffffff');

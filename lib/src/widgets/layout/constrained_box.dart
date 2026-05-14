@@ -2,7 +2,9 @@ import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 
+/// Represents the ConstrainedBox API in Flint UI.
 class ConstrainedBox extends FlintElement {
+  /// Creates a ConstrainedBox instance.
   ConstrainedBox({
     Object? child,
     List<Object?> children = const [],
@@ -16,22 +18,22 @@ class ConstrainedBox extends FlintElement {
     Map<String, Object?> style = const {},
     DartStyle? dartStyle,
   }) : super(
-          'div',
-          props: mergeComponentProps(
-            props,
-            className: className,
-            dartStyle: DartStyle(
-              width: SizeValue.full,
-              minWidth: minWidth,
-              maxWidth: maxWidth,
-              minHeight: minHeight,
-              maxHeight: maxHeight,
-              margin: center
-                  ? const EdgeInsets.symmetric(horizontal: SizeValue.auto)
-                  : null,
-            ).merge(dartStyle),
-            style: style,
-          ),
-          children: normalizeChildren(child, children),
-        );
+         'div',
+         props: mergeComponentProps(
+           props,
+           className: className,
+           dartStyle: DartStyle(
+             width: SizeValue.full,
+             minWidth: minWidth,
+             maxWidth: maxWidth,
+             minHeight: minHeight,
+             maxHeight: maxHeight,
+             margin: center
+                 ? const EdgeInsets.symmetric(horizontal: SizeValue.auto)
+                 : null,
+           ).merge(dartStyle),
+           style: style,
+         ),
+         children: normalizeChildren(child, children),
+       );
 }
