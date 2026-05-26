@@ -71,8 +71,14 @@ class SizeValue {
   /// Creates an em size.
   const SizeValue.em(num value) : value = '${value}em';
 
+  /// Creates a fractional grid size.
+  const SizeValue.fr(num value) : value = '${value}fr';
+
   /// CSS `auto` size.
   static const auto = SizeValue('auto');
+
+  /// CSS unitless zero.
+  static const zero = SizeValue('0');
 
   /// CSS `100%` size.
   static const full = SizeValue('100%');
@@ -80,6 +86,119 @@ class SizeValue {
   /// Returns the CSS size string.
   @override
   String toString() => value;
+}
+
+/// CSS grid track value used by grid template helpers.
+class GridTrack {
+  /// CSS grid track string.
+  final String value;
+
+  /// Creates a grid track from raw CSS.
+  const GridTrack(this.value);
+
+  /// Creates a fractional grid track.
+  const GridTrack.fr(num value) : value = '${value}fr';
+
+  /// Creates a `minmax(...)` grid track.
+  factory GridTrack.minmax(Object min, Object max) {
+    return GridTrack('minmax(${_gridCssValue(min)}, ${_gridCssValue(max)})');
+  }
+
+  /// Creates a `fit-content(...)` grid track.
+  factory GridTrack.fitContent(Object value) {
+    return GridTrack('fit-content(${_gridCssValue(value)})');
+  }
+
+  /// CSS `auto` grid track.
+  static const auto = GridTrack('auto');
+
+  /// CSS `max-content` grid track.
+  static const maxContent = GridTrack('max-content');
+
+  /// CSS `min-content` grid track.
+  static const minContent = GridTrack('min-content');
+
+  /// CSS `1fr` grid track.
+  static const oneFr = GridTrack.fr(1);
+
+  /// CSS `minmax(0, 1fr)` grid track.
+  static final fluid = GridTrack.minmax(SizeValue.zero, oneFr);
+
+  /// Returns the CSS grid track string.
+  @override
+  String toString() => value;
+}
+
+/// CSS `grid-template-columns` value with helpers for common layouts.
+class GridTemplateColumns {
+  /// CSS grid-template-columns string.
+  final String value;
+
+  /// Creates a grid template from raw CSS.
+  const GridTemplateColumns(this.value);
+
+  /// Creates grid columns from a list of tracks.
+  factory GridTemplateColumns.tracks(List<Object> tracks) {
+    if (tracks.isEmpty) {
+      throw ArgumentError.value(tracks, 'tracks', 'Must not be empty.');
+    }
+    return GridTemplateColumns(tracks.map(_gridCssValue).join(' '));
+  }
+
+  /// Creates a `repeat(...)` grid template.
+  factory GridTemplateColumns.repeat(Object count, Object track) {
+    return GridTemplateColumns(
+      'repeat(${_gridCssValue(count, unitlessNumber: true)}, ${_gridCssValue(track)})',
+    );
+  }
+
+  /// Creates a repeated multi-track grid template.
+  factory GridTemplateColumns.repeatTracks(Object count, List<Object> tracks) {
+    if (tracks.isEmpty) {
+      throw ArgumentError.value(tracks, 'tracks', 'Must not be empty.');
+    }
+    return GridTemplateColumns(
+      'repeat(${_gridCssValue(count, unitlessNumber: true)}, ${tracks.map(_gridCssValue).join(' ')})',
+    );
+  }
+
+  /// Creates a responsive auto-fit grid.
+  factory GridTemplateColumns.autoFit(
+    Object minWidth, {
+    Object max = GridTrack.oneFr,
+  }) {
+    return GridTemplateColumns.repeat(
+      'auto-fit',
+      GridTrack.minmax(minWidth, max),
+    );
+  }
+
+  /// Creates a responsive auto-fill grid.
+  factory GridTemplateColumns.autoFill(
+    Object minWidth, {
+    Object max = GridTrack.oneFr,
+  }) {
+    return GridTemplateColumns.repeat(
+      'auto-fill',
+      GridTrack.minmax(minWidth, max),
+    );
+  }
+
+  /// CSS `1fr`.
+  static const one = GridTemplateColumns('1fr');
+
+  /// CSS `minmax(0, 1fr)`.
+  static final fluid = GridTemplateColumns.tracks([GridTrack.fluid]);
+
+  /// Returns the CSS grid-template-columns string.
+  @override
+  String toString() => value;
+}
+
+String _gridCssValue(Object value, {bool unitlessNumber = false}) {
+  if (value is GridTrack) return value.value;
+  if (value is GridTemplateColumns) return value.value;
+  return cssValue(value, unitlessNumber: unitlessNumber);
 }
 
 /// Typed CSS border shorthand value.
@@ -249,6 +368,11 @@ class FontFamily {
   /// System sans-serif font stack.
   static const systemSans = FontFamily(
     'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+  );
+
+  /// System monospace font stack.
+  static const monospace = FontFamily(
+    'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace',
   );
 
   /// Returns the CSS font-family string.

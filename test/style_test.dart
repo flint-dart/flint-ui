@@ -130,7 +130,14 @@ void main() {
           StyleFilter.blur(16),
           StyleFilter.saturate(140),
         ]),
+        maskImage: Gradient.linearTo(GradientDirection.bottom, const [
+          GradientStop(Colors.transparent, 0),
+          GradientStop(Colors.black, 15),
+          GradientStop(Colors.black, 82),
+          GradientStop(Colors.transparent, 100),
+        ]),
         justifyItems: 'center',
+        letterSpacing: const SizeValue('-0.02em'),
         textTransform: TextTransform.uppercase,
         borderTop: Border.all(color: Colors.slate200),
         borderBottom: Border.all(color: Colors.blue600),
@@ -153,6 +160,9 @@ void main() {
         'object-fit': 'cover',
         'transform': 'translateX(-50%)',
         'backdrop-filter': 'blur(16px) saturate(140%)',
+        'mask-image':
+            'linear-gradient(to bottom, transparent 0%, #000000 15%, #000000 82%, transparent 100%)',
+        'letter-spacing': '-0.02em',
         'text-transform': 'uppercase',
         'cursor': 'pointer',
         'resize': 'vertical',
@@ -195,6 +205,7 @@ void main() {
         body: DartStyle(
           margin: const EdgeInsets.all(0),
           fontFamily: FontFamily.systemSans,
+          letterSpacing: const SizeValue('-0.01em'),
           background: Background.layers([
             const Color('#090b10'),
             Gradient.linearColors(135, const [Colors.blue600, Colors.sky500]),
@@ -225,6 +236,7 @@ void main() {
       expect(design.cssText, contains('body {'));
       expect(design.cssText, contains('margin: 0px'));
       expect(design.cssText, contains('font-family: Inter'));
+      expect(design.cssText, contains('letter-spacing: -0.01em'));
       expect(design.cssText, contains('a { color: inherit'));
       expect(design.cssText, contains('text-decoration: none'));
       expect(design.cssText, contains('@keyframes flint-spin'));
@@ -235,6 +247,25 @@ void main() {
         design.cssText,
         contains('70% { transform: translateY(-1px); opacity: 1'),
       );
+    });
+
+    test('supports typed grid template helpers', () {
+      final heroColumns = GridTemplateColumns.tracks([
+        GridTrack.minmax(SizeValue.zero, const SizeValue.fr(0.96)),
+        GridTrack.minmax(420, GridTrack.oneFr),
+      ]);
+      final cardColumns = GridTemplateColumns.repeat(3, GridTrack.fluid);
+      final autoFit = GridTemplateColumns.autoFit(220);
+
+      expect(DartStyle(gridTemplateColumns: heroColumns).toMap(), {
+        'grid-template-columns': 'minmax(0, 0.96fr) minmax(420px, 1fr)',
+      });
+      expect(DartStyle(gridTemplateColumns: cardColumns).toMap(), {
+        'grid-template-columns': 'repeat(3, minmax(0, 1fr))',
+      });
+      expect(DartStyle(gridTemplateColumns: autoFit).toMap(), {
+        'grid-template-columns': 'repeat(auto-fit, minmax(220px, 1fr))',
+      });
     });
 
     test('supports theme tokens in root design and DartStyle', () {

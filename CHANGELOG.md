@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.1.5 - 2026-05-26
+
+### Added
+- Added reactive resource state helpers for API-backed dashboards.
+- Added browser document utilities, overlays, icons, and content widgets.
+- Added a resource dashboard example using `FlintModelRecord` and `FlintModelApi`.
+
+### Improved
+- Expanded styling helpers for gradients, CSS values, and responsive layout behavior.
+- Improved component rerendering support for browser-hosted Flint UI apps.
+- Expanded README guidance for full-stack FlintDart usage.
+
+### Tests
+- Added coverage for resource controllers, state signals, browser document helpers, styles, and widgets.
+
 ## 0.1.4 - 2026-05-14
 
 ### Fixed

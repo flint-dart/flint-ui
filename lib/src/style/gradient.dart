@@ -15,6 +15,13 @@ class Gradient {
     );
   }
 
+  /// Creates a directional `linear-gradient(to ..., ...)`.
+  factory Gradient.linearTo(Object direction, List<Object> stops) {
+    return Gradient(
+      'linear-gradient(to ${cssValue(direction, unitlessNumber: true)}, ${stops.map(_gradientStopValue).join(', ')})',
+    );
+  }
+
   /// Creates an evenly distributed linear gradient from colors.
   factory Gradient.linearColors(num angle, List<Object> colors) {
     if (colors.isEmpty) {
@@ -46,6 +53,28 @@ class Gradient {
   }
 
   /// Returns the CSS gradient string.
+  @override
+  String toString() => value;
+}
+
+/// Direction keyword for directional linear gradients.
+class GradientDirection {
+  /// CSS direction string without the leading `to`.
+  final String value;
+
+  /// Creates a direction from a raw CSS [value].
+  const GradientDirection(this.value);
+
+  static const top = GradientDirection('top');
+  static const right = GradientDirection('right');
+  static const bottom = GradientDirection('bottom');
+  static const left = GradientDirection('left');
+  static const topLeft = GradientDirection('top left');
+  static const topRight = GradientDirection('top right');
+  static const bottomLeft = GradientDirection('bottom left');
+  static const bottomRight = GradientDirection('bottom right');
+
+  /// Returns the CSS direction string.
   @override
   String toString() => value;
 }

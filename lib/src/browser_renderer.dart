@@ -72,11 +72,20 @@ class FlintRoot {
         previousSlots,
         nextSlots,
       ),
+      FlintComponent() => _createComponent(
+        node,
+        path,
+        previousSlots,
+        nextSlots,
+      ),
       FlintComponentNode(:final component) => _createComponent(
         component,
         path,
         previousSlots,
         nextSlots,
+      ),
+      _ => throw UnsupportedError(
+        'Unsupported FlintNode type: ${node.runtimeType}',
       ),
     };
   }
@@ -104,7 +113,7 @@ class FlintRoot {
     Map<String, _ComponentMount> previousSlots,
     Map<String, _ComponentMount> nextSlots,
   ) {
-    final element = web.document.createElement(tag);
+    final element = _createDomElement(tag);
     _applyProps(element, props);
 
     for (var i = 0; i < children.length; i++) {
@@ -114,6 +123,14 @@ class FlintRoot {
     }
 
     return element;
+  }
+
+  web.Element _createDomElement(String tag) {
+    if (_svgTags.contains(tag)) {
+      return web.document.createElementNS('http://www.w3.org/2000/svg', tag);
+    }
+
+    return web.document.createElement(tag);
   }
 
   web.Node _createComponent(
@@ -137,6 +154,9 @@ class FlintRoot {
     }
     nextSlots[path] = mount;
 
+    if (hasExisting) {
+      mount.component.updateFrom(component);
+    }
     mount.component.attach(() => _scheduleComponentRender(mount));
     _renderComponent(mount);
 
@@ -168,7 +188,12 @@ class FlintRoot {
     mount.boundary.textContent = '';
     mount.boundary.setAttribute('style', 'display: contents;');
     mount.boundary.appendChild(
-      _createDom(mount.component.build(), 'c', previousSlots, nextSlots),
+      _createDom(
+        _normalize(mount.component.build()),
+        'c',
+        previousSlots,
+        nextSlots,
+      ),
     );
 
     for (final entry in previousSlots.entries) {
@@ -269,6 +294,19 @@ class FlintRoot {
     return FlintText(node?.toString() ?? '');
   }
 }
+
+const _svgTags = {
+  'svg',
+  'path',
+  'line',
+  'polyline',
+  'polygon',
+  'circle',
+  'rect',
+  'ellipse',
+  'title',
+  'g',
+};
 
 /// Creates a root renderer for the first element matching [selector].
 FlintRoot createRoot(String selector) {

@@ -72,6 +72,43 @@ void main() {
     });
   });
 
+  group('Icon', () {
+    test('renders decorative inline SVG icons from the built-in catalog', () {
+      final icon = Icon(Icons.home, size: 24, color: '#155eef');
+
+      expect(icon.tag, 'svg');
+      expect(icon.props['aria-hidden'], 'true');
+      expect(icon.props['viewBox'], '0 0 24 24');
+      expect(icon.props['stroke'], 'currentColor');
+      expect(icon.props['style'], containsPair('width', '24px'));
+      expect(icon.props['style'], containsPair('height', '24px'));
+      expect(icon.props['style'], containsPair('color', '#155eef'));
+      expect(icon.children, isNotEmpty);
+      expect((icon.children.first as FlintElement).tag, 'path');
+    });
+
+    test('renders accessible labelled icons', () {
+      final icon = Icon(Icons.search, title: 'Search');
+
+      expect(icon.props['role'], 'img');
+      expect(icon.props['aria-label'], 'Search');
+      expect(icon.props.containsKey('aria-hidden'), isFalse);
+      expect((icon.children.first as FlintElement).tag, 'title');
+      expect(
+        (icon.children.first as FlintElement).children.single,
+        isA<FlintText>(),
+      );
+    });
+
+    test('ships a broad app icon catalog', () {
+      expect(Icons.all.length, greaterThanOrEqualTo(80));
+      expect(Icons.all.map((icon) => icon.name), contains('server'));
+      expect(Icons.all.map((icon) => icon.name), contains('route'));
+      expect(Icons.all.map((icon) => icon.name), contains('shoppingCart'));
+      expect(Icons.all.map((icon) => icon.name), contains('sparkles'));
+    });
+  });
+
   group('ButtonGroup', () {
     test('renders inline action grouping', () {
       final group = ButtonGroup(

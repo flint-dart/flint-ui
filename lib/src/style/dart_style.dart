@@ -63,7 +63,7 @@ class DartStyle {
   final Object? flexBasis;
 
   /// CSS `grid-template-columns` value.
-  final String? gridTemplateColumns;
+  final Object? gridTemplateColumns;
 
   /// CSS `position` value.
   final Position? position;
@@ -104,6 +104,9 @@ class DartStyle {
   /// CSS `backdrop-filter` value.
   final Object? backdropFilter;
 
+  /// CSS `mask-image` value.
+  final Object? maskImage;
+
   /// CSS `font-family` value.
   final Object? fontFamily;
 
@@ -115,6 +118,9 @@ class DartStyle {
 
   /// CSS `line-height` value.
   final Object? lineHeight;
+
+  /// CSS `letter-spacing` value.
+  final Object? letterSpacing;
 
   /// CSS `color` value.
   final Object? color;
@@ -252,10 +258,12 @@ class DartStyle {
     this.objectFit,
     this.transform,
     this.backdropFilter,
+    this.maskImage,
     this.fontFamily,
     this.fontSize,
     this.fontWeight,
     this.lineHeight,
+    this.letterSpacing,
     this.color,
     this.textAlign,
     this.textTransform,
@@ -315,7 +323,10 @@ class DartStyle {
       'flex-grow': cssValue(flexGrow, unitlessNumber: true),
       'flex-shrink': cssValue(flexShrink, unitlessNumber: true),
       'flex-basis': cssValue(flexBasis),
-      'grid-template-columns': gridTemplateColumns,
+      'grid-template-columns': cssValue(
+        gridTemplateColumns,
+        unitlessNumber: true,
+      ),
       'position': position?.css,
       'top': cssValue(top),
       'right': cssValue(right),
@@ -329,10 +340,12 @@ class DartStyle {
       'object-fit': cssValue(objectFit, unitlessNumber: true),
       'transform': cssValue(transform, unitlessNumber: true),
       'backdrop-filter': cssValue(backdropFilter, unitlessNumber: true),
+      'mask-image': cssValue(maskImage, unitlessNumber: true),
       'font-family': cssValue(fontFamily, unitlessNumber: true),
       'font-size': cssValue(fontSize),
       'font-weight': cssValue(fontWeight, unitlessNumber: true),
       'line-height': cssValue(lineHeight, unitlessNumber: true),
+      'letter-spacing': cssValue(letterSpacing),
       'color': cssValue(color),
       'text-align': textAlign?.css,
       'text-transform': cssValue(textTransform, unitlessNumber: true),
@@ -435,10 +448,12 @@ class DartStyle {
       objectFit: override.objectFit ?? objectFit,
       transform: override.transform ?? transform,
       backdropFilter: override.backdropFilter ?? backdropFilter,
+      maskImage: override.maskImage ?? maskImage,
       fontFamily: override.fontFamily ?? fontFamily,
       fontSize: override.fontSize ?? fontSize,
       fontWeight: override.fontWeight ?? fontWeight,
       lineHeight: override.lineHeight ?? lineHeight,
+      letterSpacing: override.letterSpacing ?? letterSpacing,
       color: override.color ?? color,
       textAlign: override.textAlign ?? textAlign,
       textTransform: override.textTransform ?? textTransform,

@@ -1,7 +1,10 @@
 import 'component.dart';
 
+/// Short public alias for [FlintNode] in app code and examples.
+typedef Node = FlintNode;
+
 /// Base type for all renderable Flint UI nodes.
-sealed class FlintNode {
+abstract class FlintNode {
   /// Creates a Flint UI node.
   const FlintNode();
 }

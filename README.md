@@ -39,7 +39,7 @@ import 'package:flint_ui/flint_ui_core.dart';
 
 ## Quick Start
 
-Create a Flint UI entry file, usually `flint_ui/main.dart`:
+Create a Flint UI entry file, usually `lib/ui/main.dart`:
 
 ```dart
 import 'package:flint_ui/flint_ui.dart';
@@ -83,7 +83,6 @@ Response home(Request req, Response res) {
   return res.page(
     'Home',
     title: 'My Flint App',
-    script: '/main.dart.js',
     props: {
       'name': 'Flint',
     },
@@ -94,7 +93,7 @@ Response home(Request req, Response res) {
 Compile the UI:
 
 ```bash
-dart compile js flint_ui/main.dart -o public/main.dart.js
+dart compile js lib/ui/main.dart -o public/main.dart.js
 ```
 
 When used through FlintDart hot reload, Flint can compile the UI bundle and refresh the browser for you.
@@ -143,7 +142,7 @@ class Example extends FlintComponent {
   void willUnmount() {}
 
   @override
-  FlintNode build() => Text('Example');
+  View  build() => Text('Example');
 }
 ```
 
@@ -482,6 +481,15 @@ ButtonGroup
 IconButton
 ```
 
+### Icons
+
+```dart
+Icon(Icons.home)
+Icon(Icons.search, label: 'Search')
+Icon(Icons.server, size: 24, color: Colors.blue600)
+Icons.all
+```
+
 ### Forms
 
 ```dart
@@ -716,6 +724,222 @@ final data = response.data;
 ```
 
 When running in the browser, `ClientRouter` defaults to the current browser origin if no base URL is provided.
+
+## Data Fetching With FlintDart
+
+Flint UI is designed to pair with FlintDart in two phases:
+
+1. Render the first screen from FlintDart with `res.page(..., props: {...})`.
+2. Refresh and mutate browser data with `ResourceController` and `FlintModelApi`.
+
+This gives you fast first paint, predictable state, and live UI updates without hand-writing fetch boilerplate in every component.
+
+### Server Props First
+
+Use FlintDart models on the server, then pass plain JSON props to the browser:
+
+```dart
+Future<Response> dashboard(Request req, Response res) async {
+  final plans = await Plan().all();
+
+  return res.page(
+    'Dashboard',
+    title: 'Dashboard',
+    script: '/main.dart.js',
+    props: {
+      'plans': plans.map((plan) => plan.toMap()).toList(),
+    },
+  );
+}
+```
+
+### Resource State In The Browser
+
+Use a resource when data can load, refresh, fail, or be locally mutated:
+
+```dart
+class PlansPanel extends FlintComponent {
+  PlansPanel(List<Map<String, dynamic>> initialPlans) {
+    plans = ResourceController<List<FlintModelRecord>>(
+      initialData: initialPlans.map(FlintModelRecord.new).toList(),
+      loader: () => FlintModelApi<FlintModelRecord>
+          .records('/plans')
+          .list(),
+      loadImmediately: true,
+    );
+  }
+
+  late final ResourceController<List<FlintModelRecord>> plans;
+
+  @override
+  void willUnmount() {
+    plans.dispose();
+  }
+
+  @override
+  FlintNode build() {
+    return ResourceView<List<FlintModelRecord>>(
+      plans,
+      (snapshot) {
+        final rows = snapshot.data ?? const <FlintModelRecord>[];
+
+        if (snapshot.isLoading && rows.isEmpty) {
+          return DataTable(columns: columns, loading: true);
+        }
+
+        if (snapshot.isError && rows.isEmpty) {
+          return EmptyState(
+            title: 'Could not load plans',
+            message: snapshot.error.toString(),
+          );
+        }
+
+        return Column(children: [
+          Button(
+            child: 'Refresh',
+            onPressed: (_) => plans.refresh(silent: true),
+          ),
+          DataTable(
+            columns: columns,
+            rows: [
+              for (final plan in rows)
+                TableRowData(cells: {
+                  'name': plan.string('name') ?? 'Plan',
+                  'price': plan.string('price') ?? '0',
+                }),
+            ],
+          ),
+        ]);
+      },
+    );
+  }
+}
+```
+
+`ResourceController<T>` stores:
+
+```text
+status     idle | loading | success | error
+data       the latest successful value
+error      the latest error
+updatedAt  when data/error last changed
+```
+
+Use `refresh(silent: true)` when you want to keep existing data visible while the next request runs.
+
+### Can Flint UI Use FlintDart Models Directly?
+
+Not directly in browser code. Server-side FlintDart `Model` classes depend on database and server APIs, so they should stay on the server.
+
+The recommended bridge is:
+
+```text
+FlintDart Model -> toMap()/JSON -> Flint UI DTO/FlintModelRecord
+```
+
+For quick dashboards, use `FlintModelRecord`:
+
+```dart
+final api = FlintModelApi<FlintModelRecord>.records('/users');
+final users = await api.list();
+final email = users.first.string('email');
+```
+
+For larger apps, create typed client DTOs:
+
+```dart
+class PlanDto {
+  PlanDto.fromJson(Map<String, dynamic> json)
+      : id = json['id'].toString(),
+        name = json['name'].toString(),
+        price = double.tryParse(json['price']?.toString() ?? '') ?? 0;
+
+  final String id;
+  final String name;
+  final double price;
+}
+
+final plansApi = FlintModelApi<PlanDto>(
+  path: '/plans',
+  fromJson: PlanDto.fromJson,
+);
+```
+
+## State Management
+
+Flint UI has three practical state layers:
+
+```text
+setState          component-local state
+StateSignal<T>    shared reactive value
+ResourceController<T> API data with loading/error/cache state
+```
+
+### Component State
+
+Use `setState` for state owned by one component:
+
+```dart
+class Counter extends FlintComponent {
+  int count = 0;
+
+  @override
+  FlintNode build() {
+    return Button(
+      child: 'Count: $count',
+      onPressed: (_) => setState(() => count++),
+    );
+  }
+}
+```
+
+### Shared State
+
+Use `StateSignal<T>` when multiple components need the same value:
+
+```dart
+final sidebarOpen = StateSignal<bool>(true);
+
+StateSignalListener<bool>(
+  sidebarOpen,
+  (open) => Text(open ? 'Open' : 'Closed'),
+);
+```
+
+### API State
+
+Use `ResourceController<T>` for data fetched from FlintDart:
+
+```dart
+final users = ResourceController<List<FlintModelRecord>>(
+  loader: () => FlintModelApi<FlintModelRecord>.records('/users').list(),
+);
+
+await users.load();
+```
+
+### One-Way Or Two-Way?
+
+Flint UI's recommended architecture is **one-way data flow**:
+
+```text
+server props/API data -> state/resource -> build() -> DOM
+user event -> setState/resource mutation -> build() -> DOM
+```
+
+Form controls can feel like two-way binding because `TextEditingController` and `FormController` keep input fields synchronized with form state. Under the hood, that is still controlled state: user input updates the controller, the controller notifies listeners, and the component rerenders from the new value.
+
+For complex apps, prefer one-way state for pages and resources, and use controlled form fields for editing.
+
+A complete source example lives at `example/resource_dashboard.dart`. It shows:
+
+```text
+server props -> ResourceController initialData
+GET /plans -> FlintModelApi refresh
+FormController -> controlled input state
+ResourceController.mutate -> local UI update
+ResourceView -> loading/error/cached-data rendering
+```
 
 ## Environment Config
 
