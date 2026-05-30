@@ -25,6 +25,14 @@ abstract class FlintComponent extends FlintNode {
   /// renderable values. The renderer normalizes the value internally.
   View build();
 
+  /// Whether Flint should preserve this component instance across parent
+  /// rerenders when the runtime type and tree position match.
+  ///
+  /// Stateful components keep the default so local fields, controllers, and
+  /// subscriptions survive rerenders. Components that only display constructor
+  /// values should extend [StatelessComponent] instead.
+  bool get preserveState => true;
+
   /// Applies [update] and schedules this component to render again.
   void setState(FlintStateUpdater update) {
     update();
@@ -51,6 +59,16 @@ abstract class FlintComponent extends FlintNode {
   void attach(void Function() scheduleRender) {
     _scheduleRender = scheduleRender;
   }
+}
+
+/// Base class for components that only render constructor-provided values.
+///
+/// Flint replaces stateless component instances during parent rerenders so
+/// final fields naturally receive the newest values without an [updateFrom]
+/// override.
+abstract class StatelessComponent extends FlintComponent {
+  @override
+  bool get preserveState => false;
 }
 
 /// Component wrapper for a function that returns renderable output.
