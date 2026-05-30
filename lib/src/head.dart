@@ -40,7 +40,7 @@ class HeadTag {
 }
 
 /// Component that synchronizes page title and head metadata.
-class Head extends FlintComponent {
+class Head extends StatefulComponent {
   /// Additional head tags to synchronize.
   final List<HeadTag> tags;
 

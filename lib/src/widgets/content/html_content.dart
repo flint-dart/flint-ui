@@ -10,7 +10,7 @@ import '../primitives/container.dart';
 ///
 /// This is useful for trusted server-rendered Markdown, CMS content, docs
 /// pages, and other HTML fragments that should not be escaped as text.
-class HtmlContent extends Component {
+class HtmlContent extends StatefulComponent {
   /// Creates an HTML content mount.
   HtmlContent({
     required this.html,

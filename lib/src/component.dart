@@ -3,8 +3,11 @@ import 'node.dart';
 /// Callback used to mutate component state before a rerender is scheduled.
 typedef FlintStateUpdater = void Function();
 
-/// Short public alias for [FlintComponent] in app code and examples.
-typedef Component = FlintComponent;
+/// Backwards-compatible alias for [StatefulComponent].
+///
+/// Prefer extending [StatefulComponent] or [StatelessComponent] in new code so
+/// state preservation is explicit at the class declaration.
+typedef Component = StatefulComponent;
 
 /// Return type for component build methods.
 ///
@@ -61,6 +64,13 @@ abstract class FlintComponent extends FlintNode {
   }
 }
 
+/// Base class for components that own local state or lifecycle resources.
+///
+/// Flint preserves stateful component instances across parent rerenders when
+/// the runtime type and tree position match. Use this for pages, controllers,
+/// sockets, subscriptions, text editing controllers, and other local state.
+abstract class StatefulComponent extends FlintComponent {}
+
 /// Base class for components that only render constructor-provided values.
 ///
 /// Flint replaces stateless component instances during parent rerenders so
@@ -72,7 +82,7 @@ abstract class StatelessComponent extends FlintComponent {
 }
 
 /// Component wrapper for a function that returns renderable output.
-class FunctionalComponent extends FlintComponent {
+class FunctionalComponent extends StatelessComponent {
   /// Builds the node tree for this functional component.
   final View Function() builder;
 

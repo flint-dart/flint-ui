@@ -173,7 +173,7 @@ class ResourceController<T> {
 }
 
 /// Rebuilds when a [ResourceController] changes.
-class ResourceView<T> extends Component {
+class ResourceView<T> extends StatelessComponent {
   /// Creates a resource view.
   ResourceView(this.resource, this.builder);
 
