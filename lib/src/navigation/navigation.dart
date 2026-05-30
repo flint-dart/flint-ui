@@ -25,11 +25,13 @@ class BrowserNavigation {
   /// Pushes a new browser history entry without reloading the page.
   void navigate(String url, {Object? state}) {
     web.window.history.pushState(_toJsState(state), '', url);
+    _dispatchFlintNavigation();
   }
 
   /// Replaces the current browser history entry without reloading the page.
   void replace(String url, {Object? state}) {
     web.window.history.replaceState(_toJsState(state), '', url);
+    _dispatchFlintNavigation();
   }
 
   /// Loads [url] through `window.location.assign`.
@@ -64,6 +66,10 @@ class BrowserNavigation {
 
   JSAny? _toJsState(Object? state) {
     return state == null ? null : state.jsify();
+  }
+
+  void _dispatchFlintNavigation() {
+    web.window.dispatchEvent(web.Event('flint:navigate'));
   }
 }
 

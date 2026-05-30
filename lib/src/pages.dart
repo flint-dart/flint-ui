@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:js_interop';
 
 import 'package:universal_web/web.dart' as web;
 
@@ -150,20 +152,56 @@ void createFlintApp(
   }
 
   final page = _readPage(host);
-  final context = FlintPageContext(host: host, page: page);
+  final root = createRootForElement(host);
+  var navigationRequest = 0;
 
-  for (final middleware in middlewares) {
-    middleware(context);
-    if (context.stopped) return;
+  void renderPage(FlintPage page) {
+    final context = FlintPageContext(host: host, page: page);
+
+    for (final middleware in middlewares) {
+      middleware(context);
+      if (context.stopped) return;
+    }
+
+    final builder = registry?[page.component] ?? pages?[page.component];
+    final component =
+        builder?.call(page.props) ??
+        missingPage?.call(page.component) ??
+        MissingFlintPage(page.component);
+
+    root.render(component);
   }
 
-  final builder = registry?[page.component] ?? pages?[page.component];
-  final component =
-      builder?.call(page.props) ??
-      missingPage?.call(page.component) ??
-      MissingFlintPage(page.component);
+  Future<void> renderCurrentLocation() async {
+    final requestId = ++navigationRequest;
+    try {
+      final next = await _fetchPageForCurrentLocation(selector);
+      if (requestId != navigationRequest) return;
+      host.setAttribute('data-flint-page', jsonEncode(next.page));
+      if (next.title != null && next.title!.isNotEmpty) {
+        web.document.title = next.title!;
+      }
+      renderPage(FlintPage.fromJson(next.page));
+    } catch (_) {
+      web.window.location.assign(
+        '${web.window.location.pathname}${web.window.location.search}',
+      );
+    }
+  }
 
-  createRootForElement(host).render(component);
+  renderPage(page);
+  web.window.addEventListener(
+    'flint:navigate',
+    ((web.Event _) {
+      renderCurrentLocation();
+    }).toJS,
+  );
+  web.window.addEventListener(
+    'popstate',
+    ((web.Event _) {
+      renderCurrentLocation();
+    }).toJS,
+  );
 }
 
 FlintPage _readPage(web.Element host) {
@@ -189,4 +227,79 @@ Map<String, dynamic> _asStringKeyedMap(Object? value) {
     return value.map((key, entryValue) => MapEntry(key.toString(), entryValue));
   }
   return const {};
+}
+
+Future<_FetchedFlintPage> _fetchPageForCurrentLocation(String selector) {
+  final url = '${web.window.location.pathname}${web.window.location.search}';
+  final xhr = web.XMLHttpRequest();
+  final completer = Completer<_FetchedFlintPage>();
+
+  xhr.open('GET', url, true);
+  xhr.setRequestHeader('Accept', 'text/html');
+
+  xhr.onLoad.listen((_) {
+    if (xhr.status < 200 || xhr.status >= 300) {
+      completer.completeError(StateError('HTTP ${xhr.status}'));
+      return;
+    }
+
+    try {
+      completer.complete(_parseFetchedPage(xhr.responseText, selector));
+    } catch (error) {
+      completer.completeError(error);
+    }
+  });
+
+  xhr.onError.listen((_) {
+    completer.completeError(StateError('Navigation request failed.'));
+  });
+
+  xhr.send();
+  return completer.future;
+}
+
+_FetchedFlintPage _parseFetchedPage(String html, String selector) {
+  final container = web.document.createElement('div');
+  container.innerHTML = html.toJS;
+  final host =
+      container.querySelector(selector) ??
+      container.querySelector('[data-flint-page]');
+  final encoded = host?.getAttribute('data-flint-page');
+
+  if (encoded == null || encoded.trim().isEmpty) {
+    throw StateError('Missing data-flint-page payload in fetched page.');
+  }
+
+  final decoded = jsonDecode(encoded);
+  if (decoded is! Map<String, dynamic>) {
+    throw StateError('Invalid fetched Flint page payload.');
+  }
+
+  return _FetchedFlintPage(
+    page: decoded,
+    title: _titleFromHtml(html),
+  );
+}
+
+String? _titleFromHtml(String html) {
+  final match = RegExp(
+    r'<title[^>]*>(.*?)</title>',
+    caseSensitive: false,
+    dotAll: true,
+  ).firstMatch(html);
+  if (match == null) return null;
+  return _decodeHtmlText(match.group(1) ?? '').trim();
+}
+
+String _decodeHtmlText(String value) {
+  final element = web.document.createElement('textarea');
+  element.innerHTML = value.toJS;
+  return element.textContent ?? value;
+}
+
+class _FetchedFlintPage {
+  _FetchedFlintPage({required this.page, required this.title});
+
+  final Map<String, dynamic> page;
+  final String? title;
 }
