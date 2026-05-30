@@ -31,10 +31,15 @@ abstract class FlintComponent extends FlintNode {
   /// Whether Flint should preserve this component instance across parent
   /// rerenders when the runtime type and tree position match.
   ///
-  /// Stateful components keep the default so local fields, controllers, and
-  /// subscriptions survive rerenders. Components that only display constructor
-  /// values should extend [StatelessComponent] instead.
-  bool get preserveState => true;
+  /// Components are replaced by default when their parent rebuilds so
+  /// constructor values always stay fresh. A component still keeps its local
+  /// fields when it calls [setState] itself, because that rerenders the same
+  /// mounted instance directly.
+  ///
+  /// Override this to `true` only for child components that must survive parent
+  /// rerenders. Preserved components that also receive constructor values must
+  /// override [updateFrom] to copy those values from the next instance.
+  bool get preserveState => false;
 
   /// Applies [update] and schedules this component to render again.
   void setState(FlintStateUpdater update) {
@@ -66,20 +71,17 @@ abstract class FlintComponent extends FlintNode {
 
 /// Base class for components that own local state or lifecycle resources.
 ///
-/// Flint preserves stateful component instances across parent rerenders when
-/// the runtime type and tree position match. Use this for pages, controllers,
-/// sockets, subscriptions, text editing controllers, and other local state.
+/// Use this for pages, controllers, sockets, subscriptions, text editing
+/// controllers, and other local state. A stateful component keeps its fields
+/// when it calls [setState] itself. When its parent rebuilds, Flint creates a
+/// fresh child instance by default so constructor values cannot go stale.
 abstract class StatefulComponent extends FlintComponent {}
 
 /// Base class for components that only render constructor-provided values.
 ///
-/// Flint replaces stateless component instances during parent rerenders so
-/// final fields naturally receive the newest values without an [updateFrom]
-/// override.
-abstract class StatelessComponent extends FlintComponent {
-  @override
-  bool get preserveState => false;
-}
+/// Flint replaces stateless component instances during parent rerenders, so
+/// final fields naturally receive the newest values.
+abstract class StatelessComponent extends FlintComponent {}
 
 /// Component wrapper for a function that returns renderable output.
 class FunctionalComponent extends StatelessComponent {
