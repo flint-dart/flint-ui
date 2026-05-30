@@ -7,7 +7,7 @@ import 'package:flint_ui/flint_ui.dart';
 import 'package:test/test.dart';
 import 'package:universal_web/web.dart' as web;
 
-class _MiddlewareTestPage extends FlintComponent {
+class _MiddlewareTestPage extends StatefulComponent {
   _MiddlewareTestPage(this.props);
 
   final Map<String, dynamic> props;

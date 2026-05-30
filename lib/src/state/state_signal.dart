@@ -113,7 +113,7 @@ class StateSignal<T> {
 ///   );
 /// });
 /// ```
-class StateSignalListener<T> extends Component {
+class StateSignalListener<T> extends StatefulComponent {
   /// Creates a component that rebuilds when [signal] changes.
   StateSignalListener(this.signal, this.builder);
 

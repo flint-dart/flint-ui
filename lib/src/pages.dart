@@ -98,7 +98,7 @@ class FlintPageContext {
 }
 
 /// Fallback component rendered when a page name is not registered.
-class MissingFlintPage extends FlintComponent {
+class MissingFlintPage extends StatelessComponent {
   /// Missing component name.
   final String component;
 
@@ -275,10 +275,7 @@ _FetchedFlintPage _parseFetchedPage(String html, String selector) {
     throw StateError('Invalid fetched Flint page payload.');
   }
 
-  return _FetchedFlintPage(
-    page: decoded,
-    title: _titleFromHtml(html),
-  );
+  return _FetchedFlintPage(page: decoded, title: _titleFromHtml(html));
 }
 
 String? _titleFromHtml(String html) {
