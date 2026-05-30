@@ -142,7 +142,9 @@ class FlintRoot {
     final previous = previousSlots[path];
     final hasExisting =
         previous != null &&
-        previous.component.runtimeType == component.runtimeType;
+        previous.component.runtimeType == component.runtimeType &&
+        previous.component.preserveState &&
+        component.preserveState;
     final mount = hasExisting
         ? previous
         : _ComponentMount(
