@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.1.8 - 2026-05-31
+
 ### Added
 - Added `FlintComponentRegistry.only(...)` for generated page-level entrypoints that should keep only the requested page component.
 
