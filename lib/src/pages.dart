@@ -41,6 +41,19 @@ class FlintComponentRegistry {
 
   /// Returns the page builder registered for [name].
   FlintPageBuilder? operator [](String name) => _pages[name];
+
+  /// Returns a registry containing only the requested [names].
+  ///
+  /// This is useful for page-level bundles where the generated browser
+  /// entrypoint should only retain the page component it is responsible for.
+  FlintComponentRegistry only(Iterable<String> names) {
+    final selected = <String, FlintPageBuilder>{};
+    for (final name in names) {
+      final builder = _pages[name];
+      if (builder != null) selected[name] = builder;
+    }
+    return FlintComponentRegistry(selected);
+  }
 }
 
 /// Server-provided page payload used to mount a Flint UI page.

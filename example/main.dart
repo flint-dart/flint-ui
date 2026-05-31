@@ -13,7 +13,7 @@ class ExampleHomePage extends FlintComponent {
         description: 'A Dart-first interface composed from Flint UI widgets.',
         actions: Button(
           child: 'Open Docs',
-          onPressed: (_) => navigation.assign('https://flintdart.eulogia.net'),
+          onPressed: (_) => navigation.assign('https://flintdart.dev'),
         ),
       ),
       child: Section(
