@@ -27,6 +27,18 @@ class FlintFragment extends FlintNode {
   const FlintFragment(this.children);
 }
 
+/// Raw HTML node used by server rendering for trusted HTML fragments.
+class FlintRawHtml extends FlintNode {
+  /// HTML content to render without escaping when trusted.
+  final String value;
+
+  /// Whether [value] should be rendered as HTML instead of text.
+  final bool trusted;
+
+  /// Creates a raw HTML node.
+  const FlintRawHtml(this.value, {this.trusted = true});
+}
+
 /// DOM element node with a tag, properties, and children.
 class FlintElement extends FlintNode {
   /// HTML tag name for this element.

@@ -1,7 +1,8 @@
 export 'actions/button.dart';
 export 'actions/button_group.dart';
 export 'actions/icon_button.dart';
-export 'content/html_content.dart';
+export 'content/html_content_stub.dart'
+    if (dart.library.js_interop) 'content/html_content.dart';
 export 'data/avatar.dart';
 export 'data/data_table.dart';
 export 'data/description_list.dart';

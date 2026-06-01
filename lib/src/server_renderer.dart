@@ -48,9 +48,10 @@ class FlintServerRenderer {
   String _renderNode(FlintNode node, _ServerRenderContext context) {
     return switch (node) {
       FlintText(:final value) => _escapeHtmlText(value),
-      FlintFragment(:final children) => children
-          .map((child) => _renderNode(child, context))
-          .join(),
+      FlintRawHtml(:final value, :final trusted) =>
+        trusted ? value : _escapeHtmlText(value),
+      FlintFragment(:final children) =>
+        children.map((child) => _renderNode(child, context)).join(),
       FlintElement(:final tag, :final props, :final children) => _renderElement(
         tag,
         props,
@@ -152,10 +153,7 @@ class _MissingServerPage extends StatelessComponent {
     return FlintElement(
       'div',
       props: const {
-        'style': {
-          'padding': '24px',
-          'font-family': 'system-ui, sans-serif',
-        },
+        'style': {'padding': '24px', 'font-family': 'system-ui, sans-serif'},
       },
       children: [FlintText('Flint page "$component" was not registered.')],
     );
@@ -186,9 +184,9 @@ String _escapeHtmlText(String value) {
 }
 
 String _escapeHtmlAttribute(String value) {
-  return _escapeHtmlText(value)
-      .replaceAll('"', '&quot;')
-      .replaceAll("'", '&#39;');
+  return _escapeHtmlText(
+    value,
+  ).replaceAll('"', '&quot;').replaceAll("'", '&#39;');
 }
 
 const _voidTags = {
