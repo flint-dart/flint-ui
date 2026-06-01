@@ -1,24 +1,15 @@
 import 'dart:convert';
 
-import 'package:universal_web/web.dart' as web;
-
 /// Base API for browser-backed key/value storage.
 abstract class BrowserStorage {
   /// Creates a browser storage wrapper.
   const BrowserStorage();
 
-  /// The browser storage object used by this wrapper.
-  web.Storage get storage;
-
   /// Reads a string value by [key].
-  String? read(String key) {
-    return storage.getItem(key);
-  }
+  String? read(String key);
 
   /// Writes a string [value] by [key].
-  void write(String key, String value) {
-    storage.setItem(key, value);
-  }
+  void write(String key, String value);
 
   /// Whether [key] currently exists in storage.
   bool has(String key) {
@@ -48,14 +39,8 @@ abstract class BrowserStorage {
   }
 
   /// Removes [key] and returns the previous value when present.
-  String? remove(String key) {
-    final value = read(key);
-    storage.removeItem(key);
-    return value;
-  }
+  String? remove(String key);
 
   /// Removes every value from this storage backend.
-  void clear() {
-    storage.clear();
-  }
+  void clear();
 }
