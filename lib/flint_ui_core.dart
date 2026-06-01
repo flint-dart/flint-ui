@@ -9,6 +9,7 @@ export 'src/auth/auth_session.dart';
 export 'src/browser/document.dart';
 export 'src/client/client_router.dart';
 export 'src/component_props.dart' hide toFlintNode;
+export 'src/component_registry.dart';
 export 'src/component.dart';
 export 'src/config/environment_config.dart';
 export 'src/data/resource.dart';
