@@ -15,6 +15,9 @@ import 'widgets.dart';
 /// Intercepts page mounting before a Flint page component renders.
 typedef FlintPageMiddleware = void Function(FlintPageContext context);
 
+/// Resolves a page builder, optionally loading a deferred page library first.
+typedef FlintAsyncPageBuilder =
+    FutureOr<FlintPageBuilder?> Function(String component);
 
 /// Server-provided page payload used to mount a Flint UI page.
 class FlintPage {
@@ -98,6 +101,7 @@ void createFlintApp(
   String selector, {
   Map<String, FlintPageBuilder>? pages,
   FlintComponentRegistry? registry,
+  FlintAsyncPageBuilder? resolvePage,
   List<FlintPageMiddleware> middlewares = const [],
   List<StyleSheet> stylesheets = const [],
   RootDesign? rootDesign,
@@ -128,7 +132,7 @@ void createFlintApp(
   final root = createRootForElement(host);
   var navigationRequest = 0;
 
-  void renderPage(FlintPage page) {
+  Future<void> renderPage(FlintPage page, int requestId) async {
     final context = FlintPageContext(host: host, page: page);
 
     for (final middleware in middlewares) {
@@ -136,7 +140,13 @@ void createFlintApp(
       if (context.stopped) return;
     }
 
-    final builder = registry?[page.component] ?? pages?[page.component];
+    final builder =
+        registry?[page.component] ??
+        pages?[page.component] ??
+        await resolvePage?.call(page.component);
+
+    if (requestId != navigationRequest) return;
+
     final component =
         builder?.call(page.props) ??
         missingPage?.call(page.component) ??
@@ -154,7 +164,7 @@ void createFlintApp(
       if (next.title != null && next.title!.isNotEmpty) {
         web.document.title = next.title!;
       }
-      renderPage(FlintPage.fromJson(next.page));
+      await renderPage(FlintPage.fromJson(next.page), requestId);
     } catch (_) {
       web.window.location.assign(
         '${web.window.location.pathname}${web.window.location.search}',
@@ -162,7 +172,7 @@ void createFlintApp(
     }
   }
 
-  renderPage(page);
+  unawaited(renderPage(page, navigationRequest));
   web.window.addEventListener(
     'flint:navigate',
     ((web.Event _) {

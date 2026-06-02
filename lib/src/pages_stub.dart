@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'component.dart';
@@ -44,6 +45,9 @@ class FlintPageContext {
 
 typedef FlintPageMiddleware = void Function(FlintPageContext context);
 
+typedef FlintAsyncPageBuilder =
+    FutureOr<FlintPageBuilder?> Function(String component);
+
 class MissingFlintPage extends StatelessComponent {
   MissingFlintPage(this.component);
 
@@ -64,6 +68,7 @@ void createFlintApp(
   String selector, {
   Map<String, FlintPageBuilder>? pages,
   FlintComponentRegistry? registry,
+  FlintAsyncPageBuilder? resolvePage,
   List<FlintPageMiddleware> middlewares = const [],
   List<Object> stylesheets = const [],
   Object? rootDesign,
