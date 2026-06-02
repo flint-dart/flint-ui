@@ -1,4 +1,4 @@
-import 'package:flint_ui/flint_ui_core.dart';
+import 'package:flint_ui/flint_ui.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -266,6 +266,36 @@ void main() {
       expect(DartStyle(gridTemplateColumns: autoFit).toMap(), {
         'grid-template-columns': 'repeat(auto-fit, minmax(220px, 1fr))',
       });
+    });
+
+    test('createFlintApp collects root css on the VM', () {
+      resetCollectedStyleCss();
+
+      createFlintApp(
+        '#app',
+        rootDesign: RootDesign(
+          name: 'test-root',
+          theme: const FlintTheme(
+            colors: {'ink': Color('#101828')},
+          ),
+          body: DartStyle(color: ThemeToken.color('ink')),
+        ),
+        stylesheets: const [
+          StyleSheet(
+            'test-sheet',
+            {
+              '.shell': StyleRule({'display': Display.flex}),
+            },
+          ),
+        ],
+      );
+
+      final css = consumeCollectedStyleCss();
+
+      expect(css, contains('--color-ink: #101828'));
+      expect(css, contains('body {'));
+      expect(css, contains('.test-sheet-shell'));
+      expect(consumeCollectedStyleCss(), isEmpty);
     });
 
     test('supports theme tokens in root design and DartStyle', () {

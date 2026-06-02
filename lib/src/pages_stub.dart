@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'component.dart';
 import 'component_registry.dart';
 import 'node.dart';
+import 'style.dart';
+import 'style_browser_stub.dart';
 import 'widgets.dart';
 
 class FlintPage {
@@ -74,7 +76,22 @@ void createFlintApp(
   Object? rootDesign,
   FlintComponent Function(String component)? missingPage,
 }) {
-  throw UnsupportedError('createFlintApp is only available in the browser.');
+  registerRootDesign(
+    RootDesign(
+      name: 'flint-animations',
+      keyframes: [StyleKeyframes.spin(), StyleKeyframes.fadeIn()],
+    ),
+  );
+
+  if (rootDesign is RootDesign) {
+    registerRootDesign(rootDesign);
+  }
+
+  for (final stylesheet in stylesheets) {
+    if (stylesheet is StyleSheet) {
+      registerStyleSheet(stylesheet);
+    }
+  }
 }
 
 Map<String, dynamic> _asStringKeyedMap(Object? value) {

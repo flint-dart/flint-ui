@@ -42,3 +42,7 @@ void registerStyleSheet(StyleSheet stylesheet) {
   head.appendChild(element);
   _registeredStyleSheets.add(stylesheet.name);
 }
+
+String consumeCollectedStyleCss() => '';
+
+void resetCollectedStyleCss() {}
