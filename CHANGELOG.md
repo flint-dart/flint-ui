@@ -1,5 +1,32 @@
 # Changelog
 
+## Unreleased
+
+## 0.1.8 - 2026-05-31
+
+### Added
+- Added `FlintComponentRegistry.only(...)` for generated page-level entrypoints that should keep only the requested page component.
+
+## 0.1.7 - 2026-05-31
+
+### Changed
+- Updated the package homepage and example docs link to the canonical Flint docs URL at `https://flintdart.dev`.
+
+## 0.1.6 - 2026-05-31
+
+### Added
+- Added explicit `StatefulComponent` and `StatelessComponent` base classes so app code can communicate component lifecycle intent clearly.
+
+### Changed
+- `Component` remains a backwards-compatible alias for `StatefulComponent`.
+- Child components are replaced by default during parent rebuilds so constructor-provided values stay fresh.
+- Components that must survive parent rebuilds can opt in by overriding `preserveState` and copying constructor values with `updateFrom`.
+- Functional components now extend `StatelessComponent`.
+
+### Fixed
+- Fixed stale child component values after a parent component rebuild.
+- Improved rerender behavior for content, page middleware, resource views, state signal listeners, and head metadata components.
+
 ## 0.1.5 - 2026-05-26
 
 ### Added

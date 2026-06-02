@@ -1,7 +1,7 @@
 name: flint_ui
 description: Dart-first web UI components and browser rendering for Flint fullstack apps.
-version: 0.1.5
-homepage: https://flintdart.eulogia.net
+version: 0.1.8
+homepage: https://flintdart.dev
 repository: https://github.com/flint-dart/flint-ui
 issue_tracker: https://github.com/flint-dart/flint-ui/issues
 license: MIT

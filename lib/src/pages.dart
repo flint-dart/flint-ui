@@ -6,42 +6,18 @@ import 'package:universal_web/web.dart' as web;
 
 import 'browser_renderer.dart';
 import 'component.dart';
+import 'component_registry.dart';
 import 'node.dart';
 import 'style.dart';
 import 'style_browser.dart';
 import 'widgets.dart';
 
-/// Builds a page component from server-provided props.
-typedef FlintPageBuilder = FlintComponent Function(Map<String, dynamic> props);
-
 /// Intercepts page mounting before a Flint page component renders.
 typedef FlintPageMiddleware = void Function(FlintPageContext context);
 
-/// Registry that maps server-rendered page names to components.
-class FlintComponentRegistry {
-  final Map<String, FlintPageBuilder> _pages = {};
-
-  /// Creates a registry with optional initial [pages].
-  FlintComponentRegistry([Map<String, FlintPageBuilder>? pages]) {
-    if (pages != null) registerAll(pages);
-  }
-
-  /// Registered page builders keyed by page name.
-  Map<String, FlintPageBuilder> get pages => Map.unmodifiable(_pages);
-
-  /// Registers a page [builder] for [name].
-  void register(String name, FlintPageBuilder builder) {
-    _pages[name] = builder;
-  }
-
-  /// Registers all page builders from [pages].
-  void registerAll(Map<String, FlintPageBuilder> pages) {
-    _pages.addAll(pages);
-  }
-
-  /// Returns the page builder registered for [name].
-  FlintPageBuilder? operator [](String name) => _pages[name];
-}
+/// Resolves a page builder, optionally loading a deferred page library first.
+typedef FlintAsyncPageBuilder =
+    FutureOr<FlintPageBuilder?> Function(String component);
 
 /// Server-provided page payload used to mount a Flint UI page.
 class FlintPage {
@@ -125,6 +101,7 @@ void createFlintApp(
   String selector, {
   Map<String, FlintPageBuilder>? pages,
   FlintComponentRegistry? registry,
+  FlintAsyncPageBuilder? resolvePage,
   List<FlintPageMiddleware> middlewares = const [],
   List<StyleSheet> stylesheets = const [],
   RootDesign? rootDesign,
@@ -155,7 +132,7 @@ void createFlintApp(
   final root = createRootForElement(host);
   var navigationRequest = 0;
 
-  void renderPage(FlintPage page) {
+  Future<void> renderPage(FlintPage page, int requestId) async {
     final context = FlintPageContext(host: host, page: page);
 
     for (final middleware in middlewares) {
@@ -163,7 +140,13 @@ void createFlintApp(
       if (context.stopped) return;
     }
 
-    final builder = registry?[page.component] ?? pages?[page.component];
+    final builder =
+        registry?[page.component] ??
+        pages?[page.component] ??
+        await resolvePage?.call(page.component);
+
+    if (requestId != navigationRequest) return;
+
     final component =
         builder?.call(page.props) ??
         missingPage?.call(page.component) ??
@@ -181,7 +164,7 @@ void createFlintApp(
       if (next.title != null && next.title!.isNotEmpty) {
         web.document.title = next.title!;
       }
-      renderPage(FlintPage.fromJson(next.page));
+      await renderPage(FlintPage.fromJson(next.page), requestId);
     } catch (_) {
       web.window.location.assign(
         '${web.window.location.pathname}${web.window.location.search}',
@@ -189,7 +172,7 @@ void createFlintApp(
     }
   }
 
-  renderPage(page);
+  unawaited(renderPage(page, navigationRequest));
   web.window.addEventListener(
     'flint:navigate',
     ((web.Event _) {

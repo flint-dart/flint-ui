@@ -58,6 +58,10 @@ class FlintRoot {
   ) {
     return switch (node) {
       FlintText(:final value) => web.document.createTextNode(value),
+      FlintRawHtml(:final value, :final trusted) => _createRawHtml(
+        value,
+        trusted,
+      ),
       FlintFragment(:final children) => _createFragment(
         children,
         path,
@@ -88,6 +92,15 @@ class FlintRoot {
         'Unsupported FlintNode type: ${node.runtimeType}',
       ),
     };
+  }
+
+  web.Node _createRawHtml(String value, bool trusted) {
+    if (!trusted) return web.document.createTextNode(value);
+
+    final template =
+        web.document.createElement('template') as web.HTMLTemplateElement;
+    template.innerHTML = value.toJS;
+    return template.content.cloneNode(true);
   }
 
   web.DocumentFragment _createFragment(
