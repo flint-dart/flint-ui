@@ -5,6 +5,15 @@ import '../../style.dart';
 /// CSS grid container with optional template and alignment controls.
 class Grid extends FlintElement {
   /// Creates a grid around child content.
+  ///
+  /// - [columns] sets the default CSS `grid-template-columns` template. Accepts
+  ///   raw CSS strings, size values, or [GridTemplateColumns] instances.
+  /// - [sm], [md], [lg], [xl] define responsive overrides for [columns] at each
+  ///   respective viewport breakpoint.
+  /// - [rows] sets the CSS `grid-template-rows` template.
+  /// - [gap] sets the CSS `gap` spacing between grid items.
+  /// - [alignItems] sets the CSS `align-items` grid container alignment.
+  /// - [justifyItems] sets the CSS `justify-items` grid container alignment.
   Grid({
     Object? child,
     List<Object?> children = const [],
