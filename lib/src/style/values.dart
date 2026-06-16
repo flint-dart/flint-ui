@@ -184,6 +184,28 @@ class GridTemplateColumns {
     );
   }
 
+  /// Creates a two-column layout with a flexible content area and a minimum-sized sidebar.
+  factory GridTemplateColumns.contentAndSidebar(
+    Object sidebarMin, {
+    double contentFr = 1.05,
+    double sidebarFr = 0.95,
+  }) {
+    return GridTemplateColumns.tracks([
+      GridTrack.minmax(SizeValue.zero, SizeValue.fr(contentFr)),
+      GridTrack.minmax(sidebarMin, SizeValue.fr(sidebarFr)),
+    ]);
+  }
+
+  /// Creates grid columns from a list of fractional values.
+  factory GridTemplateColumns.fractional(List<num> fractions) {
+    if (fractions.isEmpty) {
+      throw ArgumentError.value(fractions, 'fractions', 'Must not be empty.');
+    }
+    return GridTemplateColumns.tracks(
+      fractions.map((fr) => GridTrack.fr(fr)).toList(),
+    );
+  }
+
   /// CSS `1fr`.
   static const one = GridTemplateColumns('1fr');
 
