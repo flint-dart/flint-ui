@@ -16,6 +16,12 @@ typedef Component = StatefulComponent;
 typedef View = Object?;
 
 /// Base class for reusable Flint UI components.
+///
+/// Prefer extending [StatelessComponent] for presentation widgets, or
+/// [StatefulComponent] for components that manage local state or lifecycle.
+/// Extending [StatelessComponent] or [StatefulComponent] directly makes state
+/// preservation explicit and helps developer tools (and AI assistants) reason
+/// about the component structure.
 abstract class FlintComponent extends FlintNode {
   /// Creates a reusable Flint UI component.
   FlintComponent();
