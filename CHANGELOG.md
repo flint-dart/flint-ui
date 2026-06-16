@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 0.1.10 - 2026-06-16
+
+### Added
+- Added browser event helper exports for class-based Flint UI apps.
+
+### Fixed
+- Fixed page mounting so missing page handlers are explicit instead of silently rendering an internal fallback.
+
 ## 0.1.8 - 2026-05-31
 
 ### Added

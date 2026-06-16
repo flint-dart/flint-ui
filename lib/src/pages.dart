@@ -147,10 +147,13 @@ void createFlintApp(
 
     if (requestId != navigationRequest) return;
 
+    if (builder == null && missingPage == null) {
+      throw StateError('Flint page "${page.component}" was not registered.');
+    }
+
     final component =
         builder?.call(page.props) ??
-        missingPage?.call(page.component) ??
-        MissingFlintPage(page.component);
+        missingPage!.call(page.component);
 
     root.render(component);
   }
