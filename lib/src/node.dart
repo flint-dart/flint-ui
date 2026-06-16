@@ -1,9 +1,15 @@
 import 'component.dart';
 
 /// Short public alias for [FlintNode] in app code and examples.
+///
+/// Prefer returning [View] in [Component] build methods instead of [Node]
+/// to support returning raw text, lists, or other components.
 typedef Node = FlintNode;
 
 /// Base type for all renderable Flint UI nodes.
+///
+/// Prefer returning [View] in [Component] build methods instead of [FlintNode]
+/// to support returning raw text, lists, or other components.
 abstract class FlintNode {
   /// Creates a Flint UI node.
   const FlintNode();
