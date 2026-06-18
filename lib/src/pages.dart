@@ -100,7 +100,7 @@ class MissingFlintPage extends StatelessComponent {
 void createFlintApp(
   String selector, {
   Map<String, FlintPageBuilder>? pages,
-  FlintComponentRegistry? registry,
+  PageRegistry? registry,
   FlintAsyncPageBuilder? resolvePage,
   List<FlintPageMiddleware> middlewares = const [],
   List<StyleSheet> stylesheets = const [],

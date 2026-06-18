@@ -1,6 +1,16 @@
 # Changelog
 
-## Unreleased
+## 0.1.11 - 2026-06-18
+
+### Added
+- Introduced `PageRegistry` mapping Flint page names to component builders.
+- Added `onChanged` callback to `RichTextEditor` to support state synchronization in parent components.
+
+### Changed
+- Updated `createFlintApp` and `renderPage` signatures to accept `PageRegistry`.
+
+### Deprecated
+- Deprecated `FlintComponentRegistry` in favor of `PageRegistry` with migration warnings.
 
 ## 0.1.10 - 2026-06-16
 

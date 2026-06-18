@@ -13,7 +13,7 @@ class FlintServerRenderer {
 
   /// Renders a registered page component to HTML.
   String renderPage(
-    FlintComponentRegistry registry,
+    PageRegistry registry,
     String component, {
     Map<String, dynamic> props = const {},
     FlintComponent Function(String component)? missingPage,
