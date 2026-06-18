@@ -232,8 +232,8 @@ class RichTextEditor extends StatefulComponent {
     if (el == null) return;
 
     final html = controller?.text ?? initialHtml ?? '';
-    if ((el.innerHTML as JSString).toDart != html) {
-      el.innerHTML = html.toJS;
+    if (el.innerHTML != html) {
+      el.innerHTML = html;
     }
   }
 
@@ -241,7 +241,7 @@ class RichTextEditor extends StatefulComponent {
     final el = web.document.getElementById(_editorId) as web.HTMLElement?;
     if (el == null) return;
 
-    final html = (el.innerHTML as JSString).toDart;
+    final html = el.innerHTML;
     if (controller != null && controller!.text != html) {
       _isSyncingFromEditor = true;
       try {
@@ -319,7 +319,7 @@ class RichTextEditor extends StatefulComponent {
         final items = pasteEvent.clipboardData?.items;
         if (items != null) {
           for (var i = 0; i < items.length; i++) {
-            final item = items.item(i);
+            final item = items[i];
             if (item != null && item.type.startsWith('image/')) {
               final file = item.getAsFile();
               if (file != null) {
@@ -420,7 +420,7 @@ class RichTextEditor extends StatefulComponent {
     performUpload().then((remoteUrl) {
       final img = web.document.getElementById(imgId) as web.HTMLImageElement?;
       if (img != null) {
-        img.src = remoteUrl.toJS;
+        img.src = remoteUrl;
         img.removeAttribute('data-loading');
         img.setAttribute(
           'style',
