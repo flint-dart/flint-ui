@@ -3,6 +3,7 @@
 ## 0.1.11 - 2026-06-18
 
 ### Added
+- Added `RichTextEditor` component supporting inline text formatting, drag-and-drop / clipboard image uploading, and toolbar controls.
 - Introduced `PageRegistry` mapping Flint page names to component builders.
 - Added `onChanged` callback to `RichTextEditor` to support state synchronization in parent components.
 
