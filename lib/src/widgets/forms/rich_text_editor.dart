@@ -405,12 +405,17 @@ class RichTextEditor extends StatefulComponent {
           'filename': file.name,
           'mime_type': file.type,
           'base64': base64Content,
+          'type': 'image',
         },
       );
 
       final data = res.data;
-      if (data == null || data['success'] != true) {
+      if (data == null || (data['status'] != true && data['success'] != true)) {
         throw Exception(data?['message'] ?? 'Image upload server error');
+      }
+      final asset = data['asset'];
+      if (asset is Map) {
+        return asset['url']?.toString() ?? '';
       }
       return data['url']?.toString() ?? '';
     }
