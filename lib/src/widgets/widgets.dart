@@ -21,6 +21,8 @@ export 'forms/form.dart';
 export 'forms/radio_group.dart';
 export 'forms/select.dart';
 export 'forms/switch.dart';
+export 'forms/rich_text_editor_stub.dart'
+    if (dart.library.js_interop) 'forms/rich_text_editor.dart';
 export 'forms/text_area.dart';
 export 'forms/text_field.dart';
 export 'forms/validation.dart';
