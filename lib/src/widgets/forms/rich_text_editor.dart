@@ -5,10 +5,8 @@ import 'package:universal_web/web.dart' as web;
 import '../../auth/auth_session.dart';
 import '../../client/client_router.dart';
 import '../../component.dart';
-import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
-import '../shared/theme.dart';
 import 'controllers.dart';
 import 'field_helpers.dart';
 import 'validation.dart';
@@ -232,8 +230,8 @@ class RichTextEditor extends StatefulComponent {
     if (el == null) return;
 
     final html = controller?.text ?? initialHtml ?? '';
-    if (el.innerHTML != html) {
-      el.innerHTML = html;
+    if ((el.innerHTML as JSString).toDart != html) {
+      el.innerHTML = html.toJS;
     }
   }
 
@@ -241,7 +239,7 @@ class RichTextEditor extends StatefulComponent {
     final el = web.document.getElementById(_editorId) as web.HTMLElement?;
     if (el == null) return;
 
-    final html = el.innerHTML;
+    final html = (el.innerHTML as JSString).toDart;
     if (controller != null && controller!.text != html) {
       _isSyncingFromEditor = true;
       try {
@@ -320,7 +318,7 @@ class RichTextEditor extends StatefulComponent {
         if (items != null) {
           for (var i = 0; i < items.length; i++) {
             final item = items[i];
-            if (item != null && item.type.startsWith('image/')) {
+            if (item.type.startsWith('image/')) {
               final file = item.getAsFile();
               if (file != null) {
                 pasteEvent.preventDefault();

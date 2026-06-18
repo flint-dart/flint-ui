@@ -1,7 +1,6 @@
 import 'package:universal_web/web.dart' as web;
 
 import '../../component.dart';
-import '../../component_props.dart';
 import '../../node.dart';
 import '../../style.dart';
 import 'controllers.dart';
@@ -211,9 +210,7 @@ class RichTextEditor extends StatefulComponent {
         if (name != null) fieldLabel(id: _id, label: name!, required: required),
         FlintElement(
           'div',
-          props: {
-            'className': 'flint-rich-text-editor-container',
-          },
+          props: {'className': 'flint-rich-text-editor-container'},
           children: [
             FlintElement(
               'div',
