@@ -134,6 +134,15 @@ class DartStyle {
   /// CSS `text-decoration` value.
   final Object? textDecoration;
 
+  /// CSS `white-space` value.
+  final Object? whiteSpace;
+
+  /// CSS `word-break` value.
+  final Object? wordBreak;
+
+  /// CSS `overflow-wrap` value.
+  final Object? overflowWrap;
+
   /// CSS `cursor` value.
   final Object? cursor;
 
@@ -268,6 +277,9 @@ class DartStyle {
     this.textAlign,
     this.textTransform,
     this.textDecoration,
+    this.whiteSpace,
+    this.wordBreak,
+    this.overflowWrap,
     this.cursor,
     this.resize,
     this.background,
@@ -350,6 +362,9 @@ class DartStyle {
       'text-align': textAlign?.css,
       'text-transform': cssValue(textTransform, unitlessNumber: true),
       'text-decoration': cssValue(textDecoration, unitlessNumber: true),
+      'white-space': cssValue(whiteSpace, unitlessNumber: true),
+      'word-break': cssValue(wordBreak, unitlessNumber: true),
+      'overflow-wrap': cssValue(overflowWrap, unitlessNumber: true),
       'cursor': cssValue(cursor, unitlessNumber: true),
       'resize': cssValue(resize, unitlessNumber: true),
       'background': cssValue(gradient ?? background),
@@ -458,6 +473,9 @@ class DartStyle {
       textAlign: override.textAlign ?? textAlign,
       textTransform: override.textTransform ?? textTransform,
       textDecoration: override.textDecoration ?? textDecoration,
+      whiteSpace: override.whiteSpace ?? whiteSpace,
+      wordBreak: override.wordBreak ?? wordBreak,
+      overflowWrap: override.overflowWrap ?? overflowWrap,
       cursor: override.cursor ?? cursor,
       resize: override.resize ?? resize,
       background: override.background ?? background,
