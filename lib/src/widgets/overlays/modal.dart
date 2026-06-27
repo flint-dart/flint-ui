@@ -17,6 +17,7 @@ class Modal extends FlintElement {
     Map<String, Object?> style = const {},
     DartStyle? dartStyle,
     void Function(Object event)? onClose,
+    bool closeOnBackdrop = true,
   }) : super(
          'div',
          props: mergeComponentProps(
@@ -26,6 +27,7 @@ class Modal extends FlintElement {
              'role': 'dialog',
              'aria-modal': 'true',
              if (title != null) 'aria-label': title,
+             if (onClose != null && closeOnBackdrop) 'onClick': onClose,
            },
            className: className,
            defaultStyle: const {
@@ -44,6 +46,8 @@ class Modal extends FlintElement {
            FlintElement(
              'section',
              props: {
+               if (onClose != null && closeOnBackdrop)
+                 'onClick': _stopPropagation,
                'style': {
                  'width': '100%',
                  'max-width': _modalWidth(size),
@@ -115,4 +119,12 @@ String _modalWidth(String size) {
     'xl' => '960px',
     _ => '520px',
   };
+}
+
+void _stopPropagation(Object event) {
+  try {
+    (event as dynamic).stopPropagation();
+  } catch (_) {
+    // Non-browser renderers do not expose DOM event helpers.
+  }
 }
