@@ -233,9 +233,16 @@ void main() {
       final toggle = Switch(label: 'Auto renew', name: 'auto_renew');
       final switchLabel = toggle.children.first as FlintElement;
       final switchInput = switchLabel.children.first as FlintElement;
+      final switchTrack = switchLabel.children[1] as FlintElement;
 
       expect(switchInput.props['role'], 'switch');
       expect(switchInput.props['aria-checked'], 'false');
+      expect(switchTrack.tag, 'span');
+      expect(switchTrack.props['aria-hidden'], 'true');
+      expect(
+        switchTrack.props['style'],
+        containsPair('border-radius', '999px'),
+      );
     });
 
     test('RadioGroup renders options with selected value', () {
