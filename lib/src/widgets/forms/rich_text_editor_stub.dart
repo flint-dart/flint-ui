@@ -174,6 +174,7 @@ class RichTextEditor extends StatefulComponent {
       error: error,
       errors: errors,
     );
+    final editorHtml = controller?.text ?? initialHtml ?? '';
 
     final toolbarNodes = <FlintNode>[];
     for (final item in toolbarItems) {
@@ -224,12 +225,15 @@ class RichTextEditor extends StatefulComponent {
                 'contenteditable': disabled ? 'false' : 'true',
                 'placeholder': placeholder,
                 'className': 'flint-rich-text-editor-content',
+                'onInput': (_) {},
+                'onBlur': (_) {},
                 'style': {
                   'height': height,
                   'min-height': '150px',
                   ...editorStyle,
                 },
               },
+              children: [if (editorHtml.isNotEmpty) FlintRawHtml(editorHtml)],
             ),
           ],
         ),

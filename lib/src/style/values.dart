@@ -31,6 +31,9 @@ class EdgeInsets {
       bottom = vertical,
       left = horizontal;
 
+  /// CSS zero spacing.
+  static const zero = EdgeInsets.all(0);
+
   /// Converts this spacing value to a CSS shorthand.
   String toCss() {
     final values = [
@@ -73,6 +76,12 @@ class SizeValue {
 
   /// Creates a fractional grid size.
   const SizeValue.fr(num value) : value = '${value}fr';
+
+  /// Creates a viewport-height size.
+  const SizeValue.vh(num value) : value = '${value}vh';
+
+  /// Creates a viewport-width size.
+  const SizeValue.vw(num value) : value = '${value}vw';
 
   /// CSS `auto` size.
   static const auto = SizeValue('auto');
@@ -245,8 +254,18 @@ class Border {
     String style = 'solid',
   }) : this(width: width, color: color, style: style);
 
+  /// CSS `none` border.
+  static const none = Border(
+    width: 0,
+    color: Color('transparent'),
+    style: 'none',
+  );
+
   /// Converts this border to a CSS shorthand.
-  String toCss() => '${cssValue(width)} $style ${cssValue(color)}';
+  String toCss() {
+    if (style == 'none') return 'none';
+    return '${cssValue(width)} $style ${cssValue(color)}';
+  }
 }
 
 /// Typed CSS box-shadow value.
@@ -279,8 +298,12 @@ class Shadow {
     this.inset = false,
   });
 
+  /// CSS `none` box-shadow.
+  static const none = Shadow(color: Color('transparent'), blur: 0);
+
   /// Converts this shadow to a CSS `box-shadow` value.
   String toCss() {
+    if (identical(this, none)) return 'none';
     return [
       if (inset) 'inset',
       cssValue(x),
@@ -440,6 +463,42 @@ class ScrollBehavior {
   String toString() => value;
 }
 
+/// CSS text-overflow value.
+class TextOverflow {
+  /// CSS text-overflow string.
+  final String value;
+
+  /// Creates a text-overflow value.
+  const TextOverflow(this.value);
+
+  static const clip = TextOverflow('clip');
+  static const ellipsis = TextOverflow('ellipsis');
+
+  /// Returns the CSS text-overflow string.
+  @override
+  String toString() => value;
+}
+
+/// CSS white-space value.
+class WhiteSpace {
+  /// CSS white-space string.
+  final String value;
+
+  /// Creates a white-space value.
+  const WhiteSpace(this.value);
+
+  static const normal = WhiteSpace('normal');
+  static const nowrap = WhiteSpace('nowrap');
+  static const pre = WhiteSpace('pre');
+  static const preWrap = WhiteSpace('pre-wrap');
+  static const preLine = WhiteSpace('pre-line');
+  static const breakSpaces = WhiteSpace('break-spaces');
+
+  /// Returns the CSS white-space string.
+  @override
+  String toString() => value;
+}
+
 /// CSS cursor value.
 class Cursor {
   /// CSS cursor string.
@@ -531,8 +590,27 @@ class TextDecorationStyle {
 
   static const none = TextDecorationStyle('none');
   static const underline = TextDecorationStyle('underline');
+  static const lineThrough = TextDecorationStyle('line-through');
 
   /// Returns the CSS text-decoration string.
+  @override
+  String toString() => value;
+}
+
+/// CSS word-break value.
+class WordBreak {
+  /// CSS word-break string.
+  final String value;
+
+  /// Creates a word-break value.
+  const WordBreak(this.value);
+
+  static const normal = WordBreak('normal');
+  static const breakAll = WordBreak('break-all');
+  static const keepAll = WordBreak('keep-all');
+  static const breakWord = WordBreak('break-word');
+
+  /// Returns the CSS word-break string.
   @override
   String toString() => value;
 }

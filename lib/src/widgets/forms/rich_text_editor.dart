@@ -172,7 +172,6 @@ class RichTextEditor extends StatefulComponent {
   late final String _id;
   String get _editorId => '$_id-content';
 
-  bool _isFocused = false;
   bool _isSyncingFromEditor = false;
   int _imgCounter = 0;
 
@@ -251,6 +250,10 @@ class RichTextEditor extends StatefulComponent {
     onChanged?.call(html);
   }
 
+  void _handleEditorInput(Object event) {
+    _syncToController();
+  }
+
   void _onControllerChanged() {
     if (_isSyncingFromEditor) return;
     _syncFromController();
@@ -263,25 +266,6 @@ class RichTextEditor extends StatefulComponent {
     el.addEventListener(
       'input',
       ((web.Event event) {
-        _syncToController();
-      }).toJS,
-    );
-
-    el.addEventListener(
-      'focus',
-      ((web.Event event) {
-        setState(() {
-          _isFocused = true;
-        });
-      }).toJS,
-    );
-
-    el.addEventListener(
-      'blur',
-      ((web.Event event) {
-        setState(() {
-          _isFocused = false;
-        });
         _syncToController();
       }).toJS,
     );
@@ -384,14 +368,12 @@ class RichTextEditor extends StatefulComponent {
       final completer = Completer<String>();
       final reader = web.FileReader();
       reader.readAsDataURL(file);
-      reader.onload =
-          ((web.Event event) {
-            completer.complete((reader.result as JSString).toDart);
-          }).toJS;
-      reader.onerror =
-          ((web.Event event) {
-            completer.completeError('Failed to read local image file');
-          }).toJS;
+      reader.onload = ((web.Event event) {
+        completer.complete((reader.result as JSString).toDart);
+      }).toJS;
+      reader.onerror = ((web.Event event) {
+        completer.completeError('Failed to read local image file');
+      }).toJS;
 
       final base64DataUrl = await completer.future;
       final parts = base64DataUrl.split(',');
@@ -420,25 +402,29 @@ class RichTextEditor extends StatefulComponent {
       return data['url']?.toString() ?? '';
     }
 
-    performUpload().then((remoteUrl) {
-      final img = web.document.getElementById(imgId) as web.HTMLImageElement?;
-      if (img != null) {
-        img.src = remoteUrl;
-        img.removeAttribute('data-loading');
-        img.setAttribute(
-          'style',
-          'max-width: 100%; height: auto; border-radius: 6px; transition: all 0.3s;',
-        );
-        _syncToController();
-      }
-      web.URL.revokeObjectURL(tempUrl);
-    }).catchError((error) {
-      final img = web.document.getElementById(imgId) as web.HTMLImageElement?;
-      img?.remove();
-      _syncToController();
-      web.URL.revokeObjectURL(tempUrl);
-      web.window.alert('Failed to upload image to server: $error');
-    });
+    performUpload()
+        .then((remoteUrl) {
+          final img =
+              web.document.getElementById(imgId) as web.HTMLImageElement?;
+          if (img != null) {
+            img.src = remoteUrl;
+            img.removeAttribute('data-loading');
+            img.setAttribute(
+              'style',
+              'max-width: 100%; height: auto; border-radius: 6px; transition: all 0.3s;',
+            );
+            _syncToController();
+          }
+          web.URL.revokeObjectURL(tempUrl);
+        })
+        .catchError((error) {
+          final img =
+              web.document.getElementById(imgId) as web.HTMLImageElement?;
+          img?.remove();
+          _syncToController();
+          web.URL.revokeObjectURL(tempUrl);
+          web.window.alert('Failed to upload image to server: $error');
+        });
   }
 
   void _selectAndUploadImage() {
@@ -508,9 +494,9 @@ class RichTextEditor extends StatefulComponent {
       }
     }
 
+    final editorHtml = controller?.text ?? initialHtml ?? '';
     final containerClass = [
       'flint-rich-text-editor-container',
-      if (_isFocused) 'focused',
       if (hasError) 'invalid',
       if (disabled) 'disabled',
     ].join(' ');
@@ -527,10 +513,7 @@ class RichTextEditor extends StatefulComponent {
         if (name != null) fieldLabel(id: _id, label: name!, required: required),
         FlintElement(
           'div',
-          props: {
-            '_flintStyleCss': _cssStyles,
-            'className': containerClass,
-          },
+          props: {'_flintStyleCss': _cssStyles, 'className': containerClass},
           children: [
             FlintElement(
               'div',
@@ -552,12 +535,15 @@ class RichTextEditor extends StatefulComponent {
                 'contenteditable': disabled ? 'false' : 'true',
                 'placeholder': placeholder,
                 'className': 'flint-rich-text-editor-content',
+                'onInput': _handleEditorInput,
+                'onBlur': _handleEditorInput,
                 'style': {
                   'height': height,
                   'min-height': '150px',
                   ...editorStyle,
                 },
               },
+              children: [if (editorHtml.isNotEmpty) FlintRawHtml(editorHtml)],
             ),
           ],
         ),
@@ -683,7 +669,7 @@ class RichTextEditor extends StatefulComponent {
       overflow: hidden;
       transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
-    .flint-rich-text-editor-container.focused {
+    .flint-rich-text-editor-container:focus-within {
       border-color: #0b6f69;
       box-shadow: 0 0 0 3px rgba(11, 111, 105, 0.2);
     }

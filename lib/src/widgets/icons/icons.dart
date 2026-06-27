@@ -361,6 +361,14 @@ class Icons {
       _path('M12 2a15 15 0 0 0 0 20'),
     ],
   );
+  static final gauge = IconData(
+    'gauge',
+    shapes: [
+      _path('M12 14l4-4'),
+      _path('M3.34 19a10 10 0 1 1 17.32 0'),
+      _path('M5 19h14'),
+    ],
+  );
   static final grid = IconData(
     'grid',
     shapes: [
@@ -376,6 +384,14 @@ class Icons {
       _path(
         'M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z',
       ),
+    ],
+  );
+  static final headphones = IconData(
+    'headphones',
+    shapes: [
+      _path('M3 18v-6a9 9 0 0 1 18 0v6'),
+      _path('M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3v5z'),
+      _path('M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3v5z'),
     ],
   );
   static final home = IconData(
@@ -424,6 +440,17 @@ class Icons {
       _line(3, 18, 3, 18),
     ],
   );
+  static final lifeBuoy = IconData(
+    'lifeBuoy',
+    shapes: [
+      _circle(12, 12, 10),
+      _circle(12, 12, 4),
+      _line(4.93, 4.93, 9.17, 9.17),
+      _line(14.83, 14.83, 19.07, 19.07),
+      _line(14.83, 9.17, 19.07, 4.93),
+      _line(4.93, 19.07, 9.17, 14.83),
+    ],
+  );
   static final lock = IconData(
     'lock',
     shapes: [_rect(5, 11, 14, 10, rx: 2), _path('M8 11V7a4 4 0 0 1 8 0v4')],
@@ -443,6 +470,13 @@ class Icons {
   static final mail = IconData(
     'mail',
     shapes: [_rect(3, 5, 18, 14, rx: 2), _path('M3 7l9 6 9-6')],
+  );
+  static final mapPin = IconData(
+    'mapPin',
+    shapes: [
+      _path('M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0z'),
+      _circle(12, 10, 3),
+    ],
   );
   static final menu = IconData(
     'menu',
@@ -635,6 +669,15 @@ class Icons {
     'user',
     shapes: [_circle(12, 8, 4), _path('M4 22a8 8 0 0 1 16 0')],
   );
+  static final userPlus = IconData(
+    'userPlus',
+    shapes: [
+      _path('M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2'),
+      _circle(9, 7, 4),
+      _line(19, 8, 19, 14),
+      _line(22, 11, 16, 11),
+    ],
+  );
   static final users = IconData(
     'users',
     shapes: [
@@ -715,20 +758,24 @@ class Icons {
     file,
     filter,
     folder,
+    gauge,
     globe,
     grid,
     heart,
+    headphones,
     home,
     inbox,
     key,
     laptop,
     layers,
+    lifeBuoy,
     link,
     list,
     lock,
     logIn,
     logOut,
     mail,
+    mapPin,
     menu,
     message,
     minus,
@@ -759,6 +806,7 @@ class Icons {
     trendingUp,
     upload,
     user,
+    userPlus,
     users,
     wallet,
     wifi,

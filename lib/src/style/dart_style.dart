@@ -86,6 +86,12 @@ class DartStyle {
   /// CSS `overflow` value.
   final Object? overflow;
 
+  /// CSS `overflow-x` value.
+  final Object? overflowX;
+
+  /// CSS `overflow-y` value.
+  final Object? overflowY;
+
   /// CSS `box-sizing` value.
   final Object? boxSizing;
 
@@ -133,6 +139,9 @@ class DartStyle {
 
   /// CSS `text-decoration` value.
   final Object? textDecoration;
+
+  /// CSS `text-overflow` value.
+  final Object? textOverflow;
 
   /// CSS `white-space` value.
   final Object? whiteSpace;
@@ -261,6 +270,8 @@ class DartStyle {
     this.left,
     this.zIndex,
     this.overflow,
+    this.overflowX,
+    this.overflowY,
     this.boxSizing,
     this.scrollBehavior,
     this.aspectRatio,
@@ -277,6 +288,7 @@ class DartStyle {
     this.textAlign,
     this.textTransform,
     this.textDecoration,
+    this.textOverflow,
     this.whiteSpace,
     this.wordBreak,
     this.overflowWrap,
@@ -346,6 +358,8 @@ class DartStyle {
       'left': cssValue(left),
       'z-index': zIndex,
       'overflow': cssValue(overflow, unitlessNumber: true),
+      'overflow-x': cssValue(overflowX, unitlessNumber: true),
+      'overflow-y': cssValue(overflowY, unitlessNumber: true),
       'box-sizing': cssValue(boxSizing, unitlessNumber: true),
       'scroll-behavior': cssValue(scrollBehavior, unitlessNumber: true),
       'aspect-ratio': cssValue(aspectRatio, unitlessNumber: true),
@@ -362,6 +376,7 @@ class DartStyle {
       'text-align': textAlign?.css,
       'text-transform': cssValue(textTransform, unitlessNumber: true),
       'text-decoration': cssValue(textDecoration, unitlessNumber: true),
+      'text-overflow': cssValue(textOverflow, unitlessNumber: true),
       'white-space': cssValue(whiteSpace, unitlessNumber: true),
       'word-break': cssValue(wordBreak, unitlessNumber: true),
       'overflow-wrap': cssValue(overflowWrap, unitlessNumber: true),
@@ -457,6 +472,8 @@ class DartStyle {
       left: override.left ?? left,
       zIndex: override.zIndex ?? zIndex,
       overflow: override.overflow ?? overflow,
+      overflowX: override.overflowX ?? overflowX,
+      overflowY: override.overflowY ?? overflowY,
       boxSizing: override.boxSizing ?? boxSizing,
       scrollBehavior: override.scrollBehavior ?? scrollBehavior,
       aspectRatio: override.aspectRatio ?? aspectRatio,
@@ -473,6 +490,7 @@ class DartStyle {
       textAlign: override.textAlign ?? textAlign,
       textTransform: override.textTransform ?? textTransform,
       textDecoration: override.textDecoration ?? textDecoration,
+      textOverflow: override.textOverflow ?? textOverflow,
       whiteSpace: override.whiteSpace ?? whiteSpace,
       wordBreak: override.wordBreak ?? wordBreak,
       overflowWrap: override.overflowWrap ?? overflowWrap,
