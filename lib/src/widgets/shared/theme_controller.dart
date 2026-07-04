@@ -84,7 +84,8 @@ class FlintThemeController {
   }
 
   void _applyMode(FlintThemeMode next) {
-    final target = _target ?? web.document.documentElement;
+    web.document.documentElement?.setAttribute('data-theme', next.value);
+    final target = _target;
     target?.setAttribute('data-theme', next.value);
   }
 }
