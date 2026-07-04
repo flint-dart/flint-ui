@@ -275,18 +275,13 @@ void main() {
         '#app',
         rootDesign: RootDesign(
           name: 'test-root',
-          theme: const FlintTheme(
-            colors: {'ink': Color('#101828')},
-          ),
+          theme: const FlintTheme(colors: {'ink': Color('#101828')}),
           body: DartStyle(color: ThemeToken.color('ink')),
         ),
         stylesheets: const [
-          StyleSheet(
-            'test-sheet',
-            {
-              '.shell': StyleRule({'display': Display.flex}),
-            },
-          ),
+          StyleSheet('test-sheet', {
+            '.shell': StyleRule({'display': Display.flex}),
+          }),
         ],
       );
 
@@ -296,6 +291,44 @@ void main() {
       expect(css, contains('body {'));
       expect(css, contains('.test-sheet-shell'));
       expect(consumeCollectedStyleCss(), isEmpty);
+    });
+
+    test('createFlintApp can configure a global built-in theme', () {
+      resetCollectedStyleCss();
+
+      createFlintApp('#app', themeMode: FlintThemeMode.dark);
+
+      final css = consumeCollectedStyleCss();
+
+      expect(css, contains('--color-page: #020617'));
+      expect(css, contains(':root[data-theme="light"], [data-theme="light"]'));
+      expect(css, contains(':root[data-theme="dark"], [data-theme="dark"]'));
+    });
+
+    test('createFlintApp can configure a global custom theme', () {
+      resetCollectedStyleCss();
+
+      createFlintApp(
+        '#app',
+        theme: const FlintTheme(colors: {'brand': Color('#7c3aed')}),
+      );
+
+      final css = consumeCollectedStyleCss();
+
+      expect(css, contains('--color-brand: #7c3aed'));
+    });
+
+    test('createFlintApp does not apply theme when no theme is configured', () {
+      resetCollectedStyleCss();
+      localStorage.write(defaultFlintThemeStorageKey, 'dark');
+
+      createFlintApp('#app');
+
+      final css = consumeCollectedStyleCss();
+
+      expect(css, isNot(contains('[data-theme="dark"]')));
+      expect(css, isNot(contains('--color-page')));
+      localStorage.clear();
     });
 
     test('supports theme tokens in root design and DartStyle', () {
@@ -344,6 +377,54 @@ void main() {
       });
       expect(style.stateStyles[':hover']!.toMap(), {
         'color': 'var(--color-primary)',
+      });
+    });
+
+    test('supports built-in light and dark theme provider tokens', () {
+      const provider = FlintThemeProvider(initialMode: FlintThemeMode.dark);
+      final design = RootDesign(themeProvider: provider);
+
+      expect(design.cssText, contains(':root {'));
+      expect(design.cssText, contains('--color-page: #020617'));
+      expect(
+        design.cssText,
+        contains(':root[data-theme="light"], [data-theme="light"]'),
+      );
+      expect(
+        design.cssText,
+        contains(':root[data-theme="dark"], [data-theme="dark"]'),
+      );
+      expect(design.cssText, contains('--color-surface: #ffffff'));
+      expect(design.cssText, contains('--color-surface: #0f172a'));
+    });
+
+    test('supports light and dark scoped DartStyle overrides', () {
+      final style = DartStyle(
+        color: ThemeToken.color('text'),
+        background: ThemeToken.color('surface'),
+        light: DartStyle(border: Border.all(color: Colors.slate200)),
+        dark: DartStyle(
+          border: Border.all(color: Color.rgba(148, 163, 184, 0.24)),
+          shadow: const Shadow(
+            y: 18,
+            blur: 48,
+            spread: -32,
+            color: Color.rgba(0, 0, 0, 0.44),
+          ),
+        ),
+      );
+
+      expect(style.toMap(), {
+        'color': 'var(--color-text)',
+        'background': 'var(--color-surface)',
+      });
+      expect(style.hasScopedStyles, isTrue);
+      expect(style.themeStyles[FlintThemeMode.light]!.toMap(), {
+        'border': '1px solid #e2e8f0',
+      });
+      expect(style.themeStyles[FlintThemeMode.dark]!.toMap(), {
+        'border': '1px solid rgba(148, 163, 184, 0.24)',
+        'box-shadow': '0px 18px 48px -32px rgba(0, 0, 0, 0.44)',
       });
     });
 
@@ -502,6 +583,44 @@ void main() {
       expect(props['_flintStyleCss'], contains(':disabled'));
       expect(props['_flintStyleCss'], contains('[aria-disabled="true"]'));
       expect(props['_flintStyleCss'], contains('opacity: 0.48 !important'));
+    });
+
+    test('mergeComponentProps adds scoped light and dark css', () {
+      final props = mergeComponentProps(
+        const {},
+        dartStyle: DartStyle(
+          color: ThemeToken.color('text'),
+          light: DartStyle(background: ThemeToken.color('surface')),
+          dark: DartStyle(background: ThemeToken.color('surfaceMuted')),
+        ),
+      );
+
+      expect(props['className'], contains('flint-s-'));
+      expect(props['style'], {'color': 'var(--color-text)'});
+      expect(props['_flintStyleCss'], contains('[data-theme="light"]'));
+      expect(props['_flintStyleCss'], contains('[data-theme="dark"]'));
+      expect(
+        props['_flintStyleCss'],
+        contains('background: var(--color-surface) !important'),
+      );
+      expect(
+        props['_flintStyleCss'],
+        contains('background: var(--color-surfaceMuted) !important'),
+      );
+    });
+  });
+
+  group('ThemeProvider', () {
+    test('sets data-theme on its wrapper', () {
+      final node =
+          ThemeProvider(
+                mode: FlintThemeMode.dark,
+                child: Text('Dark mode'),
+              ).build()
+              as Container;
+
+      expect(node.props['data-theme'], 'dark');
+      expect(node.children.single, isA<Text>());
     });
   });
 }

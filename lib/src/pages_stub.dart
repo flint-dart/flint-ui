@@ -73,6 +73,9 @@ void createFlintApp(
   FlintAsyncPageBuilder? resolvePage,
   List<FlintPageMiddleware> middlewares = const [],
   List<Object> stylesheets = const [],
+  FlintTheme? theme,
+  FlintThemeProvider? themeProvider,
+  FlintThemeMode? themeMode,
   Object? rootDesign,
   FlintComponent Function(String component)? missingPage,
 }) {
@@ -83,6 +86,24 @@ void createFlintApp(
     ),
   );
 
+  final initialThemeMode = _initialAppThemeMode(
+    themeProvider: themeProvider,
+    themeMode: themeMode,
+    rootDesign: rootDesign is RootDesign ? rootDesign : null,
+  );
+  if (initialThemeMode != null) {
+    flintTheme.configure(initialMode: initialThemeMode);
+  }
+
+  final appTheme = _appThemeRootDesign(
+    theme: theme,
+    themeProvider: themeProvider,
+    themeMode: themeMode,
+  );
+  if (appTheme != null) {
+    registerRootDesign(appTheme);
+  }
+
   if (rootDesign is RootDesign) {
     registerRootDesign(rootDesign);
   }
@@ -92,6 +113,40 @@ void createFlintApp(
       registerStyleSheet(stylesheet);
     }
   }
+}
+
+RootDesign? _appThemeRootDesign({
+  FlintTheme? theme,
+  FlintThemeProvider? themeProvider,
+  FlintThemeMode? themeMode,
+}) {
+  if (themeProvider != null || themeMode != null) {
+    final provider = themeProvider == null
+        ? FlintThemeProvider(initialMode: themeMode ?? FlintThemeMode.light)
+        : FlintThemeProvider(
+            light: themeProvider.light,
+            dark: themeProvider.dark,
+            initialMode: themeMode ?? themeProvider.initialMode,
+          );
+
+    return RootDesign(name: 'flint-theme', themeProvider: provider);
+  }
+
+  if (theme != null) {
+    return RootDesign(name: 'flint-theme', theme: theme);
+  }
+
+  return null;
+}
+
+FlintThemeMode? _initialAppThemeMode({
+  FlintThemeProvider? themeProvider,
+  FlintThemeMode? themeMode,
+  RootDesign? rootDesign,
+}) {
+  if (themeMode != null) return themeMode;
+  if (themeProvider != null) return themeProvider.initialMode;
+  return rootDesign?.themeProvider?.initialMode;
 }
 
 Map<String, dynamic> _asStringKeyedMap(Object? value) {

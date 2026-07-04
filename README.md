@@ -128,6 +128,37 @@ class Counter extends FlintComponent {
 }
 ```
 
+Theme mode is state too, so you can place a switch beside or after a counter:
+
+```dart
+class ThemeModeToggle extends FlintComponent {
+  @override
+  FlintNode build() {
+    return StateSignalListener(flintTheme.mode, (mode) {
+      final isDark = mode == FlintThemeMode.dark;
+
+      return Container(
+        dartStyle: DartStyle(
+          padding: const EdgeInsets.all(16),
+          radius: ThemeToken.radius('md'),
+          background: ThemeToken.color('surface'),
+          color: ThemeToken.color('text'),
+          light: DartStyle(border: Border.all(color: Colors.slate200)),
+          dark: DartStyle(shadow: ThemeToken.shadow('card')),
+        ),
+        children: [
+          Text.span(isDark ? 'Dark mode' : 'Light mode'),
+          Button(
+            child: isDark ? 'Use light' : 'Use dark',
+            onPressed: (_) => flintTheme.toggle(),
+          ),
+        ],
+      );
+    });
+  }
+}
+```
+
 Lifecycle hooks are available:
 
 ```dart
@@ -250,6 +281,57 @@ For real protection, also guard the server route in FlintDart.
 ## Styling
 
 Flint UI supports plain style maps and the typed `DartStyle` API.
+
+Configure app-wide theme tokens once at startup:
+
+```dart
+createFlintApp(
+  '#app',
+  registry: componentRegistry,
+  themeMode: FlintThemeMode.dark,
+);
+```
+
+Then use semantic tokens anywhere:
+
+```dart
+Container(
+  dartStyle: DartStyle(
+    background: ThemeToken.color('surface'),
+    color: ThemeToken.color('text'),
+    radius: ThemeToken.radius('md'),
+    light: DartStyle(
+      border: Border.all(color: ThemeToken.color('surfaceBorder')),
+    ),
+    dark: DartStyle(
+      shadow: ThemeToken.shadow('card'),
+    ),
+  ),
+)
+```
+
+Use `ThemeProvider` only when a subtree needs to override the global mode:
+
+```dart
+ThemeProvider(
+  mode: FlintThemeMode.light,
+  child: SettingsPreview(),
+)
+```
+
+Switch the global theme from UI state with `flintTheme`:
+
+```dart
+StateSignalListener(flintTheme.mode, (mode) {
+  return Button(
+    child: mode == FlintThemeMode.dark ? 'Light mode' : 'Dark mode',
+    onPressed: (_) => flintTheme.toggle(),
+  );
+})
+```
+
+The selected mode is stored in local storage by default. On page load Flint
+uses the saved mode first, then the system color scheme, then the app default.
 
 ```dart
 Container(

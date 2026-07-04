@@ -369,6 +369,16 @@ class Icons {
       _path('M5 19h14'),
     ],
   );
+  static final gitBranch = IconData(
+    'gitBranch',
+    shapes: [
+      _circle(6, 3, 3),
+      _circle(18, 6, 3),
+      _circle(6, 21, 3),
+      _path('M6 6v12'),
+      _path('M9 18h3a6 6 0 0 0 6-6V9'),
+    ],
+  );
   static final grid = IconData(
     'grid',
     shapes: [
@@ -594,6 +604,15 @@ class Icons {
       _line(7, 17, 7, 17),
     ],
   );
+  static final settings = IconData(
+    'settings',
+    shapes: [
+      _circle(12, 12, 3),
+      _path(
+        'M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2 3-.2-.1a1.7 1.7 0 0 0-2 .1 7.8 7.8 0 0 1-1.6.7 1.7 1.7 0 0 0-1.1 1.5V22H9v-.2a1.7 1.7 0 0 0-1.1-1.5 7.8 7.8 0 0 1-1.6-.7 1.7 1.7 0 0 0-2-.1l-.2.1-2-3 .1-.1a1.7 1.7 0 0 0 .3-1.9 8 8 0 0 1 0-1.8 1.7 1.7 0 0 0-.3-1.9l-.1-.1 2-3 .2.1a1.7 1.7 0 0 0 2-.1 7.8 7.8 0 0 1 1.6-.7A1.7 1.7 0 0 0 9 5.6V5h4v.6a1.7 1.7 0 0 0 1.1 1.5 7.8 7.8 0 0 1 1.6.7 1.7 1.7 0 0 0 2 .1l.2-.1 2 3-.1.1a1.7 1.7 0 0 0-.3 1.9 8 8 0 0 1-.1 2.2z',
+      ),
+    ],
+  );
   static final shield = IconData(
     'shield',
     shapes: [_path('M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z')],
@@ -759,6 +778,7 @@ class Icons {
     filter,
     folder,
     gauge,
+    gitBranch,
     globe,
     grid,
     heart,
@@ -795,6 +815,7 @@ class Icons {
     search,
     send,
     server,
+    settings,
     shield,
     shoppingCart,
     sparkles,

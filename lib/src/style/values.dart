@@ -328,6 +328,17 @@ class StyleTransform {
     return StyleTransform('translate(${cssValue(x)}, ${cssValue(y)})');
   }
 
+  /// Creates a `translate3d(...)` transform.
+  factory StyleTransform.translate3d({
+    Object x = 0,
+    Object y = 0,
+    Object z = 0,
+  }) {
+    return StyleTransform(
+      'translate3d(${cssValue(x)}, ${cssValue(y)}, ${cssValue(z)})',
+    );
+  }
+
   /// Creates a `translateX(...)` transform.
   factory StyleTransform.translateX(Object value) {
     return StyleTransform('translateX(${cssValue(value)})');
@@ -593,6 +604,24 @@ class TextDecorationStyle {
   static const lineThrough = TextDecorationStyle('line-through');
 
   /// Returns the CSS text-decoration string.
+  @override
+  String toString() => value;
+}
+
+/// CSS background-clip value.
+class BackgroundClip {
+  /// CSS background-clip string.
+  final String value;
+
+  /// Creates a background-clip value.
+  const BackgroundClip(this.value);
+
+  static const borderBox = BackgroundClip('border-box');
+  static const paddingBox = BackgroundClip('padding-box');
+  static const contentBox = BackgroundClip('content-box');
+  static const text = BackgroundClip('text');
+
+  /// Returns the CSS background-clip string.
   @override
   String toString() => value;
 }

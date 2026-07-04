@@ -115,6 +115,15 @@ String _scopedCss(String className, DartStyle style) {
     chunks.add('.$className${entry.key} { $body; }');
   }
 
+  for (final entry in style.themeStyles.entries) {
+    final body = _styleToCssImportant(entry.value.toMap());
+    if (body.isEmpty) continue;
+    final theme = entry.key.value;
+    chunks.add(
+      '[data-theme="$theme"] .$className, .$className[data-theme="$theme"] { $body; }',
+    );
+  }
+
   for (final entry in style.breakpointStyles.entries) {
     final body = _styleToCssImportant(entry.value.toMap());
     if (body.isEmpty) continue;
@@ -129,6 +138,9 @@ String _scopedCssBody(DartStyle style) {
   return [
     ...style.stateStyles.entries.map(
       (entry) => '${entry.key}:${styleToCss(entry.value.toMap())}',
+    ),
+    ...style.themeStyles.entries.map(
+      (entry) => '${entry.key.value}:${styleToCss(entry.value.toMap())}',
     ),
     ...style.breakpointStyles.entries.map(
       (entry) => '${entry.key.name}:${styleToCss(entry.value.toMap())}',

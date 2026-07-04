@@ -39,6 +39,21 @@ class ThemeTokens {
   };
 }
 
+/// Built-in Flint UI theme modes.
+enum FlintThemeMode {
+  /// Light color scheme.
+  light('light'),
+
+  /// Dark color scheme.
+  dark('dark');
+
+  /// Attribute value used for `data-theme`.
+  final String value;
+
+  /// Creates a theme mode.
+  const FlintThemeMode(this.value);
+}
+
 /// Reference to a design token CSS variable.
 class TokenRef {
   /// Logical token name.
@@ -141,6 +156,106 @@ class FlintTheme {
 
   /// CSS custom properties generated from all theme tokens.
   Map<String, Object?> get cssVariables => allTokens.cssVariables;
+}
+
+/// Built-in Flint UI themes for quick application defaults.
+class FlintThemes {
+  /// Prevents creating a theme factory container.
+  const FlintThemes._();
+
+  /// Balanced light app theme.
+  static const light = FlintTheme(
+    name: 'light',
+    colors: {
+      'page': Color('#f8fafc'),
+      'pageText': Color('#0f172a'),
+      'surface': Color('#ffffff'),
+      'surfaceMuted': Color('#f1f5f9'),
+      'surfaceBorder': Color('#e2e8f0'),
+      'text': Color('#0f172a'),
+      'muted': Color('#64748b'),
+      'primarySolid': Color('#2563eb'),
+      'primarySoft': Color('#eff6ff'),
+      'primaryText': Color('#1d4ed8'),
+      'primaryBorder': Color('#bfdbfe'),
+      'primaryFocus': Color.rgba(37, 99, 235, 0.28),
+      'inputSurface': Color('#ffffff'),
+      'inputBorder': Color('#cbd5e1'),
+      'inputText': Color('#0f172a'),
+      'disabledText': Color('#94a3b8'),
+      'onSolid': Color('#ffffff'),
+    },
+    spacing: {'cardPadding': SizeValue.rem(1), 'controlY': 10, 'controlX': 14},
+    radii: {'sm': 6, 'md': 8, 'lg': 12, 'pill': 9999},
+    shadows: {
+      'card': Shadow(
+        y: 18,
+        blur: 48,
+        spread: -32,
+        color: Color.rgba(15, 23, 42, 0.18),
+      ),
+    },
+    fonts: {'sans': FontFamily.systemSans, 'mono': FontFamily.monospace},
+  );
+
+  /// Balanced dark app theme.
+  static const dark = FlintTheme(
+    name: 'dark',
+    colors: {
+      'page': Color('#020617'),
+      'pageText': Color('#e2e8f0'),
+      'surface': Color('#0f172a'),
+      'surfaceMuted': Color('#111827'),
+      'surfaceBorder': Color.rgba(148, 163, 184, 0.24),
+      'text': Color('#f8fafc'),
+      'muted': Color('#94a3b8'),
+      'primarySolid': Color('#60a5fa'),
+      'primarySoft': Color.rgba(37, 99, 235, 0.16),
+      'primaryText': Color('#bfdbfe'),
+      'primaryBorder': Color.rgba(96, 165, 250, 0.38),
+      'primaryFocus': Color.rgba(96, 165, 250, 0.34),
+      'inputSurface': Color('#020617'),
+      'inputBorder': Color.rgba(148, 163, 184, 0.34),
+      'inputText': Color('#f8fafc'),
+      'disabledText': Color('#64748b'),
+      'onSolid': Color('#020617'),
+    },
+    spacing: {'cardPadding': SizeValue.rem(1), 'controlY': 10, 'controlX': 14},
+    radii: {'sm': 6, 'md': 8, 'lg': 12, 'pill': 9999},
+    shadows: {
+      'card': Shadow(
+        y: 18,
+        blur: 48,
+        spread: -32,
+        color: Color.rgba(0, 0, 0, 0.44),
+      ),
+    },
+    fonts: {'sans': FontFamily.systemSans, 'mono': FontFamily.monospace},
+  );
+}
+
+/// Light and dark theme pair used by [RootDesign].
+class FlintThemeProvider {
+  /// Light theme tokens.
+  final FlintTheme light;
+
+  /// Dark theme tokens.
+  final FlintTheme dark;
+
+  /// Theme mode used for the base `:root` tokens.
+  final FlintThemeMode initialMode;
+
+  /// Creates a provider from explicit light and dark themes.
+  const FlintThemeProvider({
+    this.light = FlintThemes.light,
+    this.dark = FlintThemes.dark,
+    this.initialMode = FlintThemeMode.light,
+  });
+
+  /// Theme selected by [initialMode].
+  FlintTheme get initialTheme {
+    return initialMode == FlintThemeMode.dark ? dark : light;
+  }
 }
 
 /// CSS rule with base styles and common interaction state styles.
@@ -406,6 +521,9 @@ class RootDesign {
   /// Optional theme whose tokens are emitted as CSS variables.
   final FlintTheme? theme;
 
+  /// Optional built-in light/dark theme provider.
+  final FlintThemeProvider? themeProvider;
+
   /// Styles emitted for the `:root` selector.
   final DartStyle? root;
 
@@ -431,6 +549,7 @@ class RootDesign {
   const RootDesign({
     this.name = 'root',
     this.theme,
+    this.themeProvider,
     this.root,
     this.html,
     this.body,
@@ -442,8 +561,20 @@ class RootDesign {
 
   /// Compiled global CSS text.
   String get cssText {
+    final activeTheme = theme ?? themeProvider?.initialTheme;
     final chunks = <String>[
-      if (theme != null) _compileRootMap(':root', theme!.cssVariables),
+      if (activeTheme != null)
+        _compileRootMap(':root', activeTheme.cssVariables),
+      if (themeProvider != null)
+        _compileRootMap(
+          ':root[data-theme="light"], [data-theme="light"]',
+          themeProvider!.light.cssVariables,
+        ),
+      if (themeProvider != null)
+        _compileRootMap(
+          ':root[data-theme="dark"], [data-theme="dark"]',
+          themeProvider!.dark.cssVariables,
+        ),
       if (root != null) _compileRootRule(':root', root!),
       if (all != null) _compileRootRule('*', all!),
       if (html != null) _compileRootRule('html', html!),

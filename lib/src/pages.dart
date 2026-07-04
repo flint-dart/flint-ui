@@ -10,7 +10,8 @@ import 'component_registry.dart';
 import 'node.dart';
 import 'style.dart';
 import 'style_browser.dart';
-import 'widgets.dart';
+import 'widgets.dart' hide FlintThemeController, flintTheme;
+import 'widgets/shared/theme_controller.dart';
 
 /// Intercepts page mounting before a Flint page component renders.
 typedef FlintPageMiddleware = void Function(FlintPageContext context);
@@ -104,6 +105,9 @@ void createFlintApp(
   FlintAsyncPageBuilder? resolvePage,
   List<FlintPageMiddleware> middlewares = const [],
   List<StyleSheet> stylesheets = const [],
+  FlintTheme? theme,
+  FlintThemeProvider? themeProvider,
+  FlintThemeMode? themeMode,
   RootDesign? rootDesign,
   FlintComponent Function(String component)? missingPage,
 }) {
@@ -113,12 +117,33 @@ void createFlintApp(
     throw StateError('No element found for selector "$selector".');
   }
 
+  final initialThemeMode = _initialAppThemeMode(
+    themeProvider: themeProvider,
+    themeMode: themeMode,
+    rootDesign: rootDesign,
+  );
+  if (initialThemeMode != null && host.getAttribute('data-theme') == null) {
+    host.setAttribute('data-theme', initialThemeMode.value);
+  }
+  if (initialThemeMode != null) {
+    flintTheme.configure(initialMode: initialThemeMode, target: host);
+  }
+
   registerRootDesign(
     RootDesign(
       name: 'flint-animations',
       keyframes: [StyleKeyframes.spin(), StyleKeyframes.fadeIn()],
     ),
   );
+
+  final appTheme = _appThemeRootDesign(
+    theme: theme,
+    themeProvider: themeProvider,
+    themeMode: themeMode,
+  );
+  if (appTheme != null) {
+    registerRootDesign(appTheme);
+  }
 
   if (rootDesign != null) {
     registerRootDesign(rootDesign);
@@ -152,8 +177,7 @@ void createFlintApp(
     }
 
     final component =
-        builder?.call(page.props) ??
-        missingPage!.call(page.component);
+        builder?.call(page.props) ?? missingPage!.call(page.component);
 
     root.render(component);
   }
@@ -188,6 +212,40 @@ void createFlintApp(
       renderCurrentLocation();
     }).toJS,
   );
+}
+
+RootDesign? _appThemeRootDesign({
+  FlintTheme? theme,
+  FlintThemeProvider? themeProvider,
+  FlintThemeMode? themeMode,
+}) {
+  if (themeProvider != null || themeMode != null) {
+    final provider = themeProvider == null
+        ? FlintThemeProvider(initialMode: themeMode ?? FlintThemeMode.light)
+        : FlintThemeProvider(
+            light: themeProvider.light,
+            dark: themeProvider.dark,
+            initialMode: themeMode ?? themeProvider.initialMode,
+          );
+
+    return RootDesign(name: 'flint-theme', themeProvider: provider);
+  }
+
+  if (theme != null) {
+    return RootDesign(name: 'flint-theme', theme: theme);
+  }
+
+  return null;
+}
+
+FlintThemeMode? _initialAppThemeMode({
+  FlintThemeProvider? themeProvider,
+  FlintThemeMode? themeMode,
+  RootDesign? rootDesign,
+}) {
+  if (themeMode != null) return themeMode;
+  if (themeProvider != null) return themeProvider.initialMode;
+  return rootDesign?.themeProvider?.initialMode;
 }
 
 FlintPage _readPage(web.Element host) {

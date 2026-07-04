@@ -190,6 +190,12 @@ class DartStyle {
   /// When provided, this takes precedence over [background].
   final Object? gradient;
 
+  /// CSS `background-clip` value.
+  final Object? backgroundClip;
+
+  /// CSS vendor-prefixed `-webkit-background-clip` value.
+  final Object? webkitBackgroundClip;
+
   /// CSS `transition` value.
   final Object? transition;
 
@@ -225,6 +231,12 @@ class DartStyle {
 
   /// Scoped style applied when `aria-invalid="true"`.
   final DartStyle? invalid;
+
+  /// Scoped style applied when the nearest Flint theme is light.
+  final DartStyle? light;
+
+  /// Scoped style applied when the nearest Flint theme is dark.
+  final DartStyle? dark;
 
   /// Responsive style applied from the small breakpoint.
   final DartStyle? sm;
@@ -304,6 +316,8 @@ class DartStyle {
     this.shadow,
     this.opacity,
     this.gradient,
+    this.backgroundClip,
+    this.webkitBackgroundClip,
     this.transition,
     this.animation,
     this.willChange,
@@ -316,6 +330,8 @@ class DartStyle {
     this.selected,
     this.expanded,
     this.invalid,
+    this.light,
+    this.dark,
     this.sm,
     this.md,
     this.lg,
@@ -383,6 +399,11 @@ class DartStyle {
       'cursor': cssValue(cursor, unitlessNumber: true),
       'resize': cssValue(resize, unitlessNumber: true),
       'background': cssValue(gradient ?? background),
+      'background-clip': cssValue(backgroundClip, unitlessNumber: true),
+      '-webkit-background-clip': cssValue(
+        webkitBackgroundClip,
+        unitlessNumber: true,
+      ),
       'border-radius': cssValue(radius),
       'border': border?.toCss(),
       'border-top': borderTop?.toCss(),
@@ -413,7 +434,9 @@ class DartStyle {
       checked != null ||
       selected != null ||
       expanded != null ||
-      invalid != null;
+      invalid != null ||
+      light != null ||
+      dark != null;
 
   /// Whether this style contains any responsive or state overrides.
   bool get hasScopedStyles => hasBreakpoints || hasStateStyles;
@@ -438,6 +461,12 @@ class DartStyle {
     if (selected != null) '[aria-selected="true"]': selected!,
     if (expanded != null) '[aria-expanded="true"]': expanded!,
     if (invalid != null) '[aria-invalid="true"]': invalid!,
+  };
+
+  /// Theme-scoped styles keyed by Flint theme name.
+  Map<FlintThemeMode, DartStyle> get themeStyles => {
+    if (light != null) FlintThemeMode.light: light!,
+    if (dark != null) FlintThemeMode.dark: dark!,
   };
 
   /// Returns a new style with non-null values from [override] applied.
@@ -506,6 +535,9 @@ class DartStyle {
       shadow: override.shadow ?? shadow,
       opacity: override.opacity ?? opacity,
       gradient: override.gradient ?? gradient,
+      backgroundClip: override.backgroundClip ?? backgroundClip,
+      webkitBackgroundClip:
+          override.webkitBackgroundClip ?? webkitBackgroundClip,
       transition: override.transition ?? transition,
       animation: override.animation ?? animation,
       willChange: override.willChange ?? willChange,
@@ -518,6 +550,8 @@ class DartStyle {
       selected: override.selected ?? selected,
       expanded: override.expanded ?? expanded,
       invalid: override.invalid ?? invalid,
+      light: override.light ?? light,
+      dark: override.dark ?? dark,
       sm: override.sm ?? sm,
       md: override.md ?? md,
       lg: override.lg ?? lg,

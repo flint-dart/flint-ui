@@ -75,3 +75,6 @@ export 'shared/theme.dart'
         InputVariant,
         NavVariant,
         Tone;
+export 'shared/theme_controller_stub.dart'
+    if (dart.library.js_interop) 'shared/theme_controller.dart';
+export 'shared/theme_provider.dart';

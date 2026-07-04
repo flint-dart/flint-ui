@@ -102,7 +102,10 @@ void main() {
 
     test('ships a broad app icon catalog', () {
       expect(Icons.all.length, greaterThanOrEqualTo(80));
+      expect(Icons.all.map((icon) => icon.name), contains('code'));
+      expect(Icons.all.map((icon) => icon.name), contains('gitBranch'));
       expect(Icons.all.map((icon) => icon.name), contains('server'));
+      expect(Icons.all.map((icon) => icon.name), contains('settings'));
       expect(Icons.all.map((icon) => icon.name), contains('route'));
       expect(Icons.all.map((icon) => icon.name), contains('shoppingCart'));
       expect(Icons.all.map((icon) => icon.name), contains('sparkles'));
