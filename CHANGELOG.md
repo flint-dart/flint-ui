@@ -14,6 +14,8 @@
 - Improved modal surfaces to use theme tokens for panel, border, text, muted background, and dark-mode-friendly backdrop styling.
 
 ### Fixed
+- Preserved focused input and textarea values, focus, and cursor selection across component/root rerenders.
+- Applied form `value` and `checked` props as live DOM properties in the browser renderer.
 - Applied the active theme mode to the document root so app-wide `data-theme` CSS variables respond correctly when users toggle dark mode.
 - Emitted vendor scrollbar rules for hidden scrollbars while keeping regular CSS output clean.
 
