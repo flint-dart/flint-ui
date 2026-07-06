@@ -554,6 +554,22 @@ class Overflow {
   String toString() => value;
 }
 
+/// CSS scrollbar visibility helper.
+class ScrollbarDisplay {
+  /// Scrollbar visibility keyword.
+  final String value;
+
+  /// Creates a scrollbar display value.
+  const ScrollbarDisplay(this.value);
+
+  static const auto = ScrollbarDisplay('auto');
+  static const none = ScrollbarDisplay('none');
+
+  /// Returns the CSS scrollbar display string.
+  @override
+  String toString() => value;
+}
+
 /// CSS object-fit value.
 class ObjectFit {
   /// CSS object-fit string.

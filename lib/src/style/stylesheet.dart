@@ -400,8 +400,12 @@ class StyleSheet {
 
   String _compileRule(String selector, Map<String, Object?> styles) {
     final body = _styleBody(styles);
-    if (body.isEmpty) return '';
-    return '$selector {\n$body\n}';
+    final scrollbar = _scrollbarRule(selector, styles['scrollbar-display']);
+    if (body.isEmpty) return scrollbar;
+    return [
+      '$selector {\n$body\n}',
+      if (scrollbar.isNotEmpty) scrollbar,
+    ].join('\n');
   }
 
   void _appendState(
@@ -417,6 +421,7 @@ class StyleSheet {
   String _styleBody(Map<String, Object?> styles) {
     final entries = styles.entries
         .where((entry) => entry.value != null)
+        .where((entry) => entry.key != 'scrollbar-display')
         .map((entry) => '  ${entry.key}: ${_resolveValue(entry.value)};')
         .toList(growable: false);
     return entries.join('\n');
@@ -589,9 +594,14 @@ class RootDesign {
   }
 
   String _compileRootRule(String selector, DartStyle style) {
-    final body = _rootStyleToCss(style.toMap());
-    if (body.trim().isEmpty) return '';
-    return '$selector { $body; }';
+    final styleMap = style.toMap();
+    final body = _rootStyleToCss(styleMap);
+    final scrollbar = _scrollbarRule(selector, styleMap['scrollbar-display']);
+    if (body.trim().isEmpty) return scrollbar;
+    return [
+      '$selector { $body; }',
+      if (scrollbar.isNotEmpty) scrollbar,
+    ].join('\n');
   }
 
   String _compileRootMap(String selector, Map<String, Object?> style) {
@@ -608,9 +618,23 @@ class RootDesign {
 /// Converts a style map into root-level CSS declarations.
 String rootStyleToCss(Map<String, Object?> style) {
   return style.entries
-      .where((entry) => entry.value != null && entry.key != '_cssText')
+      .where(
+        (entry) =>
+            entry.value != null &&
+            entry.key != '_cssText' &&
+            entry.key != 'scrollbar-display',
+      )
       .map((entry) => '${entry.key}: ${_rootCssValue(entry.key, entry.value)}')
       .join('; ');
+}
+
+String _scrollbarRule(String selector, Object? value) {
+  if (value?.toString().trim().toLowerCase() != 'none') return '';
+  return [
+    '$selector::-webkit-scrollbar { width: 0; height: 0; display: none; }',
+    '$selector::-webkit-scrollbar-track { background: transparent; }',
+    '$selector::-webkit-scrollbar-thumb { background: transparent; }',
+  ].join('\n');
 }
 
 String _rootCssValue(String property, Object? value) {

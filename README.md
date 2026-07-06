@@ -14,7 +14,7 @@ Add `flint_ui` to your app:
 
 ```yaml
 dependencies:
-  flint_ui: ^0.1.3
+  flint_ui: ^0.1.12
 ```
 
 For local Flint development inside this monorepo, use a path override:

@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.1.12 - 2026-07-06
+
+### Added
+- Added built-in light and dark theme provider support through `FlintThemeProvider`, `FlintThemes`, and `RootDesign.themeProvider`.
+- Added global theme state with `flintTheme`, `FlintThemeController`, persisted theme mode storage, and `StateSignalListener`-friendly updates.
+- Added `ThemeProvider` for subtree-level light or dark mode overrides.
+- Added `DartStyle.light` and `DartStyle.dark` scoped style overrides for theme-aware components.
+- Added `scrollbarDisplay` and `ScrollbarDisplay` helpers for scrollbar visibility control.
+
+### Changed
+- Updated `createFlintApp` and `renderPage` to accept theme/provider options and apply the active theme mode to the mounted app root.
+- Improved modal surfaces to use theme tokens for panel, border, text, muted background, and dark-mode-friendly backdrop styling.
+
+### Fixed
+- Applied the active theme mode to the document root so app-wide `data-theme` CSS variables respond correctly when users toggle dark mode.
+- Emitted vendor scrollbar rules for hidden scrollbars while keeping regular CSS output clean.
+
 ## 0.1.11 - 2026-06-18
 
 ### Added

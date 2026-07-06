@@ -98,6 +98,9 @@ class DartStyle {
   /// CSS `scroll-behavior` value.
   final Object? scrollBehavior;
 
+  /// CSS scrollbar visibility helper.
+  final Object? scrollbarDisplay;
+
   /// CSS `aspect-ratio` value.
   final Object? aspectRatio;
 
@@ -286,6 +289,7 @@ class DartStyle {
     this.overflowY,
     this.boxSizing,
     this.scrollBehavior,
+    this.scrollbarDisplay,
     this.aspectRatio,
     this.objectFit,
     this.transform,
@@ -378,6 +382,9 @@ class DartStyle {
       'overflow-y': cssValue(overflowY, unitlessNumber: true),
       'box-sizing': cssValue(boxSizing, unitlessNumber: true),
       'scroll-behavior': cssValue(scrollBehavior, unitlessNumber: true),
+      'scrollbar-display': cssValue(scrollbarDisplay, unitlessNumber: true),
+      'scrollbar-width': _scrollbarWidth(scrollbarDisplay),
+      '-ms-overflow-style': _msOverflowStyle(scrollbarDisplay),
       'aspect-ratio': cssValue(aspectRatio, unitlessNumber: true),
       'object-fit': cssValue(objectFit, unitlessNumber: true),
       'transform': cssValue(transform, unitlessNumber: true),
@@ -505,6 +512,7 @@ class DartStyle {
       overflowY: override.overflowY ?? overflowY,
       boxSizing: override.boxSizing ?? boxSizing,
       scrollBehavior: override.scrollBehavior ?? scrollBehavior,
+      scrollbarDisplay: override.scrollbarDisplay ?? scrollbarDisplay,
       aspectRatio: override.aspectRatio ?? aspectRatio,
       objectFit: override.objectFit ?? objectFit,
       transform: override.transform ?? transform,
@@ -558,4 +566,20 @@ class DartStyle {
       xl: override.xl ?? xl,
     );
   }
+}
+
+String? _scrollbarWidth(Object? value) {
+  if (value == null) return null;
+  final normalized = value.toString().trim().toLowerCase();
+  if (normalized == 'none') return 'none';
+  if (normalized == 'auto') return 'auto';
+  return null;
+}
+
+String? _msOverflowStyle(Object? value) {
+  if (value == null) return null;
+  final normalized = value.toString().trim().toLowerCase();
+  if (normalized == 'none') return 'none';
+  if (normalized == 'auto') return 'auto';
+  return null;
 }

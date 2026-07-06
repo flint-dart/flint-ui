@@ -59,7 +59,8 @@ class Modal extends StatelessComponent {
           'display': 'grid',
           'place-items': 'center',
           'padding': '20px',
-          'background': 'rgba(16, 24, 40, 0.52)',
+          'background': 'rgba(2, 6, 23, 0.62)',
+          'backdrop-filter': 'blur(8px)',
         },
         dartStyle: dartStyle,
         style: style,
@@ -73,8 +74,13 @@ class Modal extends StatelessComponent {
               'width': '100%',
               'max-width': _modalWidth(size),
               'border-radius': '8px',
-              'background': '#ffffff',
-              'box-shadow': '0 20px 40px rgba(16, 24, 40, 0.18)',
+              'border':
+                  '1px solid var(--flint-color-line, var(--flint-color-surfaceBorder, #e4e7ec))',
+              'background':
+                  'var(--flint-color-panel, var(--flint-color-surface, #ffffff))',
+              'color':
+                  'var(--flint-color-ink, var(--flint-color-text, #0f172a))',
+              'box-shadow': '0 24px 56px rgba(0, 0, 0, 0.28)',
               'overflow': 'hidden',
             },
           },
@@ -89,7 +95,8 @@ class Modal extends StatelessComponent {
                     'justify-content': 'space-between',
                     'gap': '12px',
                     'padding': '16px',
-                    'border-bottom': '1px solid #e4e7ec',
+                    'border-bottom':
+                        '1px solid var(--flint-color-line, var(--flint-color-surfaceBorder, #e4e7ec))',
                   },
                 },
                 children: [
@@ -101,6 +108,18 @@ class Modal extends StatelessComponent {
                         'type': 'button',
                         'aria-label': 'Close',
                         'onClick': onClose,
+                        'style': {
+                          'width': '32px',
+                          'height': '32px',
+                          'border-radius': '8px',
+                          'border':
+                              '1px solid var(--flint-color-line, var(--flint-color-surfaceBorder, #e4e7ec))',
+                          'background':
+                              'var(--flint-color-panelMuted, var(--flint-color-surfaceMuted, #f8fafc))',
+                          'color':
+                              'var(--flint-color-ink, var(--flint-color-text, #0f172a))',
+                          'cursor': 'pointer',
+                        },
                       },
                       children: const [FlintText('x')],
                     ),
@@ -122,7 +141,8 @@ class Modal extends StatelessComponent {
                     'justify-content': 'flex-end',
                     'gap': '8px',
                     'padding': '16px',
-                    'border-top': '1px solid #e4e7ec',
+                    'border-top':
+                        '1px solid var(--flint-color-line, var(--flint-color-surfaceBorder, #e4e7ec))',
                   },
                 },
                 children: [toFlintNode(actions)],
