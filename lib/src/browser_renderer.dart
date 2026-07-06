@@ -37,10 +37,12 @@ class FlintRoot {
     final node = _node;
     if (node == null) return;
 
+    final activeControl = _ActiveControl.capture(host);
     final previousSlots = _componentSlots;
     final nextSlots = <String, _ComponentMount>{};
     host.textContent = '';
     host.appendChild(_createDom(node, '0', previousSlots, nextSlots));
+    activeControl?.restore(host);
     for (final entry in previousSlots.entries) {
       if (!nextSlots.containsKey(entry.key)) {
         _unmountComponentTree(entry.value);
@@ -199,6 +201,7 @@ class FlintRoot {
   void _renderComponent(_ComponentMount mount) {
     final previousSlots = mount.childSlots;
     final nextSlots = <String, _ComponentMount>{};
+    final activeControl = _ActiveControl.capture(mount.boundary);
 
     mount.boundary.textContent = '';
     mount.boundary.setAttribute('style', 'display: contents;');
@@ -210,6 +213,7 @@ class FlintRoot {
         nextSlots,
       ),
     );
+    activeControl?.restore(mount.boundary);
 
     for (final entry in previousSlots.entries) {
       if (!nextSlots.containsKey(entry.key)) {
@@ -247,6 +251,10 @@ class FlintRoot {
         return;
       }
 
+      if (_applyFormProperty(element, name, value)) {
+        return;
+      }
+
       if (name.startsWith('on') && value is Function) {
         _listen(element, name.substring(2).toLowerCase(), value);
         return;
@@ -259,6 +267,33 @@ class FlintRoot {
 
       element.setAttribute(name, value.toString());
     });
+  }
+
+  bool _applyFormProperty(web.Element element, String name, Object value) {
+    if (name == 'value') {
+      if (element is web.HTMLInputElement) {
+        element.value = value.toString();
+        return true;
+      }
+      if (element is web.HTMLTextAreaElement) {
+        element.value = value.toString();
+        return true;
+      }
+      if (element is web.HTMLSelectElement) {
+        element.value = value.toString();
+        return true;
+      }
+    }
+
+    if (name == 'checked' && element is web.HTMLInputElement) {
+      element.checked = value == true;
+      if (value == true) {
+        element.setAttribute(name, '');
+      }
+      return true;
+    }
+
+    return false;
   }
 
   void _registerScopedStyle(String cssText) {
@@ -345,4 +380,120 @@ class _ComponentMount {
   bool mounted = false;
 
   _ComponentMount(this.component, this.boundary);
+}
+
+class _ActiveControl {
+  _ActiveControl({
+    required this.tag,
+    required this.value,
+    this.id,
+    this.name,
+    this.type,
+    this.selectionStart,
+    this.selectionEnd,
+  });
+
+  final String tag;
+  final String value;
+  final String? id;
+  final String? name;
+  final String? type;
+  final int? selectionStart;
+  final int? selectionEnd;
+
+  static _ActiveControl? capture(web.Element scope) {
+    final active = web.document.activeElement;
+    if (active == null || !scope.contains(active)) return null;
+
+    if (active is web.HTMLInputElement) {
+      return _ActiveControl(
+        tag: 'input',
+        value: active.value,
+        id: active.id.isEmpty ? null : active.id,
+        name: active.name.isEmpty ? null : active.name,
+        type: active.type.isEmpty ? null : active.type,
+        selectionStart: active.selectionStart,
+        selectionEnd: active.selectionEnd,
+      );
+    }
+
+    if (active is web.HTMLTextAreaElement) {
+      return _ActiveControl(
+        tag: 'textarea',
+        value: active.value,
+        id: active.id.isEmpty ? null : active.id,
+        name: active.name.isEmpty ? null : active.name,
+        selectionStart: active.selectionStart,
+        selectionEnd: active.selectionEnd,
+      );
+    }
+
+    return null;
+  }
+
+  void restore(web.Element scope) {
+    final control = _find(scope);
+    if (control == null) return;
+
+    if (control is web.HTMLInputElement) {
+      control.value = value;
+      control.focus();
+      _restoreSelection(control);
+      return;
+    }
+
+    if (control is web.HTMLTextAreaElement) {
+      control.value = value;
+      control.focus();
+      _restoreSelection(control);
+    }
+  }
+
+  web.Element? _find(web.Element scope) {
+    if (id != null) {
+      final byId = web.document.getElementById(id!);
+      if (byId != null && scope.contains(byId) && _matches(byId)) {
+        return byId;
+      }
+    }
+
+    final controls = scope.querySelectorAll(tag);
+    for (var i = 0; i < controls.length; i++) {
+      final candidate = controls.item(i);
+      if (candidate is web.Element && _matches(candidate)) {
+        return candidate;
+      }
+    }
+
+    return null;
+  }
+
+  bool _matches(web.Element element) {
+    if (element.localName != tag) return false;
+
+    if (element is web.HTMLInputElement) {
+      if (type != null && element.type != type) return false;
+      if (name != null && element.name == name) return true;
+      return id != null && element.id == id;
+    }
+
+    if (element is web.HTMLTextAreaElement) {
+      if (name != null && element.name == name) return true;
+      return id != null && element.id == id;
+    }
+
+    return false;
+  }
+
+  void _restoreSelection(dynamic control) {
+    final start = selectionStart;
+    final end = selectionEnd;
+    if (start == null || end == null) return;
+
+    try {
+      control.setSelectionRange(start, end);
+    } catch (_) {
+      // Some input types, such as number/date, do not support text selection.
+    }
+  }
 }
