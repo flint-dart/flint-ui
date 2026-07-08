@@ -100,6 +100,34 @@ void main() {
       );
     });
 
+    test('accepts DartStyle with explicit style as final override', () {
+      final icon = Icon(
+        Icons.user,
+        size: 24,
+        dartStyle: const DartStyle(color: '#155eef', margin: EdgeInsets.all(4)),
+        style: const {'color': '#111827'},
+      );
+
+      expect(icon.props['style'], containsPair('width', '24px'));
+      expect(icon.props['style'], containsPair('height', '24px'));
+      expect(icon.props['style'], containsPair('margin', '4px'));
+      expect(icon.props['style'], containsPair('color', '#111827'));
+    });
+
+    test('supports scoped DartStyle states', () {
+      final icon = Icon(
+        Icons.settings,
+        dartStyle: const DartStyle(hover: DartStyle(color: '#0f766e')),
+      );
+
+      expect(icon.props['className'], contains('flint-s-'));
+      expect(icon.props['_flintStyleCss'], contains(':hover'));
+      expect(
+        icon.props['_flintStyleCss'],
+        contains('color: #0f766e !important'),
+      );
+    });
+
     test('ships a broad app icon catalog', () {
       expect(Icons.all.length, greaterThanOrEqualTo(80));
       expect(Icons.all.map((icon) => icon.name), contains('code'));

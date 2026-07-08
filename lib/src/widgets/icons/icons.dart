@@ -1,5 +1,6 @@
 import '../../component_props.dart';
 import '../../node.dart';
+import '../../style.dart';
 
 /// A reusable SVG icon definition for Flint UI.
 class IconData {
@@ -47,6 +48,7 @@ class Icon extends FlintElement {
     String? className,
     Map<String, Object?> props = const {},
     Map<String, Object?> style = const {},
+    DartStyle? dartStyle,
   }) : super(
          'svg',
          props: mergeComponentProps(
@@ -76,6 +78,7 @@ class Icon extends FlintElement {
              'vertical-align': 'middle',
              'flex-shrink': 0,
            },
+           dartStyle: dartStyle,
            style: style,
          ),
          children: [
