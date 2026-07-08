@@ -1,9 +1,27 @@
 # Changelog
 
-## Unreleased
+## 0.1.13 - 2026-07-08
 
 ### Added
 - Added `TextField(readonly: true)` for locked identity values and `SwitchRow` for settings-style boolean preferences.
+- Added `MediaDevicesController` for browser camera, microphone, camera-and-microphone, screen-share, media device listing, and stream stopping.
+- Added `GeoLocationController` for browser current-position lookup, live location watching, and clearing active watches.
+- Added `Video`, `Audio`, and `MediaPreview` components for native media playback and live browser media stream previews.
+- Added `MediaElementController` for controlling Flint video, audio, and media preview playback from Dart.
+- Added `MediaRecorderController`, `PhotoCaptureController`, and `CapturedMedia` helpers for recording streams, taking photos, and preparing base64 upload payloads.
+- Added `Canvas`, `CanvasController`, retained canvas objects, and export-to-image helpers for Fabric-like drawing workflows.
+- Added rounded rectangles, no-border canvas paint support, and image pattern fills for Flint canvas rectangles.
+- Added canvas object update, ordering, hit testing, selection, dragging, movement, and JSON import/export helpers.
+- Added canvas object resize and rotation helpers with rotated browser rendering and JSON persistence.
+- Added canvas image objects and undo/redo history for retained canvas scenes.
+- Added canvas selection handles plus keyboard delete, arrow-key movement, copy, and paste controls.
+- Added canvas multi-selection grouping and controller callbacks for selection, changes, movement, resize, and rotation.
+- Added canvas object styling helpers plus layer-panel metadata for names, renaming, lock, hide, and layer listing.
+- Added canvas snapping, alignment, and text-editing helpers with browser double-click text editing support.
+- Added canvas pointer/hover/operation lifecycle callbacks and selected-scene/backend JSON export/import helpers.
+- Added canvas history batching, history callbacks, history clearing/limits, and browser marquee selection.
+- Added canvas grid/ruler rendering, visual snap guides, and object movement/resize constraints.
+- Added server-safe media and geolocation stubs so Flint UI pages can render for SSR/SEO without touching browser-only APIs.
 
 ### Fixed
 - Preserved focused input and textarea values, focus, and cursor selection across component/root rerenders.

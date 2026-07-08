@@ -5,6 +5,8 @@ import 'package:universal_web/web.dart' as web;
 
 import 'component.dart';
 import 'node.dart';
+import 'widgets/primitives/canvas.dart';
+import 'widgets/primitives/media_preview.dart';
 
 /// Browser DOM root that renders Flint nodes into a host element.
 class FlintRoot {
@@ -241,6 +243,20 @@ class FlintRoot {
         return;
       }
 
+      if (name == '_flintMediaController') {
+        if (value is MediaElementController) {
+          value.attachTo(element);
+        }
+        return;
+      }
+
+      if (name == '_flintCanvasController') {
+        if (value is CanvasController) {
+          value.attachTo(element);
+        }
+        return;
+      }
+
       if (name == 'className') {
         element.className = value.toString();
         return;
@@ -252,6 +268,10 @@ class FlintRoot {
       }
 
       if (_applyFormProperty(element, name, value)) {
+        return;
+      }
+
+      if (_applyMediaProperty(element, name, value)) {
         return;
       }
 
@@ -290,6 +310,39 @@ class FlintRoot {
       if (value == true) {
         element.setAttribute(name, '');
       }
+      return true;
+    }
+
+    return false;
+  }
+
+  bool _applyMediaProperty(web.Element element, String name, Object value) {
+    if (element is web.HTMLMediaElement) {
+      if (name == 'muted') {
+        element.muted = value == true;
+        if (value == true) element.setAttribute(name, '');
+        return true;
+      }
+      if (name == 'controls') {
+        element.controls = value == true;
+        if (value == true) element.setAttribute(name, '');
+        return true;
+      }
+      if (name == 'autoplay') {
+        element.autoplay = value == true;
+        if (value == true) element.setAttribute(name, '');
+        return true;
+      }
+      if (name == 'loop') {
+        element.loop = value == true;
+        if (value == true) element.setAttribute(name, '');
+        return true;
+      }
+    }
+
+    if (name == 'playsinline' && element is web.HTMLVideoElement) {
+      element.playsInline = value == true;
+      if (value == true) element.setAttribute(name, '');
       return true;
     }
 

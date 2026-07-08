@@ -236,6 +236,694 @@ void main() {
       expect(figure.children.last, isA<FlintElement>());
       expect((figure.children.last as FlintElement).tag, 'figcaption');
     });
+
+    test('Video renders native media controls and playback attributes', () {
+      final controller = MediaElementController();
+      final video = Video(
+        controller: controller,
+        src: '/media/demo.mp4',
+        poster: '/media/poster.jpg',
+        width: 640,
+        height: 360,
+        autoplay: true,
+        muted: true,
+        loop: true,
+        fallback: 'Video is not supported.',
+      );
+
+      expect(video.tag, 'video');
+      expect(video.props['src'], '/media/demo.mp4');
+      expect(video.props['poster'], '/media/poster.jpg');
+      expect(video.props['width'], '640px');
+      expect(video.props['height'], '360px');
+      expect(video.props['controls'], isTrue);
+      expect(video.props['autoplay'], isTrue);
+      expect(video.props['muted'], isTrue);
+      expect(video.props['loop'], isTrue);
+      expect(video.props['playsinline'], isTrue);
+      expect(video.props['preload'], 'metadata');
+      expect(video.props['_flintMediaController'], controller);
+      expect(video.children.single, isA<FlintText>());
+    });
+
+    test('Audio renders native media controls and playback attributes', () {
+      final controller = MediaElementController();
+      final audio = Audio(
+        controller: controller,
+        src: '/media/demo.mp3',
+        preload: MediaPreload.none,
+        controls: false,
+        fallback: 'Audio is not supported.',
+      );
+
+      expect(audio.tag, 'audio');
+      expect(audio.props['src'], '/media/demo.mp3');
+      expect(audio.props.containsKey('controls'), isFalse);
+      expect(audio.props['_flintMediaController'], controller);
+      expect(audio.props['preload'], 'none');
+      expect(audio.props['style'], containsPair('width', '100%'));
+      expect(audio.children.single, isA<FlintText>());
+    });
+
+    test(
+      'MediaPreview renders a stream target without touching browser APIs',
+      () {
+        final controller = MediaElementController();
+        final preview = MediaPreview(
+          id: 'camera-preview',
+          controller: controller,
+          result: const MediaStreamResult(granted: true),
+          fallback: 'Waiting for camera.',
+        ).build();
+
+        expect(preview, isA<Video>());
+        final video = preview as Video;
+        expect(video.props['id'], 'camera-preview');
+        expect(video.props['autoplay'], isTrue);
+        expect(video.props['muted'], isTrue);
+        expect(video.props['controls'], isTrue);
+        expect(video.props['_flintMediaController'], controller);
+        expect(video.children.single, isA<FlintText>());
+      },
+    );
+
+    test('MediaElementController is server-safe before browser binding', () {
+      final controller = MediaElementController();
+
+      expect(controller.isAttached, isFalse);
+      expect(controller.isPaused, isTrue);
+      expect(controller.isPlaying, isFalse);
+      expect(controller.currentTime, Duration.zero);
+      expect(controller.duration, isNull);
+      expect(controller.volume, 1);
+      expect(controller.playbackRate, 1);
+
+      controller.pause();
+      controller.stop();
+      controller.seekTo(const Duration(seconds: 3));
+      controller.setVolume(0.5);
+      controller.mute();
+      controller.unmute();
+      controller.toggleMuted();
+      controller.setPlaybackRate(1.25);
+      controller.detach();
+    });
+
+    test('Canvas renders with controller, dimensions, and styles', () {
+      final controller = CanvasController();
+      final canvas = Canvas(
+        controller: controller,
+        width: 640,
+        height: 360,
+        dartStyle: const DartStyle(radius: 8),
+      );
+
+      expect(canvas.tag, 'canvas');
+      expect(canvas.props['width'], 640);
+      expect(canvas.props['height'], 360);
+      expect(canvas.props['_flintCanvasController'], controller);
+      expect(canvas.props['style'], containsPair('max-width', '100%'));
+      expect(canvas.props['style'], containsPair('border-radius', '8px'));
+    });
+
+    test('CanvasController stores, finds, removes, and clears objects', () {
+      final controller = CanvasController();
+      const rect = CanvasRect(
+        id: 'box',
+        x: 10,
+        y: 12,
+        width: 100,
+        height: 60,
+        borderRadius: 10,
+        paint: CanvasPaint(fill: '#fff', stroke: '#111827', lineWidth: 2),
+      );
+      const text = CanvasTextObject(
+        id: 'label',
+        text: 'Hello',
+        x: 16,
+        y: 32,
+        paint: CanvasPaint(fill: '#111827', stroke: null),
+      );
+
+      controller.addRect(rect);
+      controller.addText(text);
+
+      expect(controller.objects, [rect, text]);
+      expect(controller.objectById('box'), rect);
+      expect(rect.borderRadius, 10);
+      expect(controller.remove('box'), isTrue);
+      expect(controller.remove('missing'), isFalse);
+      expect(controller.objects, [text]);
+
+      controller.drawRect(rect);
+      controller.drawLine(const CanvasLine(x1: 0, y1: 0, x2: 10, y2: 10));
+      controller.drawCircle(const CanvasCircle(x: 20, y: 20, radius: 8));
+      controller.drawText(text);
+      controller.drawImage(
+        const CanvasImageObject(
+          src: '/assets/logo.png',
+          x: 0,
+          y: 0,
+          width: 16,
+          height: 16,
+        ),
+      );
+      expect(controller.toDataUrl(), '');
+
+      controller.clear();
+      expect(controller.objects, isEmpty);
+    });
+
+    test('CanvasPaint supports image patterns and border removal', () {
+      const pattern = CanvasImagePattern(
+        src: '/assets/pattern.png',
+        repetition: CanvasPatternRepetition.repeatX,
+        crossOrigin: 'anonymous',
+      );
+      const rect = CanvasRect(
+        x: 0,
+        y: 0,
+        width: 120,
+        height: 80,
+        borderRadius: 16,
+        paint: CanvasPaint(
+          pattern: pattern,
+          fill: '#f8fafc',
+          stroke: null,
+          lineWidth: 0,
+        ),
+      );
+
+      expect(rect.paint.pattern, pattern);
+      expect(rect.paint.stroke, isNull);
+      expect(rect.paint.lineWidth, 0);
+      expect(rect.paint.pattern?.repetition.value, 'repeat-x');
+    });
+
+    test(
+      'CanvasController updates, orders, selects, moves, and serializes',
+      () {
+        final controller = CanvasController();
+        const rect = CanvasRect(id: 'rect', x: 0, y: 0, width: 100, height: 80);
+        const circle = CanvasCircle(
+          id: 'circle',
+          x: 40,
+          y: 40,
+          radius: 20,
+          paint: CanvasPaint(fill: '#00ff00', stroke: null),
+        );
+        const text = CanvasTextObject(
+          id: 'text',
+          text: 'Hi',
+          x: 12,
+          y: 24,
+          paint: CanvasPaint(fill: '#111827', stroke: null),
+        );
+        const image = CanvasImageObject(
+          id: 'image',
+          src: '/assets/logo.png',
+          x: 70,
+          y: 12,
+          width: 24,
+          height: 18,
+          rotation: 5,
+          crossOrigin: 'anonymous',
+        );
+
+        controller.addRect(rect);
+        controller.addCircle(circle);
+        controller.addText(text);
+        controller.addImage(image);
+
+        expect(controller.hitTest(72, 14), image);
+        expect(controller.hitTest(40, 40), circle);
+        expect(controller.selectAt(40, 40), circle);
+        expect(controller.selectedObjectId, 'circle');
+
+        expect(controller.moveSelectedBy(10, 5), isTrue);
+        expect((controller.objectById('circle') as CanvasCircle).x, 50);
+        expect((controller.objectById('circle') as CanvasCircle).y, 45);
+
+        expect(controller.sendBackward('text'), isTrue);
+        expect(controller.objects.map((object) => object.id), [
+          'rect',
+          'text',
+          'circle',
+          'image',
+        ]);
+        expect(controller.bringToFront('rect'), isTrue);
+        expect(controller.objects.last.id, 'rect');
+
+        expect(
+          controller.update(
+            'rect',
+            rect.copyWith(
+              width: 120,
+              rotation: 15,
+              paint: const CanvasPaint(fill: '#fff'),
+            ),
+          ),
+          isTrue,
+        );
+        expect((controller.objectById('rect') as CanvasRect).width, 120);
+        expect((controller.objectById('rect') as CanvasRect).rotation, 15);
+
+        expect(controller.resizeBy('rect', 10, 20), isTrue);
+        expect((controller.objectById('rect') as CanvasRect).width, 130);
+        expect((controller.objectById('rect') as CanvasRect).height, 100);
+        expect(controller.select('rect'), isTrue);
+        expect(
+          controller.resizeSelectedFromHandle(
+            CanvasSelectionHandle.resizeNorthWest,
+            10,
+            10,
+          ),
+          isTrue,
+        );
+        expect((controller.objectById('rect') as CanvasRect).x, 10);
+        expect(controller.setRotation('rect', 45), isTrue);
+        expect((controller.objectById('rect') as CanvasRect).rotation, 45);
+
+        expect(controller.select('circle'), isTrue);
+        expect(controller.selectedBounds?.width, 40);
+        expect(controller.resizeSelectedBy(5, 2), isTrue);
+        expect((controller.objectById('circle') as CanvasCircle).radius, 25);
+        expect(controller.rotateSelectedBy(30), isTrue);
+        expect((controller.objectById('circle') as CanvasCircle).rotation, 30);
+
+        final json = controller.toJson();
+        final restored = CanvasController()..loadJson(json);
+        expect(restored.objects, hasLength(4));
+        expect(restored.objectById('circle'), isA<CanvasCircle>());
+        expect(restored.objectById('image'), isA<CanvasImageObject>());
+        expect(restored.selectedObjectId, 'circle');
+        expect((restored.objectById('rect') as CanvasRect).rotation, 45);
+        expect(
+          (restored.objectById('image') as CanvasImageObject).crossOrigin,
+          'anonymous',
+        );
+
+        final parsed = canvasObjectFromJson({
+          'type': 'line',
+          'id': 'line',
+          'rotation': 12,
+          'x1': 1,
+          'y1': 2,
+          'x2': 3,
+          'y2': 4,
+          'paint': {'stroke': '#333', 'lineWidth': 2},
+        });
+        expect(parsed, isA<CanvasLine>());
+        expect(parsed.rotation, 12);
+      },
+    );
+
+    test('CanvasController supports undo and redo history', () {
+      final controller = CanvasController();
+      const image = CanvasImageObject(
+        id: 'image',
+        src: '/photo.png',
+        x: 0,
+        y: 0,
+        width: 20,
+        height: 10,
+      );
+
+      expect(controller.canUndo, isFalse);
+      expect(controller.canRedo, isFalse);
+
+      controller.addImage(image);
+      expect(controller.canUndo, isTrue);
+      expect(controller.objectById('image'), image);
+
+      expect(controller.resizeBy('image', 5, 3), isTrue);
+      expect((controller.objectById('image') as CanvasImageObject).width, 25);
+      expect(controller.rotateBy('image', 15), isTrue);
+      expect(
+        (controller.objectById('image') as CanvasImageObject).rotation,
+        15,
+      );
+
+      expect(controller.undo(), isTrue);
+      expect((controller.objectById('image') as CanvasImageObject).rotation, 0);
+      expect(controller.undo(), isTrue);
+      expect((controller.objectById('image') as CanvasImageObject).width, 20);
+      expect(controller.undo(), isTrue);
+      expect(controller.objects, isEmpty);
+      expect(controller.canRedo, isTrue);
+
+      expect(controller.redo(), isTrue);
+      expect(controller.objectById('image'), isA<CanvasImageObject>());
+      expect(controller.redo(), isTrue);
+      expect((controller.objectById('image') as CanvasImageObject).width, 25);
+    });
+
+    test('CanvasController batches history and supports marquee selection', () {
+      final events = <String>[];
+      final controller = CanvasController(
+        maxHistoryEntries: 2,
+        onUndo: (_) => events.add('undo'),
+        onRedo: (_) => events.add('redo'),
+      );
+      controller.addRect(
+        const CanvasRect(id: 'a', x: 0, y: 0, width: 10, height: 10),
+      );
+      controller.addRect(
+        const CanvasRect(id: 'b', x: 30, y: 0, width: 10, height: 10),
+      );
+      controller.addRect(
+        const CanvasRect(id: 'c', x: 80, y: 0, width: 10, height: 10),
+      );
+
+      expect(
+        controller.selectInBounds(
+          const CanvasBounds(x: -1, y: -1, width: 50, height: 20),
+        ),
+        isTrue,
+      );
+      expect(controller.selectedObjectIds, ['a', 'b']);
+
+      controller.beginHistoryBatch();
+      expect(controller.moveSelectedBy(5, 0), isTrue);
+      expect(controller.moveSelectedBy(5, 0), isTrue);
+      controller.endHistoryBatch();
+      expect((controller.objectById('a') as CanvasRect).x, 10);
+
+      expect(controller.undo(), isTrue);
+      expect((controller.objectById('a') as CanvasRect).x, 0);
+      expect(controller.redo(), isTrue);
+      expect((controller.objectById('a') as CanvasRect).x, 10);
+      expect(events, ['undo', 'redo']);
+
+      controller.clearHistory();
+      expect(controller.canUndo, isFalse);
+      expect(controller.canRedo, isFalse);
+    });
+
+    test(
+      'CanvasController supports keyboard delete, move, copy, and paste',
+      () {
+        final controller = CanvasController();
+        const rect = CanvasRect(id: 'rect', x: 4, y: 6, width: 20, height: 12);
+
+        controller.addRect(rect);
+        expect(controller.select('rect'), isTrue);
+        expect(controller.handleKeyboardCommand('ArrowRight'), isTrue);
+        expect((controller.objectById('rect') as CanvasRect).x, 5);
+        expect(
+          controller.handleKeyboardCommand('ArrowDown', shift: true),
+          isTrue,
+        );
+        expect((controller.objectById('rect') as CanvasRect).y, 16);
+
+        expect(controller.handleKeyboardCommand('c', control: true), isTrue);
+        expect(controller.handleKeyboardCommand('v', control: true), isTrue);
+        expect(controller.objects, hasLength(2));
+        expect(controller.selectedObjectId, 'rect_copy_1');
+        expect((controller.selectedObject as CanvasRect).x, 17);
+
+        expect(controller.handleKeyboardCommand('Delete'), isTrue);
+        expect(controller.objectById('rect_copy_1'), isNull);
+        expect(controller.objectById('rect'), isA<CanvasRect>());
+      },
+    );
+
+    test('CanvasController groups selected objects and fires events', () {
+      final events = <String>[];
+      final controller = CanvasController(
+        onSelect: (selected) => events.add('select:${selected.length}'),
+        onChange: (_) => events.add('change'),
+        onMove: (objects) => events.add('move:${objects.length}'),
+        onResize: (objects) => events.add('resize:${objects.length}'),
+        onRotate: (objects) => events.add('rotate:${objects.length}'),
+      );
+      const left = CanvasRect(id: 'left', x: 0, y: 0, width: 20, height: 10);
+      const right = CanvasRect(id: 'right', x: 40, y: 0, width: 20, height: 10);
+
+      controller.addRect(left);
+      controller.addRect(right);
+      expect(controller.selectMany(['left', 'right']), isTrue);
+      expect(controller.selectedObjectIds, ['left', 'right']);
+      expect(controller.selectedBounds?.width, 60);
+
+      expect(controller.moveSelectedBy(5, 4), isTrue);
+      expect((controller.objectById('left') as CanvasRect).x, 5);
+      expect((controller.objectById('right') as CanvasRect).x, 45);
+
+      expect(
+        controller.resizeSelectedFromHandle(
+          CanvasSelectionHandle.resizeSouthEast,
+          60,
+          10,
+        ),
+        isTrue,
+      );
+      expect((controller.objectById('left') as CanvasRect).width, 40);
+      expect((controller.objectById('right') as CanvasRect).x, 85);
+
+      expect(controller.rotateSelectedBy(15), isTrue);
+      expect((controller.objectById('left') as CanvasRect).rotation, 15);
+      expect((controller.objectById('right') as CanvasRect).rotation, 15);
+
+      expect(controller.copySelected(), isTrue);
+      final pasted = controller.pasteCopied();
+      expect(pasted, hasLength(2));
+      expect(controller.selectedObjectIds, ['left_copy_1', 'right_copy_1']);
+      expect(controller.objects, hasLength(4));
+
+      expect(events, contains('select:2'));
+      expect(events, contains('move:2'));
+      expect(events, contains('resize:2'));
+      expect(events, contains('rotate:2'));
+      expect(events.where((event) => event == 'change'), isNotEmpty);
+    });
+
+    test('CanvasController supports styling and layer panel helpers', () {
+      final controller = CanvasController();
+      const rect = CanvasRect(
+        id: 'rect',
+        name: 'Hero box',
+        x: 0,
+        y: 0,
+        width: 30,
+        height: 20,
+      );
+      const text = CanvasTextObject(id: 'text', text: 'Title', x: 8, y: 16);
+
+      controller.addRect(rect);
+      controller.addText(text);
+      expect(controller.layerItems.first.id, 'text');
+      expect(controller.layerItems.last.name, 'Hero box');
+
+      expect(controller.selectMany(['rect', 'text']), isTrue);
+      expect(
+        controller.styleSelected(
+          fill: '#ffffff',
+          stroke: '#111827',
+          lineWidth: 3,
+          font: '20px Inter',
+        ),
+        isTrue,
+      );
+      expect(
+        (controller.objectById('rect') as CanvasRect).paint.fill,
+        '#ffffff',
+      );
+      expect(
+        (controller.objectById('text') as CanvasTextObject).paint.font,
+        '20px Inter',
+      );
+
+      expect(controller.setObjectName('rect', 'Card'), isTrue);
+      expect((controller.objectById('rect') as CanvasRect).name, 'Card');
+      expect(controller.renameObjectId('rect', 'card'), isTrue);
+      expect(controller.objectById('rect'), isNull);
+      expect(controller.objectById('card'), isA<CanvasRect>());
+      expect(controller.selectedObjectIds, contains('card'));
+
+      expect(controller.setObjectLocked('card', true), isTrue);
+      expect(controller.moveBy('card', 10, 0), isFalse);
+      expect(
+        controller.updateObjectPaint('card', const CanvasPaint(fill: '#000')),
+        isFalse,
+      );
+
+      expect(controller.setObjectHidden('text', true), isTrue);
+      expect(controller.hitTest(8, 16)?.id, isNot('text'));
+      expect(controller.select('text'), isTrue);
+      expect(controller.selectedObjectId, 'text');
+      expect(controller.layerItems.first.hidden, isTrue);
+      expect(controller.layerItems.last.locked, isTrue);
+
+      final restored = CanvasController()..loadJson(controller.toJson());
+      expect((restored.objectById('card') as CanvasRect).name, 'Card');
+      expect((restored.objectById('card') as CanvasRect).locked, isTrue);
+      expect((restored.objectById('text') as CanvasTextObject).hidden, isTrue);
+    });
+
+    test('CanvasController supports snapping and alignment helpers', () {
+      final controller = CanvasController();
+      controller.addRect(
+        const CanvasRect(id: 'a', x: 13, y: 17, width: 10, height: 10),
+      );
+      controller.addRect(
+        const CanvasRect(id: 'b', x: 100, y: 20, width: 20, height: 20),
+      );
+
+      expect(controller.select('a'), isTrue);
+      expect(controller.snapSelectedToGrid(10), isTrue);
+      expect((controller.objectById('a') as CanvasRect).x, 10);
+      expect((controller.objectById('a') as CanvasRect).y, 20);
+
+      expect(controller.moveBy('a', 78, 0), isTrue);
+      expect(controller.snapSelectedToObjects(threshold: 3), isTrue);
+      expect((controller.objectById('a') as CanvasRect).x, 90);
+
+      expect(controller.selectMany(['a', 'b']), isTrue);
+      expect(controller.alignSelected(CanvasAlignment.right), isTrue);
+      expect((controller.objectById('a') as CanvasRect).x, 110);
+      expect((controller.objectById('b') as CanvasRect).x, 100);
+
+      expect(controller.alignSelected(CanvasAlignment.top), isTrue);
+      expect((controller.objectById('a') as CanvasRect).y, 20);
+      expect((controller.objectById('b') as CanvasRect).y, 20);
+    });
+
+    test(
+      'CanvasController supports guides, grid snapping, and constraints',
+      () {
+        final controller = CanvasController(
+          snapToGrid: true,
+          gridSize: 10,
+          showGrid: true,
+          showRulers: true,
+          constraints: const CanvasObjectConstraints(
+            minWidth: 20,
+            minHeight: 10,
+            maxWidth: 40,
+            maxHeight: 30,
+            keepAspectRatio: true,
+            lockMovementX: true,
+          ),
+        );
+        controller
+          ..setCanvasSize(100, 100)
+          ..addRect(
+            const CanvasRect(id: 'rect', x: 13, y: 17, width: 20, height: 10),
+          );
+
+        expect(controller.select('rect'), isTrue);
+        expect(controller.moveSelectedBy(50, 5), isTrue);
+        final moved = controller.objectById('rect') as CanvasRect;
+        expect(moved.x, 13);
+        expect(moved.y, 20);
+        expect(controller.snapGuides, isNotEmpty);
+        expect(
+          controller.snapGuides.map((guide) => guide.orientation),
+          contains(CanvasGuideOrientation.horizontal),
+        );
+
+        expect(controller.resizeSelectedBy(100, 100), isTrue);
+        final resized = controller.objectById('rect') as CanvasRect;
+        expect(resized.width, 40);
+        expect(resized.height, 20);
+
+        final bounded = CanvasController(
+          constraints: const CanvasObjectConstraints(
+            preventOutsideCanvas: true,
+          ),
+        );
+        bounded
+          ..setCanvasSize(60, 60)
+          ..addRect(
+            const CanvasRect(
+              id: 'outside',
+              x: 40,
+              y: 40,
+              width: 30,
+              height: 30,
+            ),
+          );
+        expect(bounded.select('outside'), isTrue);
+        expect(bounded.moveSelectedBy(10, 10), isTrue);
+        final inside = bounded.objectById('outside') as CanvasRect;
+        expect(inside.x, 30);
+        expect(inside.y, 30);
+      },
+    );
+
+    test('CanvasController supports text editing and font controls', () {
+      final controller = CanvasController(
+        onTextEdit: (text) => '${text.text} edited',
+      );
+      controller.addText(
+        const CanvasTextObject(
+          id: 'title',
+          text: 'Title',
+          x: 10,
+          y: 20,
+          paint: CanvasPaint(font: '16px Arial'),
+        ),
+      );
+
+      expect(controller.updateText('title', 'Heading'), isTrue);
+      expect(
+        (controller.objectById('title') as CanvasTextObject).text,
+        'Heading',
+      );
+
+      expect(controller.select('title'), isTrue);
+      expect(controller.updateSelectedText('Hero'), isTrue);
+      expect((controller.selectedObject as CanvasTextObject).text, 'Hero');
+
+      expect(controller.setSelectedFont(family: 'Inter', size: 24), isTrue);
+      expect(
+        (controller.selectedObject as CanvasTextObject).paint.font,
+        '24px Inter',
+      );
+
+      expect(controller.setObjectLocked('title', true), isTrue);
+      expect(controller.updateSelectedText('Locked'), isFalse);
+      expect((controller.selectedObject as CanvasTextObject).text, 'Hero');
+    });
+
+    test(
+      'CanvasController exports selected objects and imports backend JSON',
+      () {
+        final controller = CanvasController();
+        controller.addRect(
+          const CanvasRect(id: 'rect', x: 0, y: 0, width: 20, height: 10),
+        );
+        controller.addText(
+          const CanvasTextObject(id: 'text', text: 'Label', x: 4, y: 8),
+        );
+        expect(controller.select('text'), isTrue);
+
+        final selected = controller.selectedToJson();
+        expect(selected['objects'], isA<List<Object?>>());
+        expect((selected['objects'] as List<Object?>), hasLength(1));
+        expect(
+          ((selected['objects'] as List<Object?>).single as Map)['type'],
+          'text',
+        );
+
+        final duplicate = controller.duplicateSceneJson();
+        (duplicate['objects'] as List<Object?>).clear();
+        expect(controller.objects, hasLength(2));
+
+        final restored = CanvasController()
+          ..importBackendJson({
+            'scene': controller.toJson(),
+            'updatedAt': '2026-07-06T00:00:00Z',
+          });
+        expect(restored.objects, hasLength(2));
+        expect(restored.selectedObjectId, 'text');
+
+        final direct = CanvasController()
+          ..importBackendJson(controller.toJson());
+        expect(direct.objectById('rect'), isA<CanvasRect>());
+      },
+    );
   });
 
   group('navigation components', () {

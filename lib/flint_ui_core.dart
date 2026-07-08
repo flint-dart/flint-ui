@@ -10,6 +10,12 @@ export 'src/browser/document_stub.dart'
     if (dart.library.js_interop) 'src/browser/document.dart';
 export 'src/browser/events_stub.dart'
     if (dart.library.js_interop) 'src/browser/events.dart';
+export 'src/browser/geolocation_stub.dart'
+    if (dart.library.js_interop) 'src/browser/geolocation.dart';
+export 'src/browser/media_capture_stub.dart'
+    if (dart.library.js_interop) 'src/browser/media_capture.dart';
+export 'src/browser/media_devices_stub.dart'
+    if (dart.library.js_interop) 'src/browser/media_devices.dart';
 export 'src/client/client_router.dart';
 export 'src/component_props.dart' hide toFlintNode;
 export 'src/component_registry.dart';

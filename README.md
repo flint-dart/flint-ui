@@ -553,6 +553,10 @@ Text
 Link
 Image
 Figure
+Video
+Audio
+MediaPreview
+Canvas
 ```
 
 ### Actions
@@ -670,6 +674,101 @@ Figure(
   ),
   caption: 'Primary hosting node',
 )
+```
+
+## Media And Device APIs
+
+Media and device controllers are server-safe through conditional exports. In a
+browser build they call native Web APIs; in server rendering they return typed
+unsupported results without touching `window`, camera, microphone, or location.
+
+```dart
+final devices = MediaDevicesController();
+final preview = MediaElementController();
+
+final camera = await devices.camera();
+
+MediaPreview(
+  controller: preview,
+  result: camera,
+)
+```
+
+Control native media elements with the same controller:
+
+```dart
+final player = MediaElementController();
+
+Column(children: [
+  Video(controller: player, src: '/media/demo.mp4'),
+  Row(children: [
+    Button(child: 'Play', onPressed: (_) => player.play()),
+    Button(child: 'Pause', onPressed: (_) => player.pause()),
+  ]),
+])
+```
+
+Location lookup follows the same SSR-safe pattern:
+
+```dart
+const location = GeoLocationController();
+final position = await location.currentPosition();
+
+if (position.granted) {
+  print('${position.latitude}, ${position.longitude}');
+}
+```
+
+## Canvas Editor
+
+`CanvasController` manages retained objects that can be rendered in the browser
+and serialized on the server. It supports selection, dragging, resize/rotate
+handles, keyboard controls, grouping, history, snapping, rulers, guides, and
+JSON import/export.
+
+```dart
+final canvas = CanvasController(
+  showGrid: true,
+  showRulers: true,
+  snapToGrid: true,
+  gridSize: 12,
+  constraints: const CanvasObjectConstraints(
+    minWidth: 24,
+    minHeight: 24,
+    keepAspectRatio: true,
+    preventOutsideCanvas: true,
+  ),
+);
+
+canvas.addRect(
+  const CanvasRect(
+    id: 'card',
+    name: 'Card background',
+    x: 24,
+    y: 24,
+    width: 160,
+    height: 96,
+    borderRadius: 12,
+    paint: CanvasPaint(fill: '#ffffff', stroke: '#0f172a'),
+  ),
+);
+
+Canvas(controller: canvas, width: 720, height: 420)
+```
+
+Common editor actions stay on the controller:
+
+```dart
+canvas.select('card');
+canvas.moveSelectedBy(12, 0);
+canvas.resizeSelectedFromHandle(CanvasSelectionHandle.resizeSouthEast, 20, 10);
+canvas.rotateSelectedBy(15);
+
+final scene = canvas.toJson();
+final selectedOnly = canvas.selectedToJson();
+
+canvas.undo();
+canvas.redo();
 ```
 
 ## Navigation

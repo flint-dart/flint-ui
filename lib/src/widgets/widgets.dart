@@ -62,8 +62,12 @@ export '../overlays/toaster.dart';
 export 'overlays/tooltip.dart';
 export 'primitives/column.dart';
 export 'primitives/container.dart';
+export 'primitives/canvas_stub.dart'
+    if (dart.library.js_interop) 'primitives/canvas.dart';
 export 'primitives/image.dart';
 export 'primitives/link.dart';
+export 'primitives/media_preview_stub.dart'
+    if (dart.library.js_interop) 'primitives/media_preview.dart';
 export 'primitives/row.dart';
 export 'primitives/text.dart';
 export 'shared/theme.dart'

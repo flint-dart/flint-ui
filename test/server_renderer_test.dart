@@ -58,6 +58,30 @@ void main() {
       expect(html, contains('.flint-s-test:hover { color: red; }'));
       expect(html, endsWith('<div class="flint-s-test">Hover</div>'));
     });
+
+    test('renders media and location pages without browser API access', () {
+      final registry = FlintComponentRegistry({
+        'DeviceCheck': (_) => _DeviceCheckPage(),
+      });
+
+      final html = const FlintServerRenderer().renderPage(
+        registry,
+        'DeviceCheck',
+      );
+
+      expect(html, contains('<h1>Device check</h1>'));
+      expect(html, contains('Use camera'));
+      expect(html, contains('Use microphone'));
+      expect(html, contains('Share screen'));
+      expect(html, contains('Use location'));
+      expect(html, contains('<video'));
+      expect(html, contains('id="device-preview"'));
+      expect(html, contains('<canvas'));
+      expect(html, contains('id="drawing-board"'));
+      expect(html, isNot(contains('_flintMediaController')));
+      expect(html, isNot(contains('_flintCanvasController')));
+      expect(html, isNot(contains('onClick')));
+    });
   });
 }
 
@@ -68,8 +92,61 @@ class _GreetingPage extends StatelessComponent {
 
   @override
   View build() {
-    return h('main', children: [
-      h('p', children: ['Hello $name']),
-    ]);
+    return h(
+      'main',
+      children: [
+        h('p', children: ['Hello $name']),
+      ],
+    );
+  }
+}
+
+class _DeviceCheckPage extends StatelessComponent {
+  @override
+  View build() {
+    const media = MediaDevicesController();
+    const location = GeoLocationController();
+
+    return h(
+      'main',
+      children: [
+        h('h1', children: ['Device check']),
+        h(
+          'p',
+          children: [
+            media.isSupported || location.isSupported
+                ? 'Device APIs are available.'
+                : 'Device APIs activate in the browser.',
+          ],
+        ),
+        button(
+          props: {'onClick': (_) => media.requestCamera()},
+          children: ['Use camera'],
+        ),
+        button(
+          props: {'onClick': (_) => media.requestMicrophone()},
+          children: ['Use microphone'],
+        ),
+        button(
+          props: {'onClick': (_) => media.requestScreenShare()},
+          children: ['Share screen'],
+        ),
+        button(
+          props: {'onClick': (_) => location.currentPosition()},
+          children: ['Use location'],
+        ),
+        MediaPreview(
+          id: 'device-preview',
+          result: const MediaStreamResult(granted: false),
+          fallback: 'Preview appears after permission is granted.',
+        ),
+        Canvas(
+          controller: CanvasController(),
+          width: 320,
+          height: 180,
+          props: const {'id': 'drawing-board'},
+        ),
+      ],
+    );
   }
 }

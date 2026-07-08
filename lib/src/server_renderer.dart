@@ -96,6 +96,7 @@ class FlintServerRenderer {
       final value = entry.value;
       if (value == null || value == false) continue;
       if (name.startsWith('on') && value is Function) continue;
+      if (name.startsWith('_flint') && name != '_flintStyleCss') continue;
 
       if (name == '_flintStyleCss') {
         final css = value.toString().trim();
