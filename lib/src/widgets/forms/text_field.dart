@@ -19,6 +19,7 @@ class TextField extends FlintElement {
     String type = 'text',
     bool required = false,
     bool disabled = false,
+    bool readonly = false,
     InputVariant variant = InputVariant.outline,
     ComponentSize size = ComponentSize.md,
     String? error,
@@ -48,6 +49,7 @@ class TextField extends FlintElement {
            type: type,
            required: required,
            disabled: disabled,
+           readonly: readonly,
            variant: variant,
            size: size,
            error: resolveFieldError(name: name, error: error, errors: errors),
@@ -82,6 +84,7 @@ class TextField extends FlintElement {
     required String type,
     required bool required,
     required bool disabled,
+    required bool readonly,
     required InputVariant variant,
     required ComponentSize size,
     required String? error,
@@ -114,17 +117,31 @@ class TextField extends FlintElement {
               error: error,
               describedBy: ariaDescribedBy,
             ),
+            if (readonly) 'readonly': true,
             'type': type,
             if (value != null) 'value': value,
             if (placeholder != null) 'placeholder': placeholder,
             if (onChanged != null) 'onInput': onChanged,
           },
-          dartStyle: inputComponentStyle(
-            variant: variant,
-            size: size,
-            disabled: disabled,
-            invalid: error != null && error.isNotEmpty,
-          ).merge(inputDartStyle),
+          dartStyle:
+              inputComponentStyle(
+                    variant: variant,
+                    size: size,
+                    disabled: disabled,
+                    invalid: error != null && error.isNotEmpty,
+                  )
+                  .merge(
+                    readonly
+                        ? DartStyle(
+                            background: ThemeToken.color(
+                              'disabledSurface',
+                              fallback: '#f3f4f6',
+                            ).toCss(),
+                            cursor: Cursor.defaultCursor,
+                          )
+                        : null,
+                  )
+                  .merge(inputDartStyle),
           style: inputStyle,
         ),
       ),

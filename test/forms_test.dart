@@ -77,6 +77,28 @@ void main() {
       expect(input.props['_flintStyleCss'], contains(':focus-visible'));
     });
 
+    test('TextField supports readonly locked values', () {
+      final field = TextField(
+        label: 'Email',
+        name: 'email',
+        value: 'ada@example.com',
+        readonly: true,
+        helpText: 'Contact support to change it.',
+      );
+
+      final input = field.children[1] as FlintElement;
+
+      expect(input.props['readonly'], true);
+      expect(input.props['disabled'], isNull);
+      expect(input.props['value'], 'ada@example.com');
+      expect(input.props['aria-describedby'], 'flint-field-email-help');
+      expect(
+        input.props['style'],
+        containsPair('background', 'var(--color-disabledSurface, #f3f4f6)'),
+      );
+      expect(input.props['style'], containsPair('cursor', 'default'));
+    });
+
     test('useForm tracks data, errors, reset, and processing state', () async {
       final form = useForm({'email': 'ada@example.com', 'password': ''});
       var notifications = 0;
@@ -243,6 +265,37 @@ void main() {
         switchTrack.props['style'],
         containsPair('border-radius', '999px'),
       );
+    });
+
+    test('SwitchRow renders settings copy with a trailing switch', () {
+      final row = SwitchRow(
+        label: 'Account emails',
+        name: 'account_emails',
+        description: 'Receive important account notices.',
+        checked: true,
+      );
+
+      expect(row.tag, 'div');
+      expect(
+        row.props['style'],
+        containsPair('justify-content', 'space-between'),
+      );
+
+      final copy = row.children.first as FlintElement;
+      final label = copy.children.first as FlintElement;
+      final description = copy.children.last as FlintElement;
+      final toggle = row.children.last as Switch;
+      final switchLabel = toggle.children.first as FlintElement;
+      final switchInput = switchLabel.children.first as FlintElement;
+
+      expect((label.children.single as FlintText).value, 'Account emails');
+      expect(
+        (description.children.single as FlintText).value,
+        'Receive important account notices.',
+      );
+      expect(switchInput.props['name'], 'account_emails');
+      expect(switchInput.props['checked'], true);
+      expect(switchInput.props['aria-label'], 'Account emails');
     });
 
     test('RadioGroup renders options with selected value', () {

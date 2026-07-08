@@ -3,74 +3,35 @@ import 'package:test/test.dart';
 
 void main() {
   group('layout components', () {
-    test('AppShell renders sidebar, topbar, and main content slots', () {
-      final shell = AppShell(
-        brand: 'EuPanel',
-        sidebar: Sidebar(
-          activePath: '/users',
-          items: const [
-            SidebarItem(label: 'Dashboard', href: '/'),
-            SidebarItem(label: 'Users', href: '/users'),
-          ],
-        ),
-        topbar: Topbar(
-          title: 'Users',
-          actions: Button(child: 'Create'),
-        ),
-        child: Text('Main content'),
-      );
+    test(
+      'AppShell renders navigation slot, topbar, and main content slots',
+      () {
+        final shell = AppShell(
+          brand: 'EuPanel',
+          sidebar: Container(child: Text('App-owned nav')),
+          topbar: Topbar(
+            title: 'Users',
+            actions: Button(child: 'Create'),
+          ),
+          child: Text('Main content'),
+        );
 
-      expect(shell.tag, 'div');
-      expect(shell.props['style'], containsPair('display', 'grid'));
-      expect(shell.children.first, isA<FlintElement>());
-      expect(shell.children.last, isA<FlintElement>());
+        expect(shell.tag, 'div');
+        expect(shell.props['style'], containsPair('display', 'grid'));
+        expect(shell.children.first, isA<FlintElement>());
+        expect(shell.children.last, isA<FlintElement>());
 
-      final aside = shell.children.first as FlintElement;
-      expect(aside.tag, 'aside');
-      expect(aside.children.first, isA<FlintElement>());
-      expect(aside.children.last, isA<Sidebar>());
+        final aside = shell.children.first as FlintElement;
+        expect(aside.tag, 'aside');
+        expect(aside.children.first, isA<FlintElement>());
+        expect(aside.children.last, isA<Container>());
 
-      final content = shell.children.last as FlintElement;
-      final main = content.children.last as FlintElement;
-      expect(main.tag, 'main');
-      expect(main.children.single, isA<Text>());
-    });
-
-    test('Sidebar marks active item and supports collapsed labels', () {
-      final sidebar = Sidebar(
-        activePath: '/users',
-        collapsed: true,
-        items: const [
-          SidebarItem(label: 'Dashboard', href: '/'),
-          SidebarItem(label: 'Users', href: '/users', icon: 'U'),
-        ],
-      );
-
-      final active = sidebar.children.last as FlintElement;
-      expect(active.props['aria-current'], 'page');
-      expect(active.children, hasLength(1));
-      expect(active.children.single, isA<FlintText>());
-    });
-
-    test('Sidebar supports item style and class customization', () {
-      final sidebar = Sidebar(
-        activePath: '/users',
-        itemClassName: 'nav-item',
-        activeItemClassName: 'nav-item-active',
-        itemStyle: {'border-radius': '12px'},
-        activeItemStyle: {'background': '#000'},
-        itemDartStyle: const DartStyle(gap: 14),
-        items: const [
-          SidebarItem(label: 'Users', href: '/users', className: 'custom-user'),
-        ],
-      );
-
-      final item = sidebar.children.single as FlintElement;
-      expect(item.props['className'], 'nav-item nav-item-active custom-user');
-      expect(item.props['style'], containsPair('background', '#000'));
-      expect(item.props['style'], containsPair('border-radius', '12px'));
-      expect(item.props['style'], containsPair('gap', '14px'));
-    });
+        final content = shell.children.last as FlintElement;
+        final main = content.children.last as FlintElement;
+        expect(main.tag, 'main');
+        expect(main.children.single, isA<Text>());
+      },
+    );
 
     test('Topbar and PageHeader render titles and actions', () {
       final topbar = Topbar(
@@ -271,8 +232,8 @@ void main() {
 
       final dashboard = DashboardShell(
         brand: 'Flint',
-        sidebar: Sidebar(
-          items: const [SidebarItem(label: 'Home', href: '/')],
+        sidebar: Container(
+          child: Link(href: '/', child: 'Home'),
         ),
         title: 'Dashboard',
         child: Text('Metrics'),

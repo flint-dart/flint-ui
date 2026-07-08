@@ -2,9 +2,15 @@
 
 ## Unreleased
 
+### Added
+- Added `TextField(readonly: true)` for locked identity values and `SwitchRow` for settings-style boolean preferences.
+
 ### Fixed
 - Preserved focused input and textarea values, focus, and cursor selection across component/root rerenders.
 - Applied form `value` and `checked` props as live DOM properties in the browser renderer.
+
+### Changed
+- Removed the opinionated `Sidebar` widget from the public export surface; app navigation should be composed from primitives or app-owned components.
 
 ## 0.1.12 - 2026-07-06
 

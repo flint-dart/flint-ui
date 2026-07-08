@@ -21,6 +21,7 @@ export 'forms/form.dart';
 export 'forms/radio_group.dart';
 export 'forms/select.dart';
 export 'forms/switch.dart';
+export 'forms/switch_row.dart';
 export 'forms/rich_text_editor_stub.dart'
     if (dart.library.js_interop) 'forms/rich_text_editor.dart';
 export 'forms/text_area.dart';
@@ -42,7 +43,6 @@ export 'layout/panel.dart';
 export 'layout/responsive_grid.dart';
 export 'layout/safe_area.dart';
 export 'layout/section.dart';
-export 'layout/sidebar.dart';
 export 'layout/spacer.dart';
 export 'layout/stack.dart';
 export 'layout/stat_card.dart';

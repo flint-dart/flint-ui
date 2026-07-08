@@ -584,6 +584,7 @@ RadioGroup
 Switch
 FileInput
 FieldGroup
+SwitchRow
 TextEditingController
 FormController
 ```
@@ -596,7 +597,6 @@ Grid
 Section
 Panel
 PageHeader
-Sidebar
 Spacer
 Stack
 StatCard
@@ -694,17 +694,86 @@ currentHash
 currentUri
 ```
 
-Example active sidebar:
+Build app navigation from primitives so each application owns its route tree and layout:
 
 ```dart
-Sidebar(
-  items: const [
-    SidebarItem(label: 'Overview', href: '/dashboard'),
-    SidebarItem(label: 'Settings', href: '/dashboard/settings'),
+Container(
+  props: {'aria-label': 'Main navigation'},
+  dartStyle: const DartStyle(display: Display.grid, gap: 8),
+  children: [
+    Link(href: '/dashboard', child: 'Overview'),
+    Link(href: '/dashboard/settings', child: 'Settings'),
   ],
-  activePath: currentUri.path,
 )
 ```
+
+## Routing And Page Patterns
+
+Keep routes owned by the application. Flint UI should provide page shells, browser navigation helpers, query helpers, and API client helpers, while each app decides its route names, middleware, permissions, and sidebar structure.
+
+Recommended pattern:
+
+1. Server route loads the first page payload.
+2. Page component receives props and renders the shell.
+3. `clientRouter` handles follow-up actions without hardcoding the backend host.
+4. `query` keeps list filters, pagination, and tabs in the URL.
+5. App-owned navigation is composed from primitives such as `Container`, `Link`, `Row`, `Column`, `Tabs`, and `Button`.
+
+Server-rendered page entry:
+
+```dart
+Future<void> subscriptionsPage(Context ctx) async {
+  final page = int.tryParse(ctx.req.query['page'] ?? '') ?? 1;
+  final result = await subscriptions.list(page: page, perPage: 25);
+
+  return ctx.res.page(
+    'Subscriptions',
+    CustomerSubscriptionsPage(
+      subscriptions: result.items,
+      page: result.page,
+      perPage: result.perPage,
+      total: result.total,
+    ),
+  );
+}
+```
+
+Client actions stay grouped by API area:
+
+```dart
+final billingApi = clientRouter.group('/api/customer/billing');
+
+Future<void> cancelSubscription(String id, String reason) async {
+  final response = await billingApi.post(
+    '/subscriptions/$id/cancel',
+    body: {'reason': reason},
+  );
+
+  if (response.ok) {
+    navigation.reload();
+  }
+}
+```
+
+List pages should keep pagination and filters shareable:
+
+```dart
+void goToPage(int page) {
+  query.update({
+    'page': page,
+    'perPage': 25,
+  });
+}
+
+Pagination(
+  page: currentPage,
+  pageSize: 25,
+  total: total,
+  onChanged: goToPage,
+)
+```
+
+Detail/manage pages should keep the primary object visible and move uncommon actions into menus, drawers, or modals owned by the app. Settings pages should use form primitives such as `TextField(readonly: true)`, `SwitchRow`, `Select`, and explicit save buttons. Checkout pages should be application-owned because pricing, currency, invoice rules, and payment callbacks are business logic.
 
 ## Query Parameters
 
