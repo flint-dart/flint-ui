@@ -1,6 +1,6 @@
 name: flint_ui
 description: Dart-first web UI components and browser rendering for Flint fullstack apps.
-version: 0.1.13
+version: 0.1.14
 homepage: https://flintdart.dev
 repository: https://github.com/flint-dart/flint-ui
 issue_tracker: https://github.com/flint-dart/flint-ui/issues
@@ -10,7 +10,7 @@ environment:
   sdk: '>=3.8.1 <4.0.0'
 
 dependencies:
-  flint_client: ^0.0.3
+  flint_client: ^0.0.5
   universal_web: ^1.1.1+1
 
 dev_dependencies:

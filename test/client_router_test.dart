@@ -38,5 +38,12 @@ void main() {
 
       expect(router.client.baseUrl, 'https://api.example.test');
     });
+
+    test('exposes QUERY helper and generic request dispatch API', () {
+      final router = ClientRouter(baseUrl: 'https://api.example.test');
+
+      expect(router.query<Map<String, dynamic>>, isA<Function>());
+      expect(router.request<Map<String, dynamic>>, isA<Function>());
+    });
   });
 }

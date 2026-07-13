@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.14 - 2026-07-13
+
+### Added
+- Added `ClientRouter.query(...)` and generic `request('QUERY', ...)` dispatch for HTTP QUERY requests.
+- Added public chart and slider widget exports.
+
+### Changed
+- Updated `flint_client` dependency to `^0.0.5`.
+
 ## 0.1.13 - 2026-07-08
 
 ### Added

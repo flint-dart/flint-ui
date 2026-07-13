@@ -85,6 +85,29 @@ class ClientRouter {
     );
   }
 
+  /// Sends a QUERY request to [path].
+  Future<FlintResponse<T>> query<T>(
+    String path, {
+    dynamic body,
+    Map<String, dynamic>? query,
+    Map<String, String>? headers,
+    JsonParser<T>? parser,
+    ErrorHandler? onError,
+    RequestDoneCallback<T>? onDone,
+    Duration? timeout,
+  }) {
+    return client.query<T>(
+      _path(path),
+      body: body,
+      queryParameters: query,
+      headers: headers,
+      parser: parser,
+      onError: onError,
+      onDone: onDone,
+      requestTimeout: timeout,
+    );
+  }
+
   /// Sends a PUT request to [path].
   Future<FlintResponse<T>> put<T>(
     String path, {
@@ -175,6 +198,16 @@ class ClientRouter {
         timeout: timeout,
       ),
       'POST' => post<T>(
+        path,
+        body: body,
+        query: query,
+        headers: headers,
+        parser: parser,
+        onError: onError,
+        onDone: onDone,
+        timeout: timeout,
+      ),
+      'QUERY' => this.query<T>(
         path,
         body: body,
         query: query,
