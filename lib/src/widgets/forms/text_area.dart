@@ -115,6 +115,7 @@ class TextArea extends FlintElement {
               describedBy: ariaDescribedBy,
             ),
             'rows': rows,
+            if (value != null) 'value': value,
             if (placeholder != null) 'placeholder': placeholder,
             if (onChanged != null) 'onInput': onChanged,
           },
@@ -131,7 +132,6 @@ class TextArea extends FlintElement {
                   .merge(textareaDartStyle),
           style: textareaStyle,
         ),
-        children: value == null ? const [] : normalizeChildren(value, const []),
       ),
       ...fieldMessages(id: id, helpText: helpText, error: error),
     ];

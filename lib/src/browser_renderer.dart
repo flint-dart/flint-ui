@@ -291,16 +291,23 @@ class FlintRoot {
 
   bool _applyFormProperty(web.Element element, String name, Object value) {
     if (name == 'value') {
+      final nextValue = value.toString();
       if (element is web.HTMLInputElement) {
-        element.value = value.toString();
+        if (element.value != nextValue) {
+          element.value = nextValue;
+        }
         return true;
       }
       if (element is web.HTMLTextAreaElement) {
-        element.value = value.toString();
+        if (element.value != nextValue) {
+          element.value = nextValue;
+        }
         return true;
       }
       if (element is web.HTMLSelectElement) {
-        element.value = value.toString();
+        if (element.value != nextValue) {
+          element.value = nextValue;
+        }
         return true;
       }
     }

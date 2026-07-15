@@ -221,7 +221,7 @@ void main() {
       );
     });
 
-    test('TextArea renders value as child text', () {
+    test('TextArea renders value as a control property', () {
       final area = TextArea(
         label: 'Notes',
         name: 'notes',
@@ -232,10 +232,8 @@ void main() {
       final textarea = area.children[1] as FlintElement;
       expect(textarea.tag, 'textarea');
       expect(textarea.props['rows'], 6);
-      expect(
-        (textarea.children.single as FlintText).value,
-        'Provision manually',
-      );
+      expect(textarea.props['value'], 'Provision manually');
+      expect(textarea.children, isEmpty);
     });
 
     test('Checkbox and Switch render checked states', () {
