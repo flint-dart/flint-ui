@@ -44,7 +44,7 @@ class FlintRoot {
     final nextSlots = <String, _ComponentMount>{};
     host.textContent = '';
     host.appendChild(_createDom(node, '0', previousSlots, nextSlots));
-    activeControl?.restore(host);
+    _restoreActiveControl(activeControl, host);
     for (final entry in previousSlots.entries) {
       if (!nextSlots.containsKey(entry.key)) {
         _unmountComponentTree(entry.value);
@@ -215,7 +215,7 @@ class FlintRoot {
         nextSlots,
       ),
     );
-    activeControl?.restore(mount.boundary);
+    _restoreActiveControl(activeControl, mount.boundary);
 
     for (final entry in previousSlots.entries) {
       if (!nextSlots.containsKey(entry.key)) {
@@ -225,6 +225,13 @@ class FlintRoot {
 
     mount.childSlots = nextSlots;
     mount.mounted = true;
+  }
+
+  void _restoreActiveControl(_ActiveControl? activeControl, web.Element scope) {
+    if (activeControl == null) return;
+
+    activeControl.restore(scope);
+    scheduleMicrotask(() => activeControl.restore(scope));
   }
 
   void _unmountComponentTree(_ComponentMount mount) {
@@ -496,14 +503,18 @@ class _ActiveControl {
     if (control == null) return;
 
     if (control is web.HTMLInputElement) {
-      control.value = value;
+      if (control.value != value) {
+        control.value = value;
+      }
       control.focus();
       _restoreSelection(control);
       return;
     }
 
     if (control is web.HTMLTextAreaElement) {
-      control.value = value;
+      if (control.value != value) {
+        control.value = value;
+      }
       control.focus();
       _restoreSelection(control);
     }
