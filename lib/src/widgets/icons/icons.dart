@@ -561,9 +561,9 @@ class Icons {
     'refresh',
     shapes: [
       _path('M21 12a9 9 0 0 1-15.5 6.2'),
-      _polyline('3 18v-6h6'),
+      _path('M3 18v-6h6'),
       _path('M3 12A9 9 0 0 1 18.5 5.8'),
-      _polyline('21 6v6h-6'),
+      _path('M21 6v6h-6'),
     ],
   );
   static final rocket = IconData(
@@ -732,7 +732,7 @@ class Icons {
   );
   static final zap = IconData(
     'zap',
-    shapes: [_polygon('13 2 3 14h8l-1 8 11-14h-8l0-6z')],
+    shapes: [_path('M13 2 3 14h8l-1 8 11-14h-8l0-6z')],
   );
 
   /// All built-in Flint UI icons in alphabetical order.

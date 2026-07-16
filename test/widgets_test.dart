@@ -138,6 +138,25 @@ void main() {
       expect(Icons.all.map((icon) => icon.name), contains('shoppingCart'));
       expect(Icons.all.map((icon) => icon.name), contains('sparkles'));
     });
+
+    test('does not put path commands inside polyline points', () {
+      final invalidPolylines = <String>[];
+      final numberList = RegExp(
+        r'^\s*-?\d+(?:\.\d+)?(?:[,\s]+-?\d+(?:\.\d+)?)*\s*$',
+      );
+
+      for (final icon in Icons.all) {
+        for (final shape in icon.shapes) {
+          if (shape.tag != 'polyline' && shape.tag != 'polygon') continue;
+          final points = shape.props['points']?.toString() ?? '';
+          if (!numberList.hasMatch(points)) {
+            invalidPolylines.add('${icon.name}: $points');
+          }
+        }
+      }
+
+      expect(invalidPolylines, isEmpty);
+    });
   });
 
   group('ButtonGroup', () {
