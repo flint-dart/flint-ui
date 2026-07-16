@@ -232,6 +232,7 @@ class FlintRoot {
 
     activeControl.restore(scope);
     scheduleMicrotask(() => activeControl.restore(scope));
+    Timer.run(() => activeControl.restore(scope));
   }
 
   void _unmountComponentTree(_ComponentMount mount) {
@@ -456,6 +457,7 @@ class _ActiveControl {
     this.id,
     this.name,
     this.type,
+    this.domPath,
     this.selectionStart,
     this.selectionEnd,
   });
@@ -465,6 +467,7 @@ class _ActiveControl {
   final String? id;
   final String? name;
   final String? type;
+  final List<int>? domPath;
   final int? selectionStart;
   final int? selectionEnd;
 
@@ -479,6 +482,7 @@ class _ActiveControl {
         id: active.id.isEmpty ? null : active.id,
         name: active.name.isEmpty ? null : active.name,
         type: active.type.isEmpty ? null : active.type,
+        domPath: _pathFrom(scope, active),
         selectionStart: active.selectionStart,
         selectionEnd: active.selectionEnd,
       );
@@ -490,6 +494,7 @@ class _ActiveControl {
         value: active.value,
         id: active.id.isEmpty ? null : active.id,
         name: active.name.isEmpty ? null : active.name,
+        domPath: _pathFrom(scope, active),
         selectionStart: active.selectionStart,
         selectionEnd: active.selectionEnd,
       );
@@ -521,6 +526,9 @@ class _ActiveControl {
   }
 
   web.Element? _find(web.Element scope) {
+    final byPath = _findByPath(scope);
+    if (byPath != null) return byPath;
+
     if (id != null) {
       final byId = web.document.getElementById(id!);
       if (byId != null && scope.contains(byId) && _matches(byId)) {
@@ -536,6 +544,23 @@ class _ActiveControl {
       }
     }
 
+    return null;
+  }
+
+  web.Element? _findByPath(web.Element scope) {
+    final path = domPath;
+    if (path == null || path.isEmpty) return null;
+
+    web.Node node = scope;
+    for (final index in path) {
+      final children = node.childNodes;
+      if (index < 0 || index >= children.length) return null;
+      final child = children.item(index);
+      if (child == null) return null;
+      node = child;
+    }
+
+    if (node is web.Element && _matches(node)) return node;
     return null;
   }
 
@@ -556,15 +581,45 @@ class _ActiveControl {
     return false;
   }
 
-  void _restoreSelection(dynamic control) {
+  void _restoreSelection(web.Element control) {
     final start = selectionStart;
     final end = selectionEnd;
     if (start == null || end == null) return;
 
     try {
-      control.setSelectionRange(start, end);
+      if (control is web.HTMLInputElement) {
+        control.setSelectionRange(start, end);
+      } else if (control is web.HTMLTextAreaElement) {
+        control.setSelectionRange(start, end);
+      }
     } catch (_) {
       // Some input types, such as number/date, do not support text selection.
     }
+  }
+
+  static List<int>? _pathFrom(web.Element scope, web.Node node) {
+    final path = <int>[];
+    web.Node? current = node;
+
+    while (current != null && current != scope) {
+      final parent = current.parentNode;
+      if (parent == null) return null;
+
+      final siblings = parent.childNodes;
+      var index = -1;
+      for (var i = 0; i < siblings.length; i++) {
+        if (siblings.item(i) == current) {
+          index = i;
+          break;
+        }
+      }
+      if (index == -1) return null;
+
+      path.insert(0, index);
+      current = parent;
+    }
+
+    if (current != scope) return null;
+    return path;
   }
 }
