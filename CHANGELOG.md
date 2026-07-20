@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.15 - 2026-07-20
+
+### Added
+- Added credential control to `ClientRouter` so Flint UI apps can send authenticated browser requests when needed.
+
+### Fixed
+- Preserved focused text input and textarea caret/selection across rerenders.
+- Preserved active input values across component and root rerenders.
+- Fixed SVG icon point attributes used by browser rendering.
+
+### Changed
+- Updated `flint_client` dependency to `^0.0.6`.
+
 ## 0.1.14 - 2026-07-13
 
 ### Added

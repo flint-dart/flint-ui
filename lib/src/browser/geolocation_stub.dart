@@ -82,10 +82,7 @@ class GeoCoordinates {
 
 /// A browser geolocation position.
 class GeoPosition {
-  const GeoPosition({
-    required this.coords,
-    required this.timestamp,
-  });
+  const GeoPosition({required this.coords, required this.timestamp});
 
   /// Coordinates reported by the browser.
   final GeoCoordinates coords;

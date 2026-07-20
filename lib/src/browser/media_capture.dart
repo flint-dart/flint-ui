@@ -48,10 +48,7 @@ class MediaRecorderController {
     _kind = kind;
     _filename = options.filename;
 
-    final recorder = web.MediaRecorder(
-      stream,
-      _recorderOptions(options),
-    );
+    final recorder = web.MediaRecorder(stream, _recorderOptions(options));
     _recorder = recorder;
 
     recorder.ondataavailable = ((web.Event event) {
@@ -175,8 +172,12 @@ class PhotoCaptureController {
       throw ArgumentError('No video element found for id "$elementId".');
     }
 
-    final width = element.videoWidth > 0 ? element.videoWidth : element.clientWidth;
-    final height = element.videoHeight > 0 ? element.videoHeight : element.clientHeight;
+    final width = element.videoWidth > 0
+        ? element.videoWidth
+        : element.clientWidth;
+    final height = element.videoHeight > 0
+        ? element.videoHeight
+        : element.clientHeight;
     if (width <= 0 || height <= 0) {
       throw StateError('The video element is not ready for photo capture.');
     }
@@ -190,7 +191,11 @@ class PhotoCaptureController {
     }
 
     context.drawImage(element, 0, 0, width, height);
-    final blob = await _canvasToBlob(canvas, mimeType: mimeType, quality: quality);
+    final blob = await _canvasToBlob(
+      canvas,
+      mimeType: mimeType,
+      quality: quality,
+    );
     return _capturedFromBlob(
       blob,
       kind: CapturedMediaKind.photo,

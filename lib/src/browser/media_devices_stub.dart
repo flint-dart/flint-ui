@@ -60,11 +60,7 @@ class MediaPermissionError {
 /// this as [Object] so the public API stays usable from server-safe imports.
 /// Browser-only helpers and preview widgets can cast the stream internally.
 class MediaStreamResult {
-  const MediaStreamResult({
-    required this.granted,
-    this.stream,
-    this.error,
-  });
+  const MediaStreamResult({required this.granted, this.stream, this.error});
 
   /// Whether the browser granted the requested camera, microphone, or screen.
   final bool granted;
