@@ -64,6 +64,7 @@ export '../overlays/toaster.dart';
 export 'overlays/tooltip.dart';
 export 'primitives/column.dart';
 export 'primitives/container.dart';
+export 'primitives/flex.dart';
 export 'primitives/canvas_stub.dart'
     if (dart.library.js_interop) 'primitives/canvas.dart';
 export 'primitives/image.dart';

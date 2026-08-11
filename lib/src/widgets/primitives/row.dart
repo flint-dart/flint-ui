@@ -17,11 +17,12 @@ class Row extends FlintElement {
          props: mergeComponentProps(
            props,
            className: className,
-           // defaultStyle is merged first; dartStyle overrides it.
-           // We embed flexDirection explicitly in dartStyle so it always wins.
+           defaultStyle: const {'display': 'flex', 'flex-direction': 'row'},
            dartStyle: DartStyle(
-             display: dartStyle?.display ?? Display.flex,
-             flexDirection: dartStyle?.flexDirection ?? FlexDirection.row,
+             display: (dartStyle?.display == Display.grid)
+                 ? Display.flex
+                 : (dartStyle?.display ?? Display.flex),
+             flexDirection: FlexDirection.row,
              flexWrap: dartStyle?.flexWrap,
              alignItems: dartStyle?.alignItems,
              justifyContent: dartStyle?.justifyContent,

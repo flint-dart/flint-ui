@@ -132,7 +132,7 @@ class GradientPosition {
 }
 
 /// Typed CSS `flex` shorthand value.
-class Flex {
+class FlexValue {
   /// CSS `flex-grow` component.
   final Object grow;
 
@@ -143,19 +143,19 @@ class Flex {
   final Object basis;
 
   /// Creates a custom flex shorthand value.
-  const Flex(this.grow, this.shrink, this.basis);
+  const FlexValue(this.grow, this.shrink, this.basis);
 
   /// Creates `1 1 0%` by default.
-  const Flex.grow([this.grow = 1]) : shrink = 1, basis = '0%';
+  const FlexValue.grow([this.grow = 1]) : shrink = 1, basis = '0%';
 
   /// Creates `1 1 auto`.
-  const Flex.auto() : grow = 1, shrink = 1, basis = 'auto';
+  const FlexValue.auto() : grow = 1, shrink = 1, basis = 'auto';
 
   /// Creates `0 0 auto`.
-  const Flex.none() : grow = 0, shrink = 0, basis = 'auto';
+  const FlexValue.none() : grow = 0, shrink = 0, basis = 'auto';
 
   /// Creates `1 1 auto`.
-  const Flex.fill() : grow = 1, shrink = 1, basis = 'auto';
+  const FlexValue.fill() : grow = 1, shrink = 1, basis = 'auto';
 
   /// Converts this shorthand to a CSS `flex` value.
   String toCss() {

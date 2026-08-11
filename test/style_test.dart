@@ -12,7 +12,7 @@ void main() {
         gap: 12,
         alignItems: AlignItems.center,
         justifyContent: JustifyContent.between,
-        flex: const Flex.fill(),
+        flex: const FlexValue.fill(),
         flexGrow: 1,
         flexShrink: 0,
         flexBasis: 12,
@@ -42,10 +42,10 @@ void main() {
     });
 
     test('supports flex value helpers', () {
-      expect(const DartStyle(flex: Flex.grow()).toMap(), {'flex': '1 1 0%'});
-      expect(const DartStyle(flex: Flex.auto()).toMap(), {'flex': '1 1 auto'});
-      expect(const DartStyle(flex: Flex.none()).toMap(), {'flex': '0 0 auto'});
-      expect(const DartStyle(flex: Flex(2, 0, SizeValue.auto)).toMap(), {
+      expect(const DartStyle(flex: FlexValue.grow()).toMap(), {'flex': '1 1 0%'});
+      expect(const DartStyle(flex: FlexValue.auto()).toMap(), {'flex': '1 1 auto'});
+      expect(const DartStyle(flex: FlexValue.none()).toMap(), {'flex': '0 0 auto'});
+      expect(const DartStyle(flex: FlexValue(2, 0, SizeValue.auto)).toMap(), {
         'flex': '2 0 auto',
       });
     });

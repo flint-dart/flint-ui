@@ -97,6 +97,41 @@ class SizeValue {
   String toString() => value;
 }
 
+/// Convenient pixel size value.
+class Px extends SizeValue {
+  const Px(num value) : super.px(value);
+}
+
+/// Convenient percentage size value.
+class Percent extends SizeValue {
+  const Percent(num value) : super.percent(value);
+}
+
+/// Convenient rem size value.
+class Rem extends SizeValue {
+  const Rem(num value) : super.rem(value);
+}
+
+/// Convenient em size value.
+class Em extends SizeValue {
+  const Em(num value) : super.em(value);
+}
+
+/// Convenient viewport height size value.
+class Vh extends SizeValue {
+  const Vh(num value) : super.vh(value);
+}
+
+/// Convenient viewport width size value.
+class Vw extends SizeValue {
+  const Vw(num value) : super.vw(value);
+}
+
+/// Convenient fractional grid size value.
+class Fr extends SizeValue {
+  const Fr(num value) : super.fr(value);
+}
+
 /// CSS grid track value used by grid template helpers.
 class GridTrack {
   /// CSS grid track string.
@@ -1138,7 +1173,7 @@ String cssValue(Object? value, {bool unitlessNumber = false}) {
 
   if (value is SizeValue) return value.value;
 
-  if (value is Flex) return value.toCss();
+  if (value is FlexValue) return value.toCss();
 
   if (value is Border) return value.toCss();
 
