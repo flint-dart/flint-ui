@@ -441,26 +441,45 @@ DartStyle(
 )
 ```
 
-### Flex
+### FlexValue Style Helper
 
-Use `Flex` helpers instead of raw CSS strings:
+Use `FlexValue` helpers instead of raw CSS strings for the `flex` style property:
 
 ```dart
 const DartStyle(
   display: Display.flex,
-  flex: Flex.fill(),
+  flex: FlexValue.fill(),
 )
 ```
 
 Available helpers:
 
 ```dart
-Flex.fill() // 1 1 auto
-Flex.auto() // 1 1 auto
-Flex.grow() // 1 1 0%
-Flex.none() // 0 0 auto
-Flex(2, 0, SizeValue.auto)
+FlexValue.fill() // 1 1 auto
+FlexValue.auto() // 1 1 auto
+FlexValue.grow() // 1 1 0%
+FlexValue.none() // 0 0 auto
+FlexValue(2, 0, SizeValue.auto)
 ```
+
+### Flex Component
+
+Use `Flex` for dynamic and responsive layouts:
+
+```dart
+Flex(
+  direction: FlexDirection.row,
+  gap: Px(20),
+  dartStyle: const DartStyle(
+    sm: DartStyle(flexDirection: FlexDirection.column),
+  ),
+  children: [ ... ],
+)
+```
+
+Factory constructors:
+- `Flex.row(...)`
+- `Flex.column(...)`
 
 Individual properties are also available:
 
