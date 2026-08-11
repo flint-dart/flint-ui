@@ -964,6 +964,45 @@ class StyleAnimation {
     );
   }
 
+  /// Creates the built-in `flint-slide-up` animation.
+  factory StyleAnimation.slideUp({
+    int milliseconds = 350,
+    TransitionTiming timing = TransitionTiming.easeOut,
+  }) {
+    return StyleAnimation.named(
+      'flint-slide-up',
+      milliseconds: milliseconds,
+      timing: timing,
+      fillMode: AnimationFillMode.both,
+    );
+  }
+
+  /// Creates the built-in `flint-slide-down` animation.
+  factory StyleAnimation.slideDown({
+    int milliseconds = 350,
+    TransitionTiming timing = TransitionTiming.easeOut,
+  }) {
+    return StyleAnimation.named(
+      'flint-slide-down',
+      milliseconds: milliseconds,
+      timing: timing,
+      fillMode: AnimationFillMode.both,
+    );
+  }
+
+  /// Creates the built-in `flint-scale-in` animation.
+  factory StyleAnimation.scaleIn({
+    int milliseconds = 300,
+    TransitionTiming timing = TransitionTiming.easeOut,
+  }) {
+    return StyleAnimation.named(
+      'flint-scale-in',
+      milliseconds: milliseconds,
+      timing: timing,
+      fillMode: AnimationFillMode.both,
+    );
+  }
+
   /// Creates the built-in `flint-spin` animation.
   factory StyleAnimation.spin({
     int milliseconds = 800,
