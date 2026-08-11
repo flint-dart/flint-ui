@@ -29,6 +29,7 @@ export 'forms/text_area.dart';
 export 'forms/text_field.dart';
 export 'forms/validation.dart';
 export 'icons/icons.dart';
+export 'layout/animated.dart';
 export 'layout/app_shell.dart';
 export 'layout/aspect_ratio_box.dart';
 export 'layout/box.dart';

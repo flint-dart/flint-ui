@@ -3,6 +3,7 @@
 ## 0.1.16 - 2026-08-11
 
 ### Added
+- Added declarative animation widgets: `AnimatedContainer`, `FadeIn`, `SlideIn`, and `ScaleIn` with built-in `StyleKeyframes.slideUp()`, `slideDown()`, and `scaleIn()` keyframe generators.
 - Added unified `Flex` primitive widget supporting base and responsive layout directions (`Flex(direction: ...)`, `Flex.row(...)`, `Flex.column(...)`).
 - Added declarative strongly-typed size and unit classes: `Px`, `Percent`, `Rem`, `Em`, `Vh`, `Vw`, and `Fr`.
 - Added `ThreeScene` widget and `ThreeSceneController` to support Three.js 3D canvas rendering in the browser with server-safe stubs.

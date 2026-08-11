@@ -132,7 +132,13 @@ void createFlintApp(
   registerRootDesign(
     RootDesign(
       name: 'flint-animations',
-      keyframes: [StyleKeyframes.spin(), StyleKeyframes.fadeIn()],
+      keyframes: [
+        StyleKeyframes.spin(),
+        StyleKeyframes.fadeIn(),
+        StyleKeyframes.slideUp(),
+        StyleKeyframes.slideDown(),
+        StyleKeyframes.scaleIn(),
+      ],
     ),
   );
 

@@ -503,6 +503,33 @@ class StyleKeyframes {
     );
   }
 
+  /// Creates a reusable slide-up animation.
+  static StyleKeyframes slideUp({String name = 'flint-slide-up'}) {
+    return StyleKeyframes.fromTo(
+      name: name,
+      from: const DartStyle(opacity: 0, transform: 'translateY(16px)'),
+      to: const DartStyle(opacity: 1, transform: 'translateY(0)'),
+    );
+  }
+
+  /// Creates a reusable slide-down animation.
+  static StyleKeyframes slideDown({String name = 'flint-slide-down'}) {
+    return StyleKeyframes.fromTo(
+      name: name,
+      from: const DartStyle(opacity: 0, transform: 'translateY(-16px)'),
+      to: const DartStyle(opacity: 1, transform: 'translateY(0)'),
+    );
+  }
+
+  /// Creates a reusable scale-in animation.
+  static StyleKeyframes scaleIn({String name = 'flint-scale-in'}) {
+    return StyleKeyframes.fromTo(
+      name: name,
+      from: const DartStyle(opacity: 0, transform: 'scale(0.95)'),
+      to: const DartStyle(opacity: 1, transform: 'scale(1)'),
+    );
+  }
+
   /// Compiled CSS `@keyframes` text.
   String get cssText {
     final body = steps
