@@ -33,6 +33,7 @@ class TextField extends FlintElement {
     DartStyle? dartStyle,
     DartStyle? inputDartStyle,
     void Function(Object event)? onChanged,
+    void Function(String value)? onSubmitted,
   }) : super(
          'div',
          props: fieldWrapperProps(
@@ -58,6 +59,7 @@ class TextField extends FlintElement {
            inputStyle: inputStyle,
            inputDartStyle: inputDartStyle,
            onChanged: _controlledOnChanged(controller, onChanged),
+           onSubmitted: onSubmitted,
          ),
        );
 
@@ -93,6 +95,7 @@ class TextField extends FlintElement {
     required Map<String, Object?> inputStyle,
     required DartStyle? inputDartStyle,
     required void Function(Object event)? onChanged,
+    required void Function(String value)? onSubmitted,
   }) {
     final id = fieldId('field', name, inputProps);
     final ariaDescribedBy = describedBy(
@@ -122,6 +125,13 @@ class TextField extends FlintElement {
             if (value != null) 'value': value,
             if (placeholder != null) 'placeholder': placeholder,
             if (onChanged != null) 'onInput': onChanged,
+            if (onSubmitted != null)
+              'onKeyDown': (Object event) {
+                if (event is web.KeyboardEvent && event.key == 'Enter') {
+                  event.preventDefault();
+                  onSubmitted((event.target as web.HTMLInputElement).value);
+                }
+              },
           },
           dartStyle:
               inputComponentStyle(

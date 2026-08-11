@@ -71,6 +71,7 @@ export 'primitives/link.dart';
 export 'primitives/media_preview_stub.dart'
     if (dart.library.js_interop) 'primitives/media_preview.dart';
 export 'primitives/row.dart';
+export 'primitives/table_elements.dart';
 export 'primitives/text.dart';
 export 'primitives/three_scene_stub.dart'
     if (dart.library.js_interop) 'primitives/three_scene.dart';
