@@ -3,6 +3,10 @@
 ## 0.1.16 - 2026-08-11
 
 ### Added
+- Added `DatePicker` and `DateRangePicker` interactive form controls with native date inputs, date presets, and Flint UI theme token integration.
+- Added `GridCols` type-safe helper class (`GridCols.count`, `GridCols.fit`, `GridCols.fill`, `GridCols.ratios`, `GridCols.sidebar`).
+- Added Flutter-style integer column coercion (`sm: 1`, `md: 2`, `lg: 3`) and numeric gap formatting (`gap: 20`) for `Grid`.
+- Added convenience factory constructors to `Grid`: `Grid.count()`, `Grid.fit()`, `Grid.fill()`, `Grid.ratios()`, and `Grid.sidebar()`.
 - Added declarative animation widgets: `AnimatedContainer`, `FadeIn`, `SlideIn`, and `ScaleIn` with built-in `StyleKeyframes.slideUp()`, `slideDown()`, and `scaleIn()` keyframe generators.
 - Added unified `Flex` primitive widget supporting base and responsive layout directions (`Flex(direction: ...)`, `Flex.row(...)`, `Flex.column(...)`).
 - Added declarative strongly-typed size and unit classes: `Px`, `Percent`, `Rem`, `Em`, `Vh`, `Vw`, and `Fr`.
