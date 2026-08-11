@@ -275,5 +275,48 @@ void main() {
       final marketingShell = marketing.children.single as PageShell;
       expect(marketingShell.children.first, isA<Text>());
     });
+
+    test('GridCols and Grid factory constructors render type-safe grid styles', () {
+      final gridCount = Grid.count(3, gap: '16px');
+      expect(gridCount.props['style'], containsPair('display', 'grid'));
+      expect(
+        gridCount.props['style'],
+        containsPair('grid-template-columns', 'repeat(3, minmax(0, 1fr))'),
+      );
+
+      final gridFit = Grid.fit(250, gap: '20px');
+      expect(
+        gridFit.props['style'],
+        containsPair('grid-template-columns', 'repeat(auto-fit, minmax(250px, 1fr))'),
+      );
+
+      final gridRatios = Grid.ratios([1, 2, 1]);
+      expect(
+        gridRatios.props['style'],
+        containsPair('grid-template-columns', '1fr 2fr 1fr'),
+      );
+
+      final gridSidebar = Grid.sidebar(248);
+      expect(
+        gridSidebar.props['style'],
+        containsPair('grid-template-columns', '248px minmax(0, 1fr)'),
+      );
+    });
+
+    test('Grid supports Flutter-style integer column numbers and numeric gap values', () {
+      final flutterStyleGrid = Grid.count(
+        3,
+        sm: 1,
+        md: 2,
+        lg: 4,
+        gap: 20,
+      );
+
+      expect(flutterStyleGrid.props['style'], containsPair('gap', '20px'));
+      expect(
+        flutterStyleGrid.props['style'],
+        containsPair('grid-template-columns', 'repeat(3, minmax(0, 1fr))'),
+      );
+    });
   });
 }

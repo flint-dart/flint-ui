@@ -392,5 +392,44 @@ void main() {
       expect(group.children.first, isA<FlintElement>());
       expect(group.children.last, isA<Form>());
     });
+
+    test('DatePicker renders input type date and presets', () {
+      final picker = DatePicker(
+        label: 'Select Date',
+        name: 'event_date',
+        value: '2026-08-11',
+        min: '2026-01-01',
+        max: '2026-12-31',
+        presets: const [
+          DatePreset(label: 'Today', date: '2026-08-11'),
+        ],
+      );
+
+      expect(picker.tag, 'div');
+      final label = picker.children[0] as FlintElement;
+      final wrapper = picker.children[1] as FlintElement;
+      final input = wrapper.children[0] as FlintElement;
+
+      expect(label.tag, 'label');
+      expect(input.tag, 'input');
+      expect(input.props['type'], 'date');
+      expect(input.props['value'], '2026-08-11');
+      expect(input.props['min'], '2026-01-01');
+      expect(input.props['max'], '2026-12-31');
+    });
+
+    test('DateRangePicker renders start and end date controls', () {
+      final rangePicker = DateRangePicker(
+        label: 'Select Range',
+        startName: 'start',
+        endName: 'end',
+        startDate: '2026-08-01',
+        endDate: '2026-08-11',
+      );
+
+      expect(rangePicker.tag, 'div');
+      final label = rangePicker.children[0] as FlintElement;
+      expect(label.tag, 'label');
+    });
   });
 }

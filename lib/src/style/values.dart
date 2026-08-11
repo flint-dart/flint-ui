@@ -261,6 +261,43 @@ class GridTemplateColumns {
   String toString() => value;
 }
 
+/// Clean, type-safe builder for CSS Grid columns without raw strings or nested objects.
+abstract class GridCols {
+  /// Creates a template with [count] equal-width fluid columns (e.g. `GridCols.count(3)`).
+  static GridTemplateColumns count(int count) =>
+      GridTemplateColumns.repeat(count, GridTrack.fluid);
+
+  /// Creates a responsive auto-fit grid with [minWidth] per item (e.g. `GridCols.fit(250)`).
+  static GridTemplateColumns fit(
+    Object minWidth, {
+    Object max = GridTrack.oneFr,
+  }) =>
+      GridTemplateColumns.autoFit(minWidth, max: max);
+
+  /// Creates a responsive auto-fill grid with [minWidth] per item (e.g. `GridCols.fill(200)`).
+  static GridTemplateColumns fill(
+    Object minWidth, {
+    Object max = GridTrack.oneFr,
+  }) =>
+      GridTemplateColumns.autoFill(minWidth, max: max);
+
+  /// Creates columns based on proportional ratios (e.g. `GridCols.ratios([1, 2, 1])`).
+  static GridTemplateColumns ratios(List<num> fractions) =>
+      GridTemplateColumns.fractional(fractions);
+
+  /// Creates a sidebar + main content area grid (e.g. `GridCols.sidebar(248)`).
+  static GridTemplateColumns sidebar(Object sidebarWidth) =>
+      GridTemplateColumns.tracks([sidebarWidth, GridTrack.fluid]);
+
+  /// Creates a content area + minimum sidebar width grid layout.
+  static GridTemplateColumns contentSidebar(Object sidebarMin) =>
+      GridTemplateColumns.contentAndSidebar(sidebarMin);
+
+  /// Creates a repeated track grid template (e.g. `GridCols.repeat(3, '200px')`).
+  static GridTemplateColumns repeat(Object count, Object track) =>
+      GridTemplateColumns.repeat(count, track);
+}
+
 String _gridCssValue(Object value, {bool unitlessNumber = false}) {
   if (value is GridTrack) return value.value;
   if (value is GridTemplateColumns) return value.value;

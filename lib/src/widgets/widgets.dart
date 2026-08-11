@@ -16,6 +16,7 @@ export 'feedback/spinner.dart';
 export 'feedback/status_badge.dart';
 export 'forms/checkbox.dart';
 export 'forms/controllers.dart';
+export 'forms/date_picker.dart';
 export 'forms/field_group.dart';
 export 'forms/file_input.dart';
 export 'forms/form.dart';
