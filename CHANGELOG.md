@@ -3,9 +3,14 @@
 ## 0.1.16 - 2026-08-11
 
 ### Added
+- Added unified `Flex` primitive widget supporting base and responsive layout directions (`Flex(direction: ...)`, `Flex.row(...)`, `Flex.column(...)`).
+- Added declarative strongly-typed size and unit classes: `Px`, `Percent`, `Rem`, `Em`, `Vh`, `Vw`, and `Fr`.
 - Added `ThreeScene` widget and `ThreeSceneController` to support Three.js 3D canvas rendering in the browser with server-safe stubs.
 - Added multi-series support to `LineChart` and `BarChart` using `LineChartSeries` and `BarChartSeries`.
 - Added optional `render` parameter (default `true`) to `setState` in `FlintComponent` to allow state updates that skip DOM repainting.
+
+### Changed
+- Enforced strict layout direction contracts: `Row` is strictly forced to horizontal (`flex-direction: row`) and `Column` is strictly forced to vertical (`flex-direction: column`) across all viewports to guarantee 100% predictable layout behavior. Use `Flex` for dynamic/responsive direction switching.
 
 ### Fixed
 - Fixed browser DOM focus preservation to support unkeyed input and textarea elements.
