@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.16 - 2026-08-11
+
+### Added
+- Added `ThreeScene` widget and `ThreeSceneController` to support Three.js 3D canvas rendering in the browser with server-safe stubs.
+- Added multi-series support to `LineChart` and `BarChart` using `LineChartSeries` and `BarChartSeries`.
+- Added optional `render` parameter (default `true`) to `setState` in `FlintComponent` to allow state updates that skip DOM repainting.
+
+### Fixed
+- Fixed browser DOM focus preservation to support unkeyed input and textarea elements.
+
 ## 0.1.15 - 2026-07-20
 
 ### Added

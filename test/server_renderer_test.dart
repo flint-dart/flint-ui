@@ -78,8 +78,10 @@ void main() {
       expect(html, contains('id="device-preview"'));
       expect(html, contains('<canvas'));
       expect(html, contains('id="drawing-board"'));
+      expect(html, contains('id="three-preview"'));
       expect(html, isNot(contains('_flintMediaController')));
       expect(html, isNot(contains('_flintCanvasController')));
+      expect(html, isNot(contains('_flintThreeSceneController')));
       expect(html, isNot(contains('onClick')));
     });
   });
@@ -145,6 +147,12 @@ class _DeviceCheckPage extends StatelessComponent {
           width: 320,
           height: 180,
           props: const {'id': 'drawing-board'},
+        ),
+        ThreeScene(
+          controller: ThreeSceneController(),
+          width: 320,
+          height: 180,
+          props: const {'id': 'three-preview'},
         ),
       ],
     );

@@ -204,5 +204,52 @@ void main() {
       controller.detach();
       expect(controller.isAttached, isFalse);
     });
+
+    test('ThreeSceneController binds to rendered scene canvas', () async {
+      final host = web.document.createElement('div');
+      web.document.body?.appendChild(host);
+      addTearDown(() {
+        host.remove();
+      });
+
+      final events = <String>[];
+      final controller = ThreeSceneController(
+        autoStart: false,
+        onAttach: (controller) {
+          events.add('attach:${controller.width}x${controller.height}');
+        },
+        onFrame: (_, timestamp) {
+          events.add('frame:${timestamp.round()}');
+        },
+        onDispose: (_) {
+          events.add('dispose');
+        },
+      );
+
+      createRootForElement(
+        host,
+      ).render(ThreeScene(controller: controller, width: 96, height: 54));
+
+      await Future<void>.delayed(Duration.zero);
+
+      expect(controller.isSupported, isTrue);
+      expect(controller.isAttached, isTrue);
+      expect(controller.width, 96);
+      expect(controller.height, 54);
+      expect(controller.canvas, isA<web.HTMLCanvasElement>());
+      expect(events, contains('attach:96x54'));
+      expect(controller.getThreeProperty('Scene'), isNull);
+
+      controller.resize(width: 120, height: 80);
+      expect(controller.width, 120);
+      expect(controller.height, 80);
+
+      controller.render(16);
+      expect(events, contains('frame:16'));
+
+      controller.dispose();
+      expect(controller.isAttached, isFalse);
+      expect(events, contains('dispose'));
+    });
   });
 }

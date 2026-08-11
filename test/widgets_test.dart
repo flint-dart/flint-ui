@@ -365,6 +365,59 @@ void main() {
       expect(canvas.props['style'], containsPair('border-radius', '8px'));
     });
 
+    test('ThreeScene renders with controller, dimensions, and styles', () {
+      final controller = ThreeSceneController(autoStart: false);
+      final scene = ThreeScene(
+        controller: controller,
+        width: 800,
+        height: 450,
+        label: 'Product preview',
+        dartStyle: const DartStyle(radius: 8),
+      );
+
+      expect(scene.tag, 'canvas');
+      expect(scene.props['width'], 800);
+      expect(scene.props['height'], 450);
+      expect(scene.props['aria-label'], 'Product preview');
+      expect(scene.props.containsKey('aria-hidden'), isFalse);
+      expect(scene.props['_flintThreeSceneController'], controller);
+      expect(scene.props['style'], containsPair('width', '100%'));
+      expect(scene.props['style'], containsPair('border-radius', '8px'));
+    });
+
+    test('ThreeSceneController is server-safe before browser binding', () {
+      final events = <String>[];
+      final controller = ThreeSceneController(
+        autoStart: false,
+        onFrame: (_, timestamp) => events.add('frame:$timestamp'),
+        onDispose: (_) => events.add('dispose'),
+      );
+
+      expect(controller.isSupported, isFalse);
+      expect(controller.isAttached, isFalse);
+      expect(controller.isThreeAvailable, isFalse);
+      expect(controller.canvas, isNull);
+      expect(controller.three, isNull);
+      expect(controller.width, 0);
+      expect(controller.height, 0);
+
+      controller.attachTo(null);
+      expect(controller.getThreeProperty('Scene'), isNull);
+      expect(controller.create('Scene'), isNull);
+      expect(controller.callMethod(null, 'render'), isNull);
+      expect(controller.getProperty(null, 'rotation'), isNull);
+      controller.setProperty(null, 'x', 1);
+      controller.disposeObject(null);
+      controller.start();
+      controller.render(12);
+      controller.resize(width: 100, height: 50);
+      controller.stop();
+      controller.detach();
+      controller.dispose();
+
+      expect(events, ['frame:12.0', 'dispose']);
+    });
+
     test('CanvasController stores, finds, removes, and clears objects', () {
       final controller = CanvasController();
       const rect = CanvasRect(
@@ -1060,6 +1113,107 @@ void main() {
         solid.props['style'],
         containsPair('color', 'var(--color-onSolid, #ffffff)'),
       );
+    });
+  });
+
+  group('LineChart & BarChart', () {
+    test('LineChart renders single series successfully', () {
+      final chart = LineChart(
+        data: const [10, 20, 15],
+        labels: const ['A', 'B', 'C'],
+        height: 200,
+      );
+
+      final svg = chart.children.first as FlintElement;
+      expect(svg.tag, 'svg');
+      expect(svg.props['viewBox'], '0 0 600.0 200.0');
+
+      // Check grid lines and paths
+      final gridLines = svg.children.where((c) => c is FlintElement && c.tag == 'line').toList();
+      expect(gridLines.length, 4); // 4 grid lines
+
+      final paths = svg.children.where((c) => c is FlintElement && (c.tag == 'polygon' || c.tag == 'polyline')).toList();
+      expect(paths.length, 2); // 1 fill polygon + 1 stroke polyline
+    });
+
+    test('LineChart renders multi series successfully', () {
+      final chart = LineChart(
+        labels: const ['A', 'B', 'C'],
+        series: const [
+          LineChartSeries(
+            data: [10, 20, 15],
+            strokeColor: '#ff0000',
+            fillColor: '#00ff00',
+          ),
+          LineChartSeries(
+            data: [30, 40, 25],
+            strokeColor: '#0000ff',
+            fillColor: '#00ffff',
+          ),
+        ],
+        height: 200,
+      );
+
+      final svg = chart.children.first as FlintElement;
+      expect(svg.tag, 'svg');
+
+      // 4 grid lines (common)
+      final gridLines = svg.children.where((c) => c is FlintElement && c.tag == 'line').toList();
+      expect(gridLines.length, 4);
+
+      // We expect 2 polygon fills + 2 polyline strokes
+      final polygons = svg.children.where((c) => c is FlintElement && c.tag == 'polygon').toList();
+      expect(polygons.length, 2);
+      expect((polygons[0] as FlintElement).props['fill'], '#00ff00');
+      expect((polygons[1] as FlintElement).props['fill'], '#00ffff');
+
+      final polylines = svg.children.where((c) => c is FlintElement && c.tag == 'polyline').toList();
+      expect(polylines.length, 2);
+      expect((polylines[0] as FlintElement).props['stroke'], '#ff0000');
+      expect((polylines[1] as FlintElement).props['stroke'], '#0000ff');
+    });
+
+    test('BarChart renders data bars successfully', () {
+      final chart = BarChart(
+        data: const [10, 20, 15],
+        labels: const ['A', 'B', 'C'],
+        height: 200,
+        barColor: '#ff0000',
+      );
+
+      final svg = chart.children.first as FlintElement;
+      expect(svg.tag, 'svg');
+
+      final bars = svg.children.where((c) => c is FlintElement && c.tag == 'rect').toList();
+      expect(bars.length, 3);
+      expect((bars[0] as FlintElement).props['fill'], '#ff0000');
+    });
+
+    test('BarChart renders multi series successfully', () {
+      final chart = BarChart(
+        labels: const ['A', 'B', 'C'],
+        series: const [
+          BarChartSeries(
+            data: [10, 20, 15],
+            barColor: '#ff0000',
+          ),
+          BarChartSeries(
+            data: [30, 40, 25],
+            barColor: '#0000ff',
+          ),
+        ],
+        height: 200,
+      );
+
+      final svg = chart.children.first as FlintElement;
+      expect(svg.tag, 'svg');
+
+      final bars = svg.children.where((c) => c is FlintElement && c.tag == 'rect').toList();
+      expect(bars.length, 6);
+      expect((bars[0] as FlintElement).props['fill'], '#ff0000');
+      expect((bars[1] as FlintElement).props['fill'], '#0000ff');
+      expect((bars[2] as FlintElement).props['fill'], '#ff0000');
+      expect((bars[3] as FlintElement).props['fill'], '#0000ff');
     });
   });
 }

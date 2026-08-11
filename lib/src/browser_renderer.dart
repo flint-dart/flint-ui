@@ -7,6 +7,7 @@ import 'component.dart';
 import 'node.dart';
 import 'widgets/primitives/canvas.dart';
 import 'widgets/primitives/media_preview.dart';
+import 'widgets/primitives/three_scene.dart';
 
 /// Browser DOM root that renders Flint nodes into a host element.
 class FlintRoot {
@@ -260,6 +261,13 @@ class FlintRoot {
 
       if (name == '_flintCanvasController') {
         if (value is CanvasController) {
+          value.attachTo(element);
+        }
+        return;
+      }
+
+      if (name == '_flintThreeSceneController') {
+        if (value is ThreeSceneController) {
           value.attachTo(element);
         }
         return;
@@ -560,22 +568,24 @@ class _ActiveControl {
       node = child;
     }
 
-    if (node is web.Element && _matches(node)) return node;
+    if (node is web.Element && _matches(node, allowUnkeyed: true)) return node;
     return null;
   }
 
-  bool _matches(web.Element element) {
+  bool _matches(web.Element element, {bool allowUnkeyed = false}) {
     if (element.localName != tag) return false;
 
     if (element is web.HTMLInputElement) {
       if (type != null && element.type != type) return false;
       if (name != null && element.name == name) return true;
-      return id != null && element.id == id;
+      if (id != null && element.id == id) return true;
+      return allowUnkeyed && name == null && id == null;
     }
 
     if (element is web.HTMLTextAreaElement) {
       if (name != null && element.name == name) return true;
-      return id != null && element.id == id;
+      if (id != null && element.id == id) return true;
+      return allowUnkeyed && name == null && id == null;
     }
 
     return false;

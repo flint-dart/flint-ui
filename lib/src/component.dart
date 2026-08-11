@@ -48,8 +48,13 @@ abstract class FlintComponent extends FlintNode {
   bool get preserveState => false;
 
   /// Applies [update] and schedules this component to render again.
-  void setState(FlintStateUpdater update) {
+  ///
+  /// Pass `render: false` when the state change is intentionally internal and
+  /// should not repaint the DOM, such as mirroring raw input text that is
+  /// already visible in the focused control.
+  void setState(FlintStateUpdater update, {bool render = true}) {
     update();
+    if (!render) return;
     _scheduleRender?.call();
   }
 
