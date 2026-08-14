@@ -71,6 +71,13 @@ abstract class FlintComponent extends FlintNode {
   /// the newly-created component so props-like fields can be copied in.
   void updateFrom(covariant FlintComponent next) {}
 
+  /// Whether this component should rerender when it is updated from a new
+  /// instance in the parent tree.
+  ///
+  /// Defaults to `true`. Override this to return `false` to prevent the component
+  /// from clearing and rebuilding its DOM nodes during parent rerenders.
+  bool shouldUpdate(covariant FlintComponent next) => true;
+
   /// Called before the component is removed from the tree.
   void willUnmount() {}
 

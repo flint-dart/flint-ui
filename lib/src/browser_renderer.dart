@@ -174,11 +174,15 @@ class FlintRoot {
     }
     nextSlots[path] = mount;
 
+    var shouldRender = true;
     if (hasExisting) {
+      shouldRender = mount.component.shouldUpdate(component);
       mount.component.updateFrom(component);
     }
     mount.component.attach(() => _scheduleComponentRender(mount));
-    _renderComponent(mount);
+    if (shouldRender) {
+      _renderComponent(mount);
+    }
 
     if (_mounted && hasExisting) {
       mount.component.didUpdate();
